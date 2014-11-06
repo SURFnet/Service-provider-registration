@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Form</title>
+
+    {% block stylesheets %}
+        <link href="{{ asset('compiled/css/bootstrap.css') }}" rel="stylesheet" media="screen">
+        {%  stylesheets
+            'css/style.css'
+            output='css/compiled/common.css'
+        %}
+            <link href="{{ asset_url }}" rel="stylesheet" media="screen">
+        {% endstylesheets %}
+    {% endblock %}
+</head>
+
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Form</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+    <script src="{{ asset('compiled/js/jquery.js') }}"></script>
+    <script src="{{ asset('compiled/js/bootstrap.js') }}"></script>
+    {% javascripts
+    'js/parsley.remote.min.js'
+    'js/jquery.autosave.min.js'
+    'js/validate.js'
+    output='js/compiled/common.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,8 @@
+.form-control + .form-control-feedback {
+    display: block;
+    line-height: 34px;
+}
+
+.nav-tabs, .tab-content {
+    margin-bottom: 15px;
+}

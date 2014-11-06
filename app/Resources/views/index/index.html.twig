@@ -1,0 +1,100 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
+      data-save="{{ path('save') }}"
+      data-lock="{{ path('lock') }}">
+    {{ bootstrap_set_style('horizontal') }}
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+        <li><a href="#tab2" data-toggle="tab">Profile</a></li>
+        <li><a href="#tab3" data-toggle="tab">Messages</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="home">
+            <div class="row">
+                <div class="col-md-11">
+                    {{ form_row(form.name) }}
+                </div>
+
+                <div class="col-md-1">
+                    <a href="#" class="btn btn-link">
+                        {{ icon('question-circle') }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-11">
+                    {{ form_row(form.city) }}
+                </div>
+
+                <div class="col-md-1">
+                    <a href="#" class="btn btn-link">
+                        {{ icon('question-circle') }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-11">
+                    {{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate') }}) }}
+                </div>
+
+                <div class="col-md-1">
+                    <a href="#" class="btn btn-link">
+                        {{ icon('question-circle') }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-offset-10 col-md-2 text-right">
+                    <a href="#" class="btn btn-default btn-sm btn-next">
+                        next {{ icon('angle-double-right') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab2">
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="#" class="btn btn-default btn-sm btn-prev">
+                        {{ icon('angle-double-left') }} prev
+                    </a>
+                </div>
+
+                <div class="col-md-offset-8 col-md-2 text-right">
+                    <a href="#" class="btn btn-default btn-sm btn-next">
+                        next {{ icon('angle-double-right') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab3">
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="#" class="btn btn-default btn-sm btn-prev">
+                        {{ icon('angle-double-left') }} prev
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-success">
+                Finish
+            </button>
+            &nbsp;&nbsp;<span id="status"></span>
+        </div>
+    </div>
+
+{{ form_end(form) }}
+
+{% endblock %}
