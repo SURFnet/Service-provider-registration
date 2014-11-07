@@ -28,7 +28,7 @@ class FormController extends Controller
     public function formAction($id)
     {
         try {
-            $subscription = $this->getSubscription($id);
+            $subscription = $this->getSubscription($id, true, false);
         } catch (\InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
         }
@@ -40,6 +40,7 @@ class FormController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
+                'locked'       => !$this->getLock($id)
             )
         );
     }
@@ -210,6 +211,7 @@ class FormController extends Controller
      * @param string $id
      *
      * @return bool
+     * @todo: move to 'manager'
      * @todo: this is not atomic!
      */
     private function getLock($id)
@@ -253,16 +255,22 @@ class FormController extends Controller
 
     /**
      * @param string $id
+     * @param bool   $checkStatus
+     * @param bool   $checkLock
      *
      * @return Contact
      * @todo: move to 'manager'
      */
-    private function getSubscription($id, $checkStatus = true)
+    private function getSubscription($id, $checkStatus = true, $checkLock = true)
     {
         $subscription = $this->getDoctrine()->getRepository('AppBundle:Contact')->find($id);
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();
+        }
+
+        if ($checkLock && !$this->getLock($id)) {
+            throw new \RuntimeException('Subscription is locked');
         }
 
         if ($checkStatus && $subscription->isFinished()) {

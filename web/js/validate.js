@@ -65,10 +65,14 @@
 
                 lockReq.done(function () {
                     $inputs.prop('disabled', false);
+                    $form.find('button').prop('disabled', false);
+                    $('.lock-warning').hide();
                 });
 
                 lockReq.fail(function () {
                     $inputs.prop('disabled', true);
+                    $form.find('button').prop('disabled', true);
+                    $('.lock-warning').show();
                 });
             },
             10000
