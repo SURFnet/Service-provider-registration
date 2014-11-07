@@ -2,104 +2,114 @@
 
 {% block body %}
 
-<form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
-      data-save="{{ path('save', {id: subscription.id}) }}"
-      data-lock="{{ path('lock', {id: subscription.id}) }}">
-    {{ bootstrap_set_style('horizontal') }}
+    {% if locked %}
+        <div class="alert alert-danger lock-warning">
+            <strong>The form is locked!</strong> Please wait until the lock has been released.
+        </div>
+    {% endif %}
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-        <li><a href="#tab2" data-toggle="tab">Profile</a></li>
-        <li><a href="#tab3" data-toggle="tab">Messages</a></li>
-    </ul>
+    <form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
+          data-save="{{ path('save', {id: subscription.id}) }}"
+          data-lock="{{ path('lock', {id: subscription.id}) }}">
+        {{ bootstrap_set_style('horizontal') }}
 
-    <div class="tab-content">
-        <div class="tab-pane fade in active" id="home">
-            <div class="row">
-                <div class="col-md-11">
-                    {{ form_row(form.name) }}
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+            <li><a href="#tab2" data-toggle="tab">Profile</a></li>
+            <li><a href="#tab3" data-toggle="tab">Messages</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="home">
+                <div class="row">
+                    <div class="col-md-11">
+                        {{ form_row(form.name) }}
+                    </div>
+
+                    <div class="col-md-1">
+                        <a href="#" class="btn btn-link popover-link"
+                           data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
+                            {{ icon('question-circle') }}
+                        </a>
+                    </div>
                 </div>
 
-                <div class="col-md-1">
-                    <a href="#" class="btn btn-link popover-link" data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
-                        {{ icon('question-circle') }}
-                    </a>
+                <div class="row">
+                    <div class="col-md-11">
+                        {{ form_row(form.city) }}
+                    </div>
+
+                    <div class="col-md-1">
+                        <a href="#" class="btn btn-link popover-link"
+                           data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
+                            {{ icon('question-circle') }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-11">
+                        {{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}
+                        ) }}
+                    </div>
+
+                    <div class="col-md-1">
+                        <a href="#" class="btn btn-link popover-link"
+                           data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
+                            {{ icon('question-circle') }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-10 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            next {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-11">
-                    {{ form_row(form.city) }}
-                </div>
+            <div class="tab-pane fade" id="tab2">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="#" class="btn btn-default btn-sm btn-prev">
+                            {{ icon('angle-double-left') }} prev
+                        </a>
+                    </div>
 
-                <div class="col-md-1">
-                    <a href="#" class="btn btn-link popover-link" data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
-                        {{ icon('question-circle') }}
-                    </a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-11">
-                    {{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
-                </div>
-
-                <div class="col-md-1">
-                    <a href="#" class="btn btn-link popover-link" data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
-                        {{ icon('question-circle') }}
-                    </a>
+                    <div class="col-md-offset-8 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            next {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-offset-10 col-md-2 text-right">
-                    <a href="#" class="btn btn-default btn-sm btn-next">
-                        next {{ icon('angle-double-right') }}
-                    </a>
+            <div class="tab-pane fade" id="tab3">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="#" class="btn btn-default btn-sm btn-prev">
+                            {{ icon('angle-double-left') }} prev
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="tab-pane fade" id="tab2">
-            <div class="row">
-                <div class="col-md-2">
-                    <a href="#" class="btn btn-default btn-sm btn-prev">
-                        {{ icon('angle-double-left') }} prev
-                    </a>
-                </div>
-
-                <div class="col-md-offset-8 col-md-2 text-right">
-                    <a href="#" class="btn btn-default btn-sm btn-next">
-                        next {{ icon('angle-double-right') }}
-                    </a>
-                </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success" {% if locked %}disabled="disabled"{% endif %}>
+                    Finish
+                </button>
+                &nbsp;&nbsp;<span id="status"></span>
             </div>
         </div>
 
-        <div class="tab-pane fade" id="tab3">
-            <div class="row">
-                <div class="col-md-2">
-                    <a href="#" class="btn btn-default btn-sm btn-prev">
-                        {{ icon('angle-double-left') }} prev
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+        {{ form_errors(form) }}
 
-    <div class="form-group">
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-success">
-                Finish
-            </button>
-            &nbsp;&nbsp;<span id="status"></span>
-        </div>
-    </div>
+        {{ form_rest(form) }}
 
-    {{ form_errors(form) }}
-
-    {{ form_rest(form) }}
-
-</form>
+    </form>
 
 {% endblock %}
