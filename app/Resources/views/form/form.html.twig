@@ -1,9 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+
 <form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
-      data-save="{{ path('save') }}"
-      data-lock="{{ path('lock') }}">
+      data-save="{{ path('save', {id: subscription.id}) }}"
+      data-lock="{{ path('lock', {id: subscription.id}) }}">
     {{ bootstrap_set_style('horizontal') }}
 
     <ul class="nav nav-tabs">
@@ -40,7 +41,7 @@
 
             <div class="row">
                 <div class="col-md-11">
-                    {{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate') }}) }}
+                    {{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
                 </div>
 
                 <div class="col-md-1">

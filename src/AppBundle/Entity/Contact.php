@@ -9,6 +9,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Contact
 {
+    const STATE_DRAFT = 0;
+    const STATE_FINISHED = 1;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -39,11 +42,17 @@ class Contact
     private $comment;
 
     /**
-     *
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    private $status;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
-        $this->id = 10;
+        $this->status = self::STATE_DRAFT;
     }
 
     /**
@@ -132,5 +141,21 @@ class Contact
         $this->remote = $remote;
 
         return $this;
+    }
+
+    /**
+     *
+     */
+    public function finish()
+    {
+        $this->status = self::STATE_FINISHED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return $this->status === self::STATE_FINISHED;
     }
 }

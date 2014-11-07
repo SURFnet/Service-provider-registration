@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h2>Are you sure?</h2>
+
+    <p>
+        The following bla bla, bla bla, bla bla, bla bla, bla bla
+    </p>
+
+    <dl class="dl-horizontal">
+        <dt>name</dt>
+        <dd>{{ subscription.name }}</dd>
+
+        <dt>city</dt>
+        <dd>{{ subscription.city }}</dd>
+
+        <dt>remote</dt>
+        <dd>{{ subscription.remote }}</dd>
+
+        <dt>comment</dt>
+        <dd>{{ subscription.comment }}</dd>
+    </dl>
+
+    <a href="{{ path('form', {id: subscription.id}) }}" class="btn btn-default">
+        Cancel
+    </a>
+
+    <a href="{{ path('confirm', {id: subscription.id}) }}" class="btn btn-primary">
+        Confirm
+    </a>
+{% endblock %}
