@@ -2,7 +2,8 @@
     "use strict";
 
     $(function () {
-        var $form = $('#form');
+        var $form = $('#form'),
+            $inputs = $form.find('input, select, textarea');
 
         $.listen('parsley:field:init', function (field) {
             field.$element.closest(".form-group").addClass('has-feedback');
@@ -58,16 +59,17 @@
                 var lockReq = $.get($form.data('lock'));
 
                 lockReq.done(function () {
-                    $form.find(':input').prop('disabled', false);
+                    $inputs.prop('disabled', false);
                 });
 
                 lockReq.fail(function () {
-                    $form.find(':input').prop('disabled', true);
+                    $inputs.prop('disabled', true);
                 });
             },
             10000
         );
 
+        // Setup next/prev tab buttons
         $form.find('.btn-next').on('click', function () {
             $('.nav-tabs .active').next().find('a').tab('show');
             return false;
@@ -77,5 +79,25 @@
             $('.nav-tabs .active').prev().find('a').tab('show');
             return false;
         });
+
+        // Setup help popovers
+        var $links = $form.find('.popover-link');
+
+        $links.popover({
+            container: 'body',
+            trigger: 'hover'
+        });
+
+        $links.on('click', function() {
+            return false;
+        });
+
+        $inputs.on('focusin', function () {
+            $(this).closest('.row').find('.popover-link').popover('show');
+        });
+
+        $inputs.on('focusout', function () {
+            $(this).closest('.row').find('.popover-link').popover('hide');
+        })
     });
 })(jQuery);
