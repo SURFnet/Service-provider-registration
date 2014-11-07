@@ -20,6 +20,11 @@
                 return field.$element.closest(".form-group");
             },
             errorsWrapper: '<ul class="help-block"></ul>'
+        }).subscribe('parsley:form:validated', function (form) {
+            if (true !== form.validationResult) {
+                var tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
+                $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
+            }
         }).subscribe('parsley:field:validate', function (field) {
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
