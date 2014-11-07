@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 $loader = require_once __DIR__ . '/../app/bootstrap.php.cache';
 
-$apcLoader = new ApcClassLoader('dev-box', $loader);
+$apcLoader = new ApcClassLoader('surf-serviceProvider-registration', $loader);
 $loader->unregister();
 $apcLoader->register(true);
 

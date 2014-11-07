@@ -14,7 +14,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        #assets_version: SomeVersionScheme
+        assets_version: 1234
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -34,13 +34,18 @@ assetic:
     debug:          "%kernel.debug%"
     use_controller: false
     bundles:        [ ]
-    #java: /usr/bin/java
     filters:
         cssrewrite: ~
         less:
             node: /usr/bin/node
             node_paths: [/usr/lib/node_modules]
             apply_to: "\.less$"
+        uglifyjs2:
+            bin: /usr/bin/uglifyjs
+            apply_to: "\.js$"
+        uglifycss:
+            bin: /usr/bin/uglifycss
+            apply_to: "\.css$"
 
 # Doctrine Configuration
 doctrine:
