@@ -6,19 +6,39 @@
         <strong>{{ 'form.lock.title'|trans }}</strong> {{ 'form.lock.description'|trans }}
     </div>
 
+    <div class="well well-sm">
+        {{ 'form.intro'|trans }}
+    </div>
+
     <form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
           data-save="{{ path('save', {id: subscription.id}) }}"
           data-lock="{{ path('lock', {id: subscription.id}) }}">
         {{ bootstrap_set_style('horizontal') }}
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#home" data-toggle="tab">{{ 'form.tab.general'|trans }}</a></li>
+            <li class="active"><a href="#info" data-toggle="tab">{{ 'form.tab.info'|trans }}</a></li>
+            <li><a href="#general" data-toggle="tab">{{ 'form.tab.general'|trans }}</a></li>
             <li><a href="#tab2" data-toggle="tab">{{ 'form.tab.metadata'|trans }}</a></li>
             <li><a href="#tab3" data-toggle="tab">{{ 'form.tab.contact'|trans }}</a></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane fade in active" id="home">
+            <div class="tab-pane fade in active" id="info">
+                <p>{{ 'form.tab.info.intro'|trans }}</p>
+
+                <div class="row">
+                    <div class="col-md-offset-10 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="general">
+
+                <p>{{ 'form.tab.general.intro'|trans }}</p>
+
                 <fieldset>
                     <div class="row">
                         <div class="col-md-11">
@@ -57,7 +77,13 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-offset-10 col-md-2 text-right">
+                        <div class="col-md-2">
+                            <a href="#" class="btn btn-default btn-sm btn-prev">
+                                {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                            </a>
+                        </div>
+
+                        <div class="col-md-offset-8 col-md-2 text-right">
                             <a href="#" class="btn btn-default btn-sm btn-next">
                                 {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
                             </a>
@@ -67,6 +93,9 @@
             </div>
 
             <div class="tab-pane fade" id="tab2">
+
+                <p>{{ 'form.tab.general.metadata'|trans }}</p>
+
                 <fieldset>
                     <div class="row">
                         <div class="col-md-11">
@@ -98,6 +127,9 @@
             </div>
 
             <div class="tab-pane fade" id="tab3">
+
+                <p>{{ 'form.tab.general.contact'|trans }}</p>
+
                 <fieldset>
                     <div class="col-md-11">
                         {{ form_row(form.comment) }}
