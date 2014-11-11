@@ -7,9 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class ContactType
+ * Class AttributeType
  */
-class ContactType extends AbstractType
+class AttributeType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,10 +18,8 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('email')
-            ->add('phone');
+            ->add('requested')
+            ->add('motivation');
     }
 
     /**
@@ -31,7 +29,7 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'AppBundle\Model\Contact'
+                'data_class' => 'AppBundle\Model\Attribute'
             )
         );
     }
@@ -41,6 +39,6 @@ class ContactType extends AbstractType
      */
     public function getName()
     {
-        return 'contact';
+        return 'attribute';
     }
 }

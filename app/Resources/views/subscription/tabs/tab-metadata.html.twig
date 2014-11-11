@@ -1,0 +1,134 @@
+<fieldset>
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.metadataUrl) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.metadataUrl'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.acsLocation, {attr: {'class': 'disabled'}}) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.acsLocation'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.entityId, {attr: {'class': 'disabled'}}) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.entityId'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.certificate, {attr: {'class': 'disabled'}}) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.certificate'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.logoUrl) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.logoUrl'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.nameEn) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.nameEn'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.descriptionEn) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.descriptionEn'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.nameNl) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.nameNl'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.descriptionNl) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.descriptionNl'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.applicationUrl) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.applicationUrl'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+</fieldset>
+
+{#<div class="row">#}
+    {#<div class="col-md-11">#}
+        {#{{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id})}}) }}#}
+    {#</div>#}
+
+    {#<div class="col-md-1">#}
+        {#<a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.remote'|trans }}">#}
+            {#{{ icon('question-circle') }}#}
+        {#</a>#}
+    {#</div>#}
+{#</div>#}

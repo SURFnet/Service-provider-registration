@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Contact;
-use AppBundle\Form\ContactType;
+use AppBundle\Entity\Subscription;
+use AppBundle\Form\SubscriptionType;
 use Doctrine\Common\Cache\ApcCache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/subscription")
  */
-class FormController extends Controller
+class SubscriptionController extends Controller
 {
     /**
      * @Route("/{id}", name="form")
@@ -39,7 +39,7 @@ class FormController extends Controller
         $form = $this->getForm($subscription);
 
         return $this->render(
-            'form/form.html.twig',
+            'subscription/form.html.twig',
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
@@ -146,7 +146,7 @@ class FormController extends Controller
         }
 
         return $this->render(
-            'form/form.html.twig',
+            'subscription/form.html.twig',
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
@@ -171,7 +171,7 @@ class FormController extends Controller
         }
 
         return $this->render(
-            'form/overview.html.twig',
+            'subscription/overview.html.twig',
             array(
                 'subscription' => $subscription
             )
@@ -210,7 +210,7 @@ class FormController extends Controller
     public function thanksAction($id)
     {
         return $this->render(
-            'form/thanks.html.twig',
+            'subscription/thanks.html.twig',
             array(
                 'subscription' => $this->getSubscription($id, false),
             )
@@ -244,18 +244,18 @@ class FormController extends Controller
     }
 
     /**
-     * @param Contact $contact
-     * @param bool    $useCsrf
+     * @param Subscription $subscription
+     * @param bool         $useCsrf
      *
      * @return Form
      */
-    private function getForm(Contact $contact, $useCsrf = true)
+    private function getForm(Subscription $subscription, $useCsrf = true)
     {
         $form = $this->createForm(
-            new ContactType(),
-            $contact,
+            new SubscriptionType(),
+            $subscription,
             array(
-                'disabled'        => !$this->getLock($contact->getId()),
+                'disabled'        => !$this->getLock($subscription->getId()),
                 'csrf_protection' => $useCsrf
             )
         );
@@ -268,12 +268,12 @@ class FormController extends Controller
      * @param bool   $checkStatus
      * @param bool   $checkLock
      *
-     * @return Contact
+     * @return Subscription
      * @todo: move to 'manager'
      */
     private function getSubscription($id, $checkStatus = true, $checkLock = true)
     {
-        $subscription = $this->getDoctrine()->getRepository('AppBundle:Contact')->find($id);
+        $subscription = $this->getDoctrine()->getRepository('AppBundle:Subscription')->find($id);
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();
@@ -294,10 +294,10 @@ class FormController extends Controller
     }
 
     /**
-     * @param Contact $subscription
+     * @param Subscription $subscription
      * @todo: move to 'manager'
      */
-    private function saveSubscription(Contact $subscription)
+    private function saveSubscription(Subscription $subscription)
     {
         $em = $this->getDoctrine()->getManager();
         $em->flush();

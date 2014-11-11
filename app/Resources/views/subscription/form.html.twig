@@ -1,0 +1,161 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <div class="alert alert-danger lock-warning {% if not locked %}hide{% endif %}">
+        <strong>{{ 'form.lock.title'|trans }}</strong> {{ 'form.lock.description'|trans }}
+    </div>
+
+    <div class="well well-sm">
+        {{ 'form.intro'|trans }}
+    </div>
+
+    <form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
+          data-save="{{ path('save', {id: subscription.id}) }}"
+          data-lock="{{ path('lock', {id: subscription.id}) }}">
+        {{ bootstrap_set_style('horizontal') }}
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#info" data-toggle="tab">{{ 'form.tab.info'|trans }}</a></li>
+            <li><a href="#general" data-toggle="tab">{{ 'form.tab.general'|trans }}</a></li>
+            <li><a href="#metadata" data-toggle="tab">{{ 'form.tab.metadata'|trans }}</a></li>
+            <li><a href="#contact" data-toggle="tab">{{ 'form.tab.contact'|trans }}</a></li>
+            <li><a href="#attributes" data-toggle="tab">{{ 'form.tab.attributes'|trans }}</a></li>
+            <li><a href="#comments" data-toggle="tab">{{ 'form.tab.comments'|trans }}</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="info">
+                <p>{{ 'form.tab.intro.info'|trans }}</p>
+
+                <div class="row">
+                    <div class="col-md-offset-10 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="general">
+
+                <p>{{ 'form.tab.intro.general'|trans }}</p>
+
+                {% include 'subscription/tabs/tab-general.html.twig' %}
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="#" class="btn btn-default btn-sm btn-prev">
+                            {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-offset-8 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="metadata">
+
+                <p>{{ 'form.tab.intro.metadata'|trans }}</p>
+
+                {% include 'subscription/tabs/tab-metadata.html.twig' %}
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="#" class="btn btn-default btn-sm btn-prev">
+                            {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-offset-8 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="contact">
+
+                <p>{{ 'form.tab.intro.contact'|trans }}</p>
+
+                {% include 'subscription/tabs/tab-contact.html.twig' %}
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="#" class="btn btn-default btn-sm btn-prev">
+                            {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-offset-8 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="attributes">
+
+                <p>{{ 'form.tab.intro.attributes'|trans }}</p>
+
+                {% include 'subscription/tabs/tab-attributes.html.twig' %}
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="#" class="btn btn-default btn-sm btn-prev">
+                            {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                        </a>
+                    </div>
+
+                    <div class="col-md-offset-8 col-md-2 text-right">
+                        <a href="#" class="btn btn-default btn-sm btn-next">
+                            {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="comments">
+                <p>{{ 'form.tab.intro.comments'|trans }}</p>
+
+                {% include 'subscription/tabs/tab-comments.html.twig' %}
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="#" class="btn btn-default btn-sm btn-prev">
+                            {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-success" {% if locked %}disabled="disabled"{% endif %}>
+                    {{ 'form.button.finish'|trans }}
+                </button>
+                &nbsp;&nbsp;
+                <span id="status-progress" class="hidden">
+                    <i class="fa fa-cog fa-spin"></i> {{ 'form.status.saving'|trans }}
+                </span>
+                <span id="status-done" class="hidden">
+                    <i class="fa fa-check"></i> {{ 'form.status.saved'|trans }}
+                </span>
+            </div>
+        </div>
+
+        {{ form_errors(form) }}
+
+        {{ form_rest(form) }}
+
+    </form>
+
+{% endblock %}

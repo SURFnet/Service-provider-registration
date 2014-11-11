@@ -1,0 +1,25 @@
+<fieldset>
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.givenNameAttribute) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.givenNameAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            {{ form_row(form.surNameAttribute) }}
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.surNameAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+</fieldset>
