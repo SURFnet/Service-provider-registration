@@ -2,7 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Contact;
+use AppBundle\Entity\Subscription;
+use AppBundle\Model\Contact;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,7 +21,7 @@ class GridController extends Controller
      */
     public function gridAction()
     {
-        $source = new Entity('AppBundle:Contact');
+        $source = new Entity('AppBundle:Subscription');
 
         $grid = $this->get('grid');
         $grid->setSource($source);
@@ -33,11 +34,15 @@ class GridController extends Controller
      */
     public function createAction()
     {
-        $entity = new Contact();
-        $entity->setName(rand(0, 100));
-        $entity->setCity(rand(0, 100));
-        $entity->setRemote(rand(0, 100));
-        $entity->setComment(rand(0, 100));
+        $entity = new Subscription();
+        $entity->setTicketNo(rand(0, 100));
+        $entity->setLocale('nl');
+
+        $contact = new Contact();
+        $contact->setEmail('test@domain.org');
+        $entity->setContact($contact);
+
+        $entity->setComments(rand(0, 100));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
