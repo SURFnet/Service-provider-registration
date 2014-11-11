@@ -23,6 +23,10 @@ monolog:
 
 assetic:
     use_controller: "%use_assetic_controller%"
+    filters:
+        # Disable minification
+        uglifyjs2: ~
+        uglifycss: ~
 
 #swiftmailer:
 #    delivery_address: me@example.com
