@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
+use AppBundle\Validator\Constraints as AppAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,8 +15,8 @@ class Contact
 
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     private $id;
 
@@ -46,6 +47,12 @@ class Contact
      * @ORM\Column(type="integer")
      */
     private $status;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @AppAssert\ValidSSLCertificate()
+     */
+    private $cert;
 
     /**
      * Constructor
@@ -157,5 +164,30 @@ class Contact
     public function isFinished()
     {
         return $this->status === self::STATE_FINISHED;
+    }
+
+    public function getLocale()
+    {
+        return 'nl';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCert()
+    {
+        return $this->cert;
+    }
+
+    /**
+     * @param mixed $cert
+     *
+     * @return Contact
+     */
+    public function setCert($cert)
+    {
+        $this->cert = $cert;
+
+        return $this;
     }
 }

@@ -2,11 +2,9 @@
 
 {% block body %}
 
-    {% if locked %}
-        <div class="alert alert-danger lock-warning">
-            <strong>The form is locked!</strong> Please wait until the lock has been released.
-        </div>
-    {% endif %}
+    <div class="alert alert-danger lock-warning {% if not locked %}hide{% endif %}">
+        <strong>{{ 'form.lock.title'|trans }}</strong> {{ 'form.lock.description'|trans }}
+    </div>
 
     <form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
           data-save="{{ path('save', {id: subscription.id}) }}"
@@ -14,95 +12,126 @@
         {{ bootstrap_set_style('horizontal') }}
 
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-            <li><a href="#tab2" data-toggle="tab">Profile</a></li>
-            <li><a href="#tab3" data-toggle="tab">Messages</a></li>
+            <li class="active"><a href="#home" data-toggle="tab">{{ 'form.tab.general'|trans }}</a></li>
+            <li><a href="#tab2" data-toggle="tab">{{ 'form.tab.metadata'|trans }}</a></li>
+            <li><a href="#tab3" data-toggle="tab">{{ 'form.tab.contact'|trans }}</a></li>
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane fade in active" id="home">
-                <div class="row">
-                    <div class="col-md-11">
-                        {{ form_row(form.name) }}
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-11">
+                            {{ form_row(form.name) }}
+                        </div>
+
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.name'|trans }}">
+                                {{ icon('question-circle') }}
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="col-md-1">
-                        <a href="#" class="btn btn-link popover-link"
-                           data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
-                            {{ icon('question-circle') }}
-                        </a>
-                    </div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-11">
+                            {{ form_row(form.city) }}
+                        </div>
 
-                <div class="row">
-                    <div class="col-md-11">
-                        {{ form_row(form.city) }}
-                    </div>
-
-                    <div class="col-md-1">
-                        <a href="#" class="btn btn-link popover-link"
-                           data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
-                            {{ icon('question-circle') }}
-                        </a>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-11">
-                        {{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}
-                        ) }}
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.city'|trans }}">
+                                {{ icon('question-circle') }}
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="col-md-1">
-                        <a href="#" class="btn btn-link popover-link"
-                           data-content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
-                            {{ icon('question-circle') }}
-                        </a>
-                    </div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-11">
+                            {{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id})}}) }}
+                        </div>
 
-                <div class="row">
-                    <div class="col-md-offset-10 col-md-2 text-right">
-                        <a href="#" class="btn btn-default btn-sm btn-next">
-                            next {{ icon('angle-double-right') }}
-                        </a>
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.remote'|trans }}">
+                                {{ icon('question-circle') }}
+                            </a>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-10 col-md-2 text-right">
+                            <a href="#" class="btn btn-default btn-sm btn-next">
+                                {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                            </a>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
 
             <div class="tab-pane fade" id="tab2">
-                <div class="row">
-                    <div class="col-md-2">
-                        <a href="#" class="btn btn-default btn-sm btn-prev">
-                            {{ icon('angle-double-left') }} prev
-                        </a>
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-11">
+                            {{ form_row(form.cert, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id})}}) }}
+                        </div>
+
+                        <div class="col-md-1">
+                            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.cert'|trans }}">
+                                {{ icon('question-circle') }}
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="col-md-offset-8 col-md-2 text-right">
-                        <a href="#" class="btn btn-default btn-sm btn-next">
-                            next {{ icon('angle-double-right') }}
-                        </a>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="#" class="btn btn-default btn-sm btn-prev">
+                                {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                            </a>
+                        </div>
+
+                        <div class="col-md-offset-8 col-md-2 text-right">
+                            <a href="#" class="btn btn-default btn-sm btn-next">
+                                {{ 'form.button.next'|trans }} {{ icon('angle-double-right') }}
+                            </a>
+                        </div>
                     </div>
-                </div>
+                </fieldset>
             </div>
 
             <div class="tab-pane fade" id="tab3">
-                <div class="row">
-                    <div class="col-md-2">
-                        <a href="#" class="btn btn-default btn-sm btn-prev">
-                            {{ icon('angle-double-left') }} prev
+                <fieldset>
+                    <div class="col-md-11">
+                        {{ form_row(form.comment) }}
+                    </div>
+
+                    <div class="col-md-1">
+                        <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.comment'|trans }}">
+                            {{ icon('question-circle') }}
                         </a>
                     </div>
-                </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="#" class="btn btn-default btn-sm btn-prev">
+                                {{ icon('angle-double-left') }} {{ 'form.button.previous'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <button type="submit" class="btn btn-success" {% if locked %}disabled="disabled"{% endif %}>
-                    Finish
+                    {{ 'form.button.finish'|trans }}
                 </button>
-                &nbsp;&nbsp;<span id="status"></span>
+                &nbsp;&nbsp;
+                <span id="status-progress" class="hidden">
+                    <i class="fa fa-cog fa-spin"></i> {{ 'form.status.saving'|trans }}
+                </span>
+                <span id="status-done" class="hidden">
+                    <i class="fa fa-check"></i> {{ 'form.status.saved'|trans }}
+                </span>
             </div>
         </div>
 

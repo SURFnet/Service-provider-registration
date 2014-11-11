@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app.request.locale }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,10 @@
 
     {% block stylesheets %}
         <link href="{{ asset('compiled/css/bootstrap.css') }}" rel="stylesheet" media="screen">
-        {%  stylesheets
-            'css/style.css'
-            output='css/compiled/common.css'
-        %}
-            <link href="{{ asset_url }}" rel="stylesheet" media="screen">
+        {% stylesheets
+        'css/style.css'
+        output='css/compiled/common.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet" media="screen">
         {% endstylesheets %}
     {% endblock %}
 </head>
@@ -35,9 +34,10 @@
     <script src="{{ asset('compiled/js/bootstrap.js') }}"></script>
     {% javascripts
     'js/parsley.remote.min.js'
+    'js/parsley.i18n.{locale}.js'
     'js/jquery.autosave.min.js'
     'js/validate.js'
-    output='js/compiled/common.js' %}
+    output='js/compiled/common.{locale}.js' vars=["locale"] %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

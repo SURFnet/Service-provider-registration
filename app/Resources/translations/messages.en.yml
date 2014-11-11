@@ -1,0 +1,4 @@
+form:
+    lock:
+        description: form.lock.description   # FIXME
+        title: form.lock.title   # FIXME

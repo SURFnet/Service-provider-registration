@@ -21,13 +21,14 @@ class ContactType extends AbstractType
             ->add('name')
             ->add('city', null, array('required' => false))
             ->add('remote')
-//            ->add(
-//                'comment',
-//                'ace_editor',
-//                array(
-//                    'mode' => 'ace/mode/twig',
-//                )
-//            )
+            ->add('cert')
+            ->add(
+                'comment',
+                'ace_editor',
+                array(
+                    'mode' => 'ace/mode/twig',
+                )
+            )
         ;
     }
 

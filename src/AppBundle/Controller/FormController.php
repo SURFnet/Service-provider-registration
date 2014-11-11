@@ -9,16 +9,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class FormController
+ *
+ * @Route("/subscription")
  */
 class FormController extends Controller
 {
     /**
-     * @Route("/{id}", requirements={"id" = "\d+"}, name="form")
+     * @Route("/{id}", name="form")
      * @Method("GET")
      *
      * @param string $id
@@ -85,7 +88,13 @@ class FormController extends Controller
         $form->submit($request->get($form->getName()), false);
 
         if (!$form->isValid()) {
-            return new Response($form->getErrors(true, false), 400);
+            $errors = array();
+
+            foreach ($form->getErrors(true) as $error) {
+                $errors[] = $error->getMessage();
+            }
+
+            return new JsonResponse($errors, 400);
         }
 
         return new Response();
@@ -141,6 +150,7 @@ class FormController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
+                'locked'       => !$this->getLock($id)
             )
         );
     }
@@ -268,6 +278,9 @@ class FormController extends Controller
         if (empty($subscription)) {
             throw $this->createNotFoundException();
         }
+
+        // @todo: not real nice to set the locale on the Request here...
+        $this->getRequest()->setLocale($subscription->getLocale());
 
         if ($checkLock && !$this->getLock($id)) {
             throw new \RuntimeException('Subscription is locked');

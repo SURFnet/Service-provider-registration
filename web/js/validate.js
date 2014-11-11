@@ -11,7 +11,6 @@
 
         // Setup validation
         // @todo double, help text
-        // @todo specific error messages
         $form.parsley({
             trigger: 'keyup',
             errorClass: 'has-error',
@@ -36,6 +35,24 @@
             field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
         });
 
+        // Show external error messages
+        $form.find(':input[data-parsley-remote]').each(function () {
+            var field = $(this).parsley();
+
+            $(this).attr('data-parsley-remote-options', '{ "type": "POST" }');
+            $(this).attr('data-parsley-errors-messages-disabled', 1);
+            field.actualizeOptions();
+
+            field.subscribe('parsley:field:success', function (field) {
+                window.ParsleyUI.removeError(field, 'remote');
+            }).subscribe('parsley:field:error', function (field) {
+                window.ParsleyUI.removeError(field, 'remote');
+                $.each($.parseJSON(field._xhr.responseText), function (key, val) {
+                    window.ParsleyUI.addError(field, 'remote', val);
+                });
+            });
+        });
+
         // Setup autosave
         // @todo: use AJAX queue
         $form.autosave({
@@ -48,10 +65,12 @@
                         url: $form.data('save'),
                         type: 'POST',
                         beforeSend: function () {
-                            $('#status').html('<i class="fa fa-cog fa-spin"></i> Saving');
+                            $('#status-done').addClass('hidden');
+                            $('#status-progress').removeClass('hidden');
                         },
                         complete: function () {
-                            $('#status').html('<i class="fa fa-check"></i> Saved');
+                            $('#status-progress').addClass('hidden');
+                            $('#status-done').removeClass('hidden');
                         }
                     }
                 }
