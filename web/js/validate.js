@@ -83,7 +83,7 @@
                 var lockReq = $.get($form.data('lock'));
 
                 lockReq.done(function () {
-                    $inputs.prop('disabled', false);
+                    $inputs.not('.disabled').prop('disabled', false);
                     $form.find('button').prop('disabled', false);
                     $('.lock-warning').hide();
                 });
