@@ -2,8 +2,11 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Subscription;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -39,6 +42,19 @@ class SubscriptionType extends AbstractType
             ->add('surNameAttribute', new AttributeType())
 
             ->add('comments');
+
+        $builder->get('metadataUrl')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                $metadataUrl = $event->getForm()->getData();
+
+                if (!empty($metadataUrl)) {
+                    // @todo: retrieve and parse the meta data
+                    $event->getForm()->getParent()->getData()->setAcsLocation('test');
+                    $event->getForm()->getParent()->getData()->setEntityId('test');
+                }
+            }
+        );
     }
 
     /**
