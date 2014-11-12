@@ -15,6 +15,10 @@ class ValidSSLCertificateValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        if (null === $value || '' === $value) {
+            return;
+        }
+
         $cert = openssl_x509_parse($value);
 
         if ($cert === false) {
