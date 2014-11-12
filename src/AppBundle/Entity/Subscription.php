@@ -90,6 +90,8 @@ class Subscription
     /**
      * @var string
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Url()
+     * @AppAssert\ValidLogo()
      */
     private $logoUrl;
 
@@ -129,6 +131,7 @@ class Subscription
      * @ORM\Column(type="object", nullable=true)
      * @Assert\Type(type="AppBundle\Model\Contact")
      * @Assert\NotBlank()
+     * @Assert\Valid()
      */
     private $administrativeContact;
 
@@ -137,6 +140,7 @@ class Subscription
      * @ORM\Column(type="object", nullable=true)
      * @Assert\Type(type="AppBundle\Model\Contact")
      * @Assert\NotBlank()
+     * @Assert\Valid()
      */
     private $technicalContact;
 
@@ -145,6 +149,7 @@ class Subscription
      * @ORM\Column(type="object", nullable=true)
      * @Assert\Type(type="AppBundle\Model\Contact")
      * @Assert\NotBlank()
+     * @Assert\Valid()
      */
     private $supportContact;
 
@@ -152,6 +157,7 @@ class Subscription
      * @var Attribute
      * @ORM\Column(type="object", nullable=true)
      * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
      */
     private $givenNameAttribute;
 
@@ -159,6 +165,7 @@ class Subscription
      * @var Attribute
      * @ORM\Column(type="object", nullable=true)
      * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
      */
     private $surNameAttribute;
 
@@ -505,6 +512,14 @@ class Subscription
      */
     public function isTechnicalContactDifferentFromAdministrativeContact()
     {
+        if (
+            $this->technicalContact->getFirstName() == false ||
+            $this->technicalContact->getLastName() == false ||
+            $this->technicalContact->getEmail() == false
+        ) {
+            return true;
+        }
+
         return (
             $this->technicalContact->getFirstName() !== $this->administrativeContact->getFirstName() ||
             $this->technicalContact->getLastName() !== $this->administrativeContact->getLastName() ||

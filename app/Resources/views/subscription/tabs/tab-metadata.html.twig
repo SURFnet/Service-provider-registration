@@ -49,7 +49,7 @@
 
     <div class="row">
         <div class="col-md-11">
-            {{ form_row(form.logoUrl) }}
+            {{ form_row(form.logoUrl, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
         </div>
 
         <div class="col-md-1">
