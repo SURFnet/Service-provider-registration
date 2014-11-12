@@ -47,6 +47,11 @@
                 window.ParsleyUI.removeError(field, 'remote');
             }).subscribe('parsley:field:error', function (field) {
                 window.ParsleyUI.removeError(field, 'remote');
+
+                if (typeof field._xhr === "undefined") {
+                    return;
+                }
+
                 $.each($.parseJSON(field._xhr.responseText), function (key, val) {
                     window.ParsleyUI.addError(field, 'remote', val);
                 });
