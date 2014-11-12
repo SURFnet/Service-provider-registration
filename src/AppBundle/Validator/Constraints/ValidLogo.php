@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class ValidLogo extends Constraint
 {
-    public $message = 'Logo is not valid.';
+    public $message = 'Logo is not a valid image.';
 }
