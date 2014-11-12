@@ -1,4 +1,41 @@
 form:
+    title: Form
+    intro: Welcome!
+
+    tab:
+        info: info
+        general: general
+        metadata: metadata
+        contact: contact
+        attributes: attributes
+        comments: comments
+
+        intro:
+            info: intro
+            general: intro
+            metadata: intro
+            contact: intro
+            attributes: intro
+            comments: intro
+
     lock:
         description: form.lock.description   # FIXME
         title: form.lock.title   # FIXME
+
+    label:
+        ticketNo: Ticket no
+
+    button:
+        next: next
+        previous: previous
+        finish: finish
+
+    legend:
+        administrativeContact: administrative contact
+        technicalContact: technical contact
+        supportContact: support contact
+
+    status:
+        saving: saving...
+        saved: saved
+
