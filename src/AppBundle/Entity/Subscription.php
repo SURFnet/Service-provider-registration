@@ -7,6 +7,7 @@ use AppBundle\Model\Contact;
 use AppBundle\Validator\Constraints as AppAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 /**
  * Class Subscription
@@ -508,26 +509,6 @@ class Subscription
     }
 
     /**
-     * @Assert\True(message = "The technical contact should be different from the administrative contact.")
-     */
-    public function isTechnicalContactDifferentFromAdministrativeContact()
-    {
-        if (
-            $this->technicalContact->getFirstName() == false ||
-            $this->technicalContact->getLastName() == false ||
-            $this->technicalContact->getEmail() == false
-        ) {
-            return true;
-        }
-
-        return (
-            $this->technicalContact->getFirstName() !== $this->administrativeContact->getFirstName() ||
-            $this->technicalContact->getLastName() !== $this->administrativeContact->getLastName() ||
-            $this->technicalContact->getEmail() !== $this->administrativeContact->getEmail()
-        );
-    }
-
-    /**
      * @return Contact
      */
     public function getSupportContact()
@@ -605,5 +586,34 @@ class Subscription
         $this->comments = $comments;
 
         return $this;
+    }
+
+    /**
+     * @param ExecutionContextInterface $context
+     *
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context)
+    {
+        if (
+            $this->technicalContact->getFirstName() == false ||
+            $this->technicalContact->getLastName() == false ||
+            $this->technicalContact->getEmail() == false
+        ) {
+            return;
+        }
+
+        if (
+            $this->technicalContact->getFirstName() !== $this->administrativeContact->getFirstName() ||
+            $this->technicalContact->getLastName() !== $this->administrativeContact->getLastName() ||
+            $this->technicalContact->getEmail() !== $this->administrativeContact->getEmail()
+        ) {
+            return;
+        }
+
+        $context->addViolationAt(
+            'technicalContact.email', // @todo: at email path??
+            'The technical contact should be different from the administrative contact.'
+        );
     }
 }
