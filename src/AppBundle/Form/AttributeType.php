@@ -33,7 +33,11 @@ class AttributeType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($formModifier) {
-                $formModifier($event->getForm(), $event->getData()->isRequested());
+                $subscription = $event->getData();
+
+                if (!empty($subscription)) {
+                    $formModifier($event->getForm(), $subscription->isRequested());
+                }
             }
         );
 
