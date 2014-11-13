@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
+            new Misd\GuzzleBundle\MisdGuzzleBundle(),
 
             new AppBundle\AppBundle()
         );

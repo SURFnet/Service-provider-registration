@@ -25,7 +25,8 @@
         "fortawesome/font-awesome": "~4.2",
         "apy/datagrid-bundle": "dev-master",
         "doctrine/migrations": "~1.0@dev",
-        "doctrine/doctrine-migrations-bundle": "~1.0"
+        "doctrine/doctrine-migrations-bundle": "~1.0",
+        "misd/guzzle-bundle": "~1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
