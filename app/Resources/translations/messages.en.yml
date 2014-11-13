@@ -11,7 +11,7 @@ form:
         comments: comments
 
         intro:
-            info: intro
+            info: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             general: intro
             metadata: intro
             contact: intro
@@ -19,23 +19,23 @@ form:
             comments: intro
 
     lock:
-        description: form.lock.description   # FIXME
-        title: form.lock.title   # FIXME
+        description: Please wait until the lock has been released.
+        title: Form has been locked!
 
     label:
         ticketNo: Ticket no
 
     button:
-        next: next
-        previous: previous
-        finish: finish
+        next: Next
+        previous: Previous
+        finish: Finish
 
     legend:
-        administrativeContact: administrative contact
-        technicalContact: technical contact
-        supportContact: support contact
+        administrativeContact: Administrative contact
+        technicalContact: Technical contact
+        supportContact: Support contact
 
     status:
-        saving: saving...
-        saved: saved
+        saving: Saving...
+        saved: Saved
 
