@@ -173,6 +173,94 @@ class Subscription
     private $surNameAttribute;
 
     /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $commonNameAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $displayNameAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $emailAddressAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $organizationAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $organizationTypeAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $affiliationAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $entitlementAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $principleNameAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $isMemberOfAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $uidAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $preferredLanguageAttribute;
+
+    /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
      */
@@ -566,6 +654,226 @@ class Subscription
     public function setSurNameAttribute(Attribute $surNameAttribute = null)
     {
         $this->surNameAttribute = $surNameAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getCommonNameAttribute()
+    {
+        return $this->commonNameAttribute;
+    }
+
+    /**
+     * @param Attribute $commonNameAttribute
+     *
+     * @return $this
+     */
+    public function setCommonNameAttribute($commonNameAttribute)
+    {
+        $this->commonNameAttribute = $commonNameAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getDisplayNameAttribute()
+    {
+        return $this->displayNameAttribute;
+    }
+
+    /**
+     * @param Attribute $displayNameAttribute
+     *
+     * @return $this
+     */
+    public function setDisplayNameAttribute($displayNameAttribute)
+    {
+        $this->displayNameAttribute = $displayNameAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getEmailAddressAttribute()
+    {
+        return $this->emailAddressAttribute;
+    }
+
+    /**
+     * @param Attribute $emailAddressAttribute
+     *
+     * @return $this
+     */
+    public function setEmailAddressAttribute($emailAddressAttribute)
+    {
+        $this->emailAddressAttribute = $emailAddressAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getOrganizationAttribute()
+    {
+        return $this->organizationAttribute;
+    }
+
+    /**
+     * @param Attribute $organizationAttribute
+     *
+     * @return $this
+     */
+    public function setOrganizationAttribute($organizationAttribute)
+    {
+        $this->organizationAttribute = $organizationAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getOrganizationTypeAttribute()
+    {
+        return $this->organizationTypeAttribute;
+    }
+
+    /**
+     * @param Attribute $organizationTypeAttribute
+     *
+     * @return $this
+     */
+    public function setOrganizationTypeAttribute($organizationTypeAttribute)
+    {
+        $this->organizationTypeAttribute = $organizationTypeAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getAffiliationAttribute()
+    {
+        return $this->affiliationAttribute;
+    }
+
+    /**
+     * @param Attribute $affiliationAttribute
+     *
+     * @return $this
+     */
+    public function setAffiliationAttribute($affiliationAttribute)
+    {
+        $this->affiliationAttribute = $affiliationAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getEntitlementAttribute()
+    {
+        return $this->entitlementAttribute;
+    }
+
+    /**
+     * @param Attribute $entitlementAttribute
+     *
+     * @return $this
+     */
+    public function setEntitlementAttribute($entitlementAttribute)
+    {
+        $this->entitlementAttribute = $entitlementAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getPrincipleNameAttribute()
+    {
+        return $this->principleNameAttribute;
+    }
+
+    /**
+     * @param Attribute $principleNameAttribute
+     *
+     * @return $this
+     */
+    public function setPrincipleNameAttribute($principleNameAttribute)
+    {
+        $this->principleNameAttribute = $principleNameAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getIsMemberOfAttribute()
+    {
+        return $this->isMemberOfAttribute;
+    }
+
+    /**
+     * @param Attribute $isMemberOfAttribute
+     *
+     * @return $this
+     */
+    public function setIsMemberOfAttribute($isMemberOfAttribute)
+    {
+        $this->isMemberOfAttribute = $isMemberOfAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getUidAttribute()
+    {
+        return $this->uidAttribute;
+    }
+
+    /**
+     * @param Attribute $uidAttribute
+     *
+     * @return $this
+     */
+    public function setUidAttribute($uidAttribute)
+    {
+        $this->uidAttribute = $uidAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getPreferredLanguageAttribute()
+    {
+        return $this->preferredLanguageAttribute;
+    }
+
+    /**
+     * @param Attribute $preferredLanguageAttribute
+     *
+     * @return $this
+     */
+    public function setPreferredLanguageAttribute($preferredLanguageAttribute)
+    {
+        $this->preferredLanguageAttribute = $preferredLanguageAttribute;
 
         return $this;
     }

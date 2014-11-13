@@ -40,6 +40,17 @@ class SubscriptionType extends AbstractType
 
             ->add('givenNameAttribute', new AttributeType(), array('by_reference' => false))
             ->add('surNameAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('commonNameAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('displayNameAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('emailAddressAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('organizationAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('organizationTypeAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('affiliationAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('entitlementAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('principleNameAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('isMemberOfAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('uidAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('preferredLanguageAttribute', new AttributeType(), array('by_reference' => false))
 
             ->add('comments');
 
@@ -49,10 +60,12 @@ class SubscriptionType extends AbstractType
                 $metadataUrl = $event->getForm()->getData();
 
                 if (!empty($metadataUrl)) {
+                    $subscription = $event->getForm()->getParent()->getData();
+
                     // @todo: retrieve, parse and pre fill the meta data
-                    $event->getForm()->getParent()->getData()->setAcsLocation('ssl://www.google.com');
-                    $event->getForm()->getParent()->getData()->setEntityId('https://www.test.com');
-                    $event->getForm()->getParent()->getData()->setCertificate('q');
+                    $subscription->setAcsLocation('ssl://www.google.com');
+                    $subscription->setEntityId('https://www.test.com');
+                    $subscription->setCertificate('q');
                 }
             }
         );

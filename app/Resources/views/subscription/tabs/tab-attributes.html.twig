@@ -50,4 +50,293 @@
             </a>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.commonNameAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.commonNameAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.commonNameAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.commonNameAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.displayNameAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.displayNameAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.displayNameAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.displayNameAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.emailAddressAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.emailAddressAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.emailAddressAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.emailAddressAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.organizationAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.organizationAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.organizationAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.organizationAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.organizationTypeAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.organizationTypeAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.organizationTypeAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link"
+               data-content="{{ 'form.help.organizationTypeAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.affiliationAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.affiliationAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.affiliationAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.affiliationAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.entitlementAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.entitlementAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.entitlementAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.entitlementAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.principleNameAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.principleNameAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.principleNameAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.principleNameAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.isMemberOfAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.isMemberOfAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.isMemberOfAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.isMemberOfAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.uidAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.uidAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.uidAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.uidAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.preferredLanguageAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.preferredLanguageAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.preferredLanguageAttribute.motivation, {attr: {'class': 'disabled' }})
+                            }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link"
+               data-content="{{ 'form.help.preferredLanguageAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
 </fieldset>
