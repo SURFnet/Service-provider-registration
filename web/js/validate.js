@@ -131,6 +131,20 @@
 
         $inputs.on('focusout', function () {
             $(this).closest('.row').find('.popover-link').popover('hide');
+        });
+
+        // Setup attribute checkboxes
+        $('#attributes').find(':checkbox').on('click', function () {
+            var checkbox = $(this),
+                textarea = checkbox.closest('.form-group').find('textarea');
+
+            if (checkbox.is(':checked')) {
+                textarea.prop('disabled', false);
+                textarea.prop('required', true);
+            } else {
+                textarea.prop('disabled', true);
+                textarea.prop('required', false);
+            }
         })
     });
 })(jQuery);
