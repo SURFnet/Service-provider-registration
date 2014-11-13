@@ -24,9 +24,9 @@ class SubscriptionType extends AbstractType
             ->add('contact', new ContactType(), array('by_reference' => false))
 
             ->add('metadataUrl')
-            ->add('acsLocation', null, array('disabled' => true))
-            ->add('entityId', null, array('disabled' => true))
-            ->add('certificate', null, array('disabled' => true))
+            ->add('acsLocation', null, array('read_only' => true)) // @todo: these should be disabled, but then validation is harder..
+            ->add('entityId', null, array('read_only' => true))
+            ->add('certificate', null, array('read_only' => true))
             ->add('logoUrl')
             ->add('nameEn')
             ->add('descriptionEn')
@@ -38,8 +38,8 @@ class SubscriptionType extends AbstractType
             ->add('technicalContact', new ContactType(), array('by_reference' => false))
             ->add('supportContact', new ContactType(), array('by_reference' => false))
 
-            ->add('givenNameAttribute', new AttributeType())
-            ->add('surNameAttribute', new AttributeType())
+            ->add('givenNameAttribute', new AttributeType(), array('by_reference' => false))
+            ->add('surNameAttribute', new AttributeType(), array('by_reference' => false))
 
             ->add('comments');
 
@@ -49,9 +49,10 @@ class SubscriptionType extends AbstractType
                 $metadataUrl = $event->getForm()->getData();
 
                 if (!empty($metadataUrl)) {
-                    // @todo: retrieve and parse the meta data
-                    $event->getForm()->getParent()->getData()->setAcsLocation('test');
-                    $event->getForm()->getParent()->getData()->setEntityId('test');
+                    // @todo: retrieve, parse and pre fill the meta data
+                    $event->getForm()->getParent()->getData()->setAcsLocation('ssl://www.google.com');
+                    $event->getForm()->getParent()->getData()->setEntityId('https://www.test.com');
+                    $event->getForm()->getParent()->getData()->setCertificate('q');
                 }
             }
         );

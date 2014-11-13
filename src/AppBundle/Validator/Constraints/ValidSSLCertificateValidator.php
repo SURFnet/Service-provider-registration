@@ -40,5 +40,18 @@ class ValidSSLCertificateValidator extends ConstraintValidator
 
             return;
         }
+
+        $acsLocation = $this->context->getRoot()->getData()->getAcsLocation();
+
+        // @todo: catch exceptions, url must be ssl://x.y.x:443, timeout?
+        $context = stream_context_create(array("ssl" => array("capture_peer_cert" => true)));
+        $res = stream_socket_client($acsLocation, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
+        $cont = stream_context_get_params($res);
+
+        openssl_x509_export($cont['options']['ssl']['peer_certificate'], $acsCert, true);
+
+        if ($value === $acsCert) {
+            $this->context->addViolation('Certificate matches certificate of ACSLocation which is not allowed.');
+        }
     }
 }
