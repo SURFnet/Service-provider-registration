@@ -598,6 +598,8 @@ class Subscription
     public function validate(ExecutionContextInterface $context)
     {
         if (
+            empty($this->technicalContact) ||
+            empty($this->administrativeContact) ||
             $this->technicalContact->getFirstName() == false ||
             $this->technicalContact->getLastName() == false ||
             $this->technicalContact->getEmail() == false
