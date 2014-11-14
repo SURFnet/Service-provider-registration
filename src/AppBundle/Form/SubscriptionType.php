@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Metadata\Parser;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -14,6 +15,19 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class SubscriptionType extends AbstractType
 {
+    /**
+     * @var Parser
+     */
+    private $parser;
+
+    /**
+     * @param Parser $parser
+     */
+    public function __construct(Parser $parser)
+    {
+        $this->parser = $parser;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -54,21 +68,33 @@ class SubscriptionType extends AbstractType
 
             ->add('comments');
 
-        $builder->get('metadataUrl')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) {
-                $metadataUrl = $event->getForm()->getData();
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
+    }
 
-                if (!empty($metadataUrl)) {
-                    $subscription = $event->getForm()->getParent()->getData();
+    /**
+     * @param FormEvent $event
+     */
+    public function onPreSubmit(FormEvent $event)
+    {
+        $subscription = $event->getData();
+        $form = $event->getForm();
 
-                    // @todo: retrieve, parse and pre fill the meta data
-                    $subscription->setAcsLocation('ssl://www.google.com');
-                    $subscription->setEntityId('https://www.test.com');
-                    $subscription->setCertificate('q');
-                }
+        $metadataUrl = isset($subscription['metadataUrl']) ? $subscription['metadataUrl'] : null;
+        $orgMetadataUrl = $form->getData()->getMetadataUrl();
+
+        if (!empty($metadataUrl) && $metadataUrl !== $orgMetadataUrl) {
+            try {
+                $metadata = $this->parser->parse($subscription['metadataUrl']);
+
+                $subscription['acsLocation'] = $metadata->acsLocation;
+                $subscription['entityId'] = $metadata->entityId;
+                $subscription['certificate'] = $metadata->certificate;
+
+                $event->setData($subscription);
+            } catch (\InvalidArgumentException $e) {
+                // Exceptions are deliberately ignored because they are caught by the validator
             }
-        );
+        }
     }
 
     /**

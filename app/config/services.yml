@@ -1,0 +1,11 @@
+services:
+
+    parser:
+        class: AppBundle\Metadata\Parser
+        arguments: [@guzzle.client]
+
+    validator.metadata:
+        class: AppBundle\Validator\Constraints\ValidMetadataValidator
+        arguments: [@parser]
+        tags:
+            - { name: validator.constraint_validator, alias: metadata }

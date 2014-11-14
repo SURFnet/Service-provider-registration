@@ -101,49 +101,6 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * @Route("/{id}/metadata", name="metadata")
-     *
-     * @param string $id
-     *
-     * @return Response
-     */
-    public function metadataAction($id)
-    {
-        $subscription = $this->getSubscription($id);
-
-        $metadataUrl = $subscription->getMetadataUrl();
-//        $metadataUrl = 'https://www.meertens.knaw.nl/Shibboleth.sso/Metadata';
-//        $metadataUrl = 'https://sts.hva.nl/federationmetadata/2007-06/federationmetadata.xml';
-//        $metadataUrl = 'https://info.acc.hsleiden.nl/OpenSAML.sso/Metadata';
-//        $metadataUrl = 'https://dmsonline.uvt.nl/simplesaml/module.php/saml/sp/metadata.php/surfconext-uvt';
-
-        $response = $this->get('guzzle.client')->get($metadataUrl, null, array('timeout' => 10))->send();
-
-        $xml = $response->xml();
-
-        $subscription->setEntityId((string)$xml['entityID']);
-
-        $xml = $xml->children('urn:oasis:names:tc:SAML:2.0:metadata');
-
-        foreach ($xml->SPSSODescriptor->AssertionConsumerService as $acs) {
-            $acs = $acs->attributes();
-            if ((string)$acs['Binding'] === 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST') {
-                $subscription->setAcsLocation((string)$acs['Location']);
-                break;
-            }
-        }
-
-        foreach ($xml->SPSSODescriptor->KeyDescriptor->children(
-            'http://www.w3.org/2000/09/xmldsig#'
-        ) as $keyDescriptor) {
-            $subscription->setCertificate((string)$keyDescriptor->X509Data->X509Certificate);
-            break;
-        }
-
-        die(var_dump($subscription));
-    }
-
-    /**
      * @Route("/{id}/lock", name="lock")
      *
      * @param string $id
@@ -295,7 +252,7 @@ class SubscriptionController extends Controller
     private function getForm(Subscription $subscription, $useCsrf = true)
     {
         $form = $this->createForm(
-            new SubscriptionType(),
+            new SubscriptionType($this->get('parser')),
             $subscription,
             array(
                 'disabled'        => !$this->getLock($subscription->getId()),
