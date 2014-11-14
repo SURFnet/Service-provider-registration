@@ -10,4 +10,9 @@ use Symfony\Component\Validator\Constraint;
 class ValidMetadata extends Constraint
 {
     public $message = 'The metadata is invalid.';
+
+    public function validatedBy()
+    {
+        return 'metadata';
+    }
 }
