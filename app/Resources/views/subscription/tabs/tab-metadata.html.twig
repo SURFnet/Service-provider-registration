@@ -1,7 +1,7 @@
 <fieldset>
     <div class="row">
         <div class="col-md-11">
-            {{ form_row(form.metadataUrl) }}
+            {{ form_row(form.metadataUrl, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
         </div>
 
         <div class="col-md-1">
