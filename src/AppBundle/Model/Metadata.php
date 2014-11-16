@@ -12,4 +12,33 @@ class Metadata
     public $entityId;
 
     public $certificate;
+
+    public $logoUrl;
+
+    public $nameEn;
+
+    public $nameNl;
+
+    public $descriptionEn;
+
+    public $descriptionNl;
+
+    public $applicationUrlEn;
+
+    public $applicationUrlNl;
+
+    /**
+     * @var Contact
+     */
+    public $administrativeContact;
+
+    /**
+     * @var Contact
+     */
+    public $supportContact;
+
+    /**
+     * @var Contact
+     */
+    public $technicalContact;
 }
