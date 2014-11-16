@@ -1,6 +1,60 @@
 (function ($) {
     "use strict";
 
+    var
+        updateData = function (dataField, field, val) {
+            window.ParsleyUI.removeError(dataField, 'remote');
+
+            if (field.$element.attr('id') !== dataField.$element.attr('id')) {
+                dataField.$element.val(val);
+            }
+        },
+
+        // @todo: clean, use recursive method
+        updateDataAndErrors = function (field) {
+            var json;
+
+            window.ParsleyUI.removeError(field, 'remote');
+
+            if (typeof field._xhr === "undefined" || typeof field._xhr.responseText === "undefined") {
+                return;
+            }
+
+            json = $.parseJSON(field._xhr.responseText);
+
+            $.each(json.data, function (key, val) {
+                if (val === Object(val)) {
+                    $.each(val, function (key2, val2) {
+                        var dataField = $('#subscription_' + key + '_' + key2).parsley();
+
+                        updateData(dataField, field, val2);
+                    });
+                } else {
+                    var dataField = $('#subscription_' + key).parsley();
+
+                    updateData(dataField, field, val);
+                }
+            });
+
+            $.each(json.errors, function (key, val) {
+                if (!$.isArray(val)) {
+                    $.each(val, function (key2, val2) {
+                        var field = $('#subscription_' + key + '_' + key2).parsley();
+
+                        $.each(val2, function (key, error) {
+                            window.ParsleyUI.addError(field, 'remote', error);
+                        });
+                    });
+                } else {
+                    var field = $('#subscription_' + key).parsley();
+
+                    $.each(val, function (key, error) {
+                        window.ParsleyUI.addError(field, 'remote', error);
+                    });
+                }
+            });
+        };
+
     $(function () {
         var $form = $('#form'),
             $inputs = $form.find('input, select, textarea');
@@ -44,22 +98,19 @@
             field.actualizeOptions();
 
             field.subscribe('parsley:field:success', function (field) {
-                window.ParsleyUI.removeError(field, 'remote');
+                updateDataAndErrors(field);
             }).subscribe('parsley:field:error', function (field) {
-                window.ParsleyUI.removeError(field, 'remote');
-
-                if (typeof field._xhr === "undefined") {
-                    return;
-                }
-
-                $.each($.parseJSON(field._xhr.responseText), function (key, val) {
-                    window.ParsleyUI.addError(field, 'remote', val);
-                });
+                updateDataAndErrors(field);
             });
         });
 
+        // Prevent caching for the metadataUrl field because the response can be different based on earlier values
+        $('#subscription_metadataUrl').parsley().subscribe('parsley:field:validate', function (field) {
+            field.$element.attr('data-parsley-remote-options', '{ "type": "POST", "ts": ' + Date.now() + ' }');
+            field.actualizeOptions();
+        });
+
         // Setup autosave
-        // @todo: use AJAX queue
         $form.autosave({
             callbacks: {
                 trigger: 'modify',
@@ -121,7 +172,7 @@
             trigger: 'hover'
         });
 
-        $links.on('click', function() {
+        $links.on('click', function () {
             return false;
         });
 

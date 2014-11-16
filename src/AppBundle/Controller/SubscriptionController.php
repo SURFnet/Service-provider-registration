@@ -87,17 +87,36 @@ class SubscriptionController extends Controller
 
         $form->submit($request->get($form->getName()), false);
 
-        if (!$form->isValid()) {
-            $errors = array();
+        $response = array('data' => array(), 'errors' => array());
 
-            foreach ($form->getErrors(true) as $error) {
-                $errors[] = $error->getMessage();
+        // @todo: use recursive method
+        foreach ($form as $field) {
+            if ($field->count() > 1) {
+                foreach ($field as $child) {
+                    if ($child->isSubmitted()) {
+                        $response['data'][$field->getName()][$child->getName()] = $child->getData();
+                    }
+
+                    if (!$child->isValid()) {
+                        foreach ($child->getErrors(true) as $error) {
+                            $response['errors'][$field->getName()][$child->getName()][] = $error->getMessage();
+                        }
+                    }
+                }
+            } else {
+                if ($field->isSubmitted()) {
+                    $response['data'][$field->getName()] = $field->getData();
+                }
+
+                if (!$field->isValid()) {
+                    foreach ($field->getErrors(true) as $error) {
+                        $response['errors'][$field->getName()][] = $error->getMessage();
+                    }
+                }
             }
-
-            return new JsonResponse($errors, 400);
         }
 
-        return new Response();
+        return new JsonResponse($response, $form->isValid() ? 200 : 400);
     }
 
     /**
@@ -170,6 +189,11 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
         }
 
+        // @todo
+//        if (!$this->get('validator')->validate($subscription)) {
+//            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+//        }
+
         return $this->render(
             'subscription/overview.html.twig',
             array(
@@ -192,6 +216,11 @@ class SubscriptionController extends Controller
         } catch (\InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
         }
+
+        // @todo
+//        if (!$this->get('validator')->validate($subscription)) {
+//            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+//        }
 
         $subscription->finish();
 
