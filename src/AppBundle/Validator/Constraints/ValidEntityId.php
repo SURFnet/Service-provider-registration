@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class ValidEntityId extends Constraint
 {
-    public $message = 'Host of entityId must match host of metadataUrl.';
+    public $message = 'Domain of entityId (%edomain%) must match domain of metadataUrl (%mdomain%).';
 }

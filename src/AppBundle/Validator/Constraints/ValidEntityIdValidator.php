@@ -2,6 +2,8 @@
 namespace AppBundle\Validator\Constraints;
 
 use AppBundle\Entity\Subscription;
+use Pdp\Parser;
+use Pdp\PublicSuffixListManager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -25,25 +27,35 @@ class ValidEntityIdValidator extends ConstraintValidator
             return;
         }
 
-        $metadataHost = parse_url($metadataUrl, PHP_URL_HOST);
-        $entityIdHost = parse_url($value, PHP_URL_HOST);
+        $pslManager = new PublicSuffixListManager();
+        $parser = new Parser($pslManager->getList());
 
-        if ($metadataHost === false) {
+        try {
+            $metadataUrl = $parser->parseUrl($metadataUrl);
+        } catch (\Exception $e) {
             $this->context->addViolationAt('metadataUrl', 'Invalid metadataUrl.');
 
             return;
         }
 
-        if ($entityIdHost === false) {
+        try {
+            $entityIdUrl = $parser->parseUrl($value);
+        } catch (\Exception $e) {
             $this->context->addViolation('Invalid entityId.');
 
             return;
         }
 
-        if ($metadataHost !== $entityIdHost) {
-            $this->context->addViolation($constraint->message);
+        if ($metadataUrl->host->registerableDomain !== $entityIdUrl->host->registerableDomain) {
+            $this->context->addViolation(
+                $constraint->message,
+                array(
+                    '%mdomain%' => $metadataUrl->host->registerableDomain,
+                    '%edomain%' => $entityIdUrl->host->registerableDomain
+                )
+            );
 
             return;
         }
-   }
+    }
 }
