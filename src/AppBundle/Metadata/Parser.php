@@ -216,51 +216,69 @@ class Parser
 
             switch ($attributes['Name']) {
                 case 'urn:mace:dir:attribute-def:displayName':
+                case 'urn:oid:2.16.840.1.113730.3.1.241':
                     $metadata->displayNameAttribute = $attr;
                     break;
 
                 case 'urn:mace:dir:attribute-def:eduPersonAffiliation':
+                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.1':
                     $metadata->affiliationAttribute = $attr;
                     break;
 
                 case 'urn:mace:dir:attribute-def:mail':
+                case 'urn:oid:0.9.2342.19200300.100.1.3':
                     $metadata->emailAddressAttribute = $attr;
                     break;
 
                 case 'urn:mace:dir:attribute-def:cn':
+                case 'urn:oid:2.5.4.3':
                     $metadata->commonNameAttribute = $attr;
                     break;
 
-                // @todo: Unknown?
-                case 'urn:mace:dir:attribute-def:schacHomeOrganization':
                 case 'urn:mace:terena.org:attribute-def:schacHomeOrganization':
+                case 'urn:oid:1.3.6.1.4.1.25178.1.2.9':
+                    $metadata->organizationAttribute = $attr;
+                    break;
+
+                case 'urn:mace:terena.org:attribute-def:schacHomeOrganizationType ':
+                case 'urn:oid:1.3.6.1.4.1.25178.1.2.10':
+                    $metadata->organizationTypeAttribute = $attr;
                     break;
 
                 case 'urn:mace:dir:attribute-def:sn':
+                case 'urn:oid:2.5.4.4':
                     $metadata->surNameAttribute = $attr;
                     break;
 
                 case 'urn:mace:dir:attribute-def:givenName':
+                case 'urn:oid:2.5.4.42':
                     $metadata->givenNameAttribute = $attr;
                     break;
 
+                case 'urn:mace:dir:attribute-def:eduPersonEntitlement':
+                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7':
+                    $metadata->entitlementAttribute = $attr;
+                    break;
+
                 case 'urn:mace:dir:attribute-def:uid':
+                case 'urn:oid:0.9.2342.19200300.100.1.1':
                     $metadata->uidAttribute = $attr;
                     break;
 
                 case 'urn:mace:dir:attribute-def:eduPersonPrincipalName':
+                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6':
                     $metadata->principleNameAttribute = $attr;
                     break;
 
-                /**
-                 * @todo: Unknown?
-                 * urn:oid:0.9.2342.19200300.100.1.3 //mail
-                 * urn:oid:2.16.840.1.113730.3.1.241 //displayName
-                 * urn:oid:2.5.4.3 //commonName
-                 * urn:oid:1.3.6.1.4.1.25178.1.2.9 //
-                 * urn:oid:1.3.6.1.4.1.5923.1.1.1.1
-                 * urn:oid:1.3.6.1.4.1.5923.1.1.1.6
-                 */
+                case 'urn:mace:dir:attribute-def:isMemberOf':
+                case 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1':
+                    $metadata->isMemberOfAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:preferredLanguage':
+                case 'urn:oid:2.16.840.1.113730.3.1.39':
+                    $metadata->preferredLanguageAttribute = $attr;
+                    break;
             }
         }
     }
