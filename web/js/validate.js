@@ -6,7 +6,11 @@
             window.ParsleyUI.removeError(dataField, 'remote');
 
             if (field.$element.attr('id') !== dataField.$element.attr('id')) {
-                dataField.$element.val(val);
+                if (dataField.$element.attr('type') === 'checkbox') {
+                    dataField.$element.prop('checked', val).trigger('change');
+                } else {
+                    dataField.$element.val(val);
+                }
             }
         },
 
@@ -185,7 +189,7 @@
         });
 
         // Setup attribute checkboxes
-        $('#attributes').find(':checkbox').on('click', function () {
+        $('#attributes').find(':checkbox').on('change', function () {
             var checkbox = $(this),
                 textarea = checkbox.closest('.form-group').find('textarea');
 
