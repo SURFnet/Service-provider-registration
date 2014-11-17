@@ -27,7 +27,7 @@ class GridController extends Controller
         $grid = $this->get('grid');
         $grid->setSource($source);
 
-        $grid->addRowAction(new RowAction('view', 'form'));
+        $grid->addRowAction(new RowAction('view', 'form', false, '_blank'));
 
         return $grid->getGridResponse('grid/overview.html.twig');
     }
