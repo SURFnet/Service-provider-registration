@@ -2,6 +2,7 @@
 
 namespace AppBundle\Metadata;
 
+use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
 use Guzzle\Common\Exception\GuzzleException;
@@ -92,9 +93,17 @@ class Parser
 
         $this->parseContactPersons($contactPersons, $metadata);
 
+        if (isset($descriptor->AttributeConsumingService)) {
+            $this->parseAttributes($descriptor, $metadata);
+        }
+
         return $this->cache[$metadataUrl] = $metadata;
     }
 
+    /**
+     * @param \SimpleXMLElement $descriptor
+     * @param Metadata          $metadata
+     */
     private function parseCertificate($descriptor, Metadata $metadata)
     {
         foreach ($descriptor->KeyDescriptor->children(self::NS_SIG) as $keyInfo) {
@@ -105,6 +114,10 @@ class Parser
         }
     }
 
+    /**
+     * @param \SimpleXMLElement $descriptor
+     * @param Metadata          $metadata
+     */
     private function parseUi($descriptor, Metadata $metadata)
     {
         $ui = $descriptor->Extensions->children(self::NS_UI)->UIInfo;
@@ -157,6 +170,10 @@ class Parser
         }
     }
 
+    /**
+     * @param \SimpleXMLElement $persons
+     * @param Metadata          $metadata
+     */
     private function parseContactPersons($persons, Metadata $metadata)
     {
         foreach ($persons as $person) {
@@ -180,6 +197,70 @@ class Parser
                 case 'administrative':
                     $metadata->administrativeContact = $contact;
                     break;
+            }
+        }
+    }
+
+    /**
+     * @param \SimpleXMLElement $descriptor
+     * @param Metadata          $metadata
+     */
+    private function parseAttributes($descriptor, Metadata $metadata)
+    {
+        foreach ($descriptor->AttributeConsumingService->RequestedAttribute as $attribute) {
+
+            $attr = new Attribute();
+            $attr->setRequested(true);
+
+            $attributes = $attribute->attributes();
+
+            switch ($attributes['Name']) {
+                case 'urn:mace:dir:attribute-def:displayName':
+                    $metadata->displayNameAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:eduPersonAffiliation':
+                    $metadata->affiliationAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:mail':
+                    $metadata->emailAddressAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:cn':
+                    $metadata->commonNameAttribute = $attr;
+                    break;
+
+                // @todo: Unknown?
+                case 'urn:mace:dir:attribute-def:schacHomeOrganization':
+                case 'urn:mace:terena.org:attribute-def:schacHomeOrganization':
+                    break;
+
+                case 'urn:mace:dir:attribute-def:sn':
+                    $metadata->surNameAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:givenName':
+                    $metadata->givenNameAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:uid':
+                    $metadata->uidAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:eduPersonPrincipalName':
+                    $metadata->principleNameAttribute = $attr;
+                    break;
+
+                /**
+                 * @todo: Unknown?
+                 * urn:oid:0.9.2342.19200300.100.1.3 //mail
+                 * urn:oid:2.16.840.1.113730.3.1.241 //displayName
+                 * urn:oid:2.5.4.3 //commonName
+                 * urn:oid:1.3.6.1.4.1.25178.1.2.9 //
+                 * urn:oid:1.3.6.1.4.1.5923.1.1.1.1
+                 * urn:oid:1.3.6.1.4.1.5923.1.1.1.6
+                 */
             }
         }
     }

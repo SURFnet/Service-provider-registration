@@ -41,4 +41,69 @@ class Metadata
      * @var Contact
      */
     public $technicalContact;
+
+    /**
+     * @var Attribute
+     */
+    public $givenNameAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $surNameAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $commonNameAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $displayNameAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $emailAddressAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $organizationAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $organizationTypeAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $affiliationAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $entitlementAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $principleNameAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $isMemberOfAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $uidAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $preferredLanguageAttribute;
 }
