@@ -88,7 +88,7 @@ class SubscriptionType extends AbstractType
         $metadata = new Metadata();
 
         try {
-            if ($metadataUrl !== $orgMetadataUrl) {
+            if ($metadataUrl != $orgMetadataUrl) {
                 $metadata = $this->parser->parse($metadataUrl);
             } else {
                 $metadata = $this->getOriginalMetadata($orgSubscription, $subscription);
