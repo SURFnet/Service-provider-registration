@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Model\Contact;
+use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,14 +20,16 @@ class GridController extends Controller
      *
      * @return Response
      */
-    public function gridAction()
+    public function overviewAction()
     {
         $source = new Entity('AppBundle:Subscription');
 
         $grid = $this->get('grid');
         $grid->setSource($source);
 
-        return $grid->getGridResponse('grid/grid.html.twig');
+        $grid->addRowAction(new RowAction('view', 'form'));
+
+        return $grid->getGridResponse('grid/overview.html.twig');
     }
 
     /**
@@ -47,5 +50,7 @@ class GridController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
         $em->flush();
+
+        return $this->redirect($this->generateUrl('grid'));
     }
 }

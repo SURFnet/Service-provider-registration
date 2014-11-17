@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Validator\Constraints as AppAssert;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContextInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\Validator\ExecutionContextInterface;
  * Class Subscription
  *
  * @ORM\Entity
+ * @GRID\Source(columns="id, ticketNo, status", filterable=false)
  */
 class Subscription
 {
