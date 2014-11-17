@@ -9,3 +9,9 @@ services:
         arguments: [@parser]
         tags:
             - { name: validator.constraint_validator, alias: metadata }
+
+    validator.certificate:
+        class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
+        arguments: [@guzzle.client]
+        tags:
+            - { name: validator.constraint_validator, alias: certificate }

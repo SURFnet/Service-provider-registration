@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Validator\Constraints;
 
+use Guzzle\Common\Exception\GuzzleException;
+use Guzzle\Http\Client;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -9,6 +11,19 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class ValidSSLCertificateValidator extends ConstraintValidator
 {
+    /**
+     * @var Client
+     */
+    private $guzzle;
+
+    /**
+     * @param Client $guzzle
+     */
+    public function __construct(Client $guzzle)
+    {
+        $this->guzzle = $guzzle;
+    }
+
     /**
      * @param mixed      $value
      * @param Constraint $constraint
@@ -41,12 +56,17 @@ class ValidSSLCertificateValidator extends ConstraintValidator
             return;
         }
 
+        return;
+
+        // @todo: fix this
+
         $acsLocation = $this->context->getRoot()->getData()->getAcsLocation();
 
-        // @todo: catch exceptions, url must be ssl://x.y.x:443, timeout?
-        $context = stream_context_create(array("ssl" => array("capture_peer_cert" => true)));
-        $res = stream_socket_client($acsLocation, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
-        $cont = stream_context_get_params($res);
+        try {
+            $response = $this->guzzle->get($acsLocation)->send();
+        } catch (GuzzleException $e) {
+            return;
+        }
 
         openssl_x509_export($cont['options']['ssl']['peer_certificate'], $acsCert, true);
 

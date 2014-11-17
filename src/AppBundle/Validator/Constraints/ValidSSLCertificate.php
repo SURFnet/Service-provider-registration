@@ -10,4 +10,9 @@ use Symfony\Component\Validator\Constraint;
 class ValidSSLCertificate extends Constraint
 {
     public $message = 'The certificate is not valid.';
+
+    public function validatedBy()
+    {
+        return 'certificate';
+    }
 }
