@@ -18,7 +18,7 @@
         updateDataAndErrors = function (field) {
             var json;
 
-            window.ParsleyUI.removeError(field, 'remote');
+            clearErrors(field);
 
             if (typeof field._xhr === "undefined" || typeof field._xhr.responseText === "undefined") {
                 return;
@@ -45,6 +45,8 @@
                     $.each(val, function (key2, val2) {
                         var field = $('#subscription_' + key + '_' + key2).parsley();
 
+                        clearErrors(field);
+
                         $.each(val2, function (key, error) {
                             window.ParsleyUI.addError(field, 'remote', error);
                         });
@@ -52,11 +54,20 @@
                 } else {
                     var field = $('#subscription_' + key).parsley();
 
+                    clearErrors(field);
+
                     $.each(val, function (key, error) {
                         window.ParsleyUI.addError(field, 'remote', error);
                     });
                 }
             });
+        },
+
+        clearErrors = function (field) {
+            window.ParsleyUI.removeError(field, 'remote');
+            window.ParsleyUI.removeError(field, 'required');
+            window.ParsleyUI.removeError(field, 'type');
+            window.ParsleyUI.removeError(field, 'contactunique');
         };
 
     $(function () {
@@ -83,6 +94,7 @@
                 $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
             }
         }).subscribe('parsley:field:validate', function (field) {
+            window.ParsleyUI.removeError(field, 'remote');
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
         }).subscribe('parsley:field:success', function (field) {
@@ -113,6 +125,25 @@
             field.$element.attr('data-parsley-remote-options', '{ "type": "POST", "ts": ' + Date.now() + ' }');
             field.actualizeOptions();
         });
+
+        // A custom validator to check whether the adm. and tech. contact are not the same
+        window.ParsleyValidator
+            .addValidator('contactunique', function () {
+                var fname1 = $('#subscription_administrativeContact_firstName').val(),
+                    fname2 = $('#subscription_technicalContact_firstName').val(),
+                    lname1 = $('#subscription_administrativeContact_lastName').val(),
+                    lname2 = $('#subscription_technicalContact_lastName').val(),
+                    email1 = $('#subscription_administrativeContact_email').val(),
+                    email2 = $('#subscription_technicalContact_email').val();
+
+                if (!fname1 || !fname2 || !lname1 || !lname2 || !email1 || !email2) {
+                    return true;
+                }
+
+                return !(fname1 == fname2 && lname1 == lname2 && email1 == email2);
+            }, 32)
+            .addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
+            .addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
 
         // Setup autosave
         $form.autosave({

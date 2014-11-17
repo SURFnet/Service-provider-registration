@@ -40,7 +40,7 @@ class SubscriptionType extends AbstractType
         $builder
             ->add('contact', new ContactType(), array('by_reference' => false))
             // Tab Metadata
-            ->add('metadataUrl')
+            ->add('metadataUrl', 'url', array('default_protocol' => 'https'))
             ->add('acsLocation', null, array('read_only' => true)) // @todo: these should be disabled, but then validation is harder..
             ->add('entityId', null, array('read_only' => true))
             ->add('certificate', null, array('read_only' => true))
