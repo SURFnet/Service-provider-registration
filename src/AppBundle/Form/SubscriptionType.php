@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Metadata\Parser;
+use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
 use Symfony\Component\Form\AbstractType;
@@ -48,27 +49,20 @@ class SubscriptionType extends AbstractType
             ->add('descriptionEn')
             ->add('nameNl')
             ->add('descriptionNl')
-            ->add('applicationUrl')
-            // Tab Contact
-            ->add('administrativeContact', new ContactType(), array('by_reference' => false))
-            ->add('technicalContact', new ContactType(), array('by_reference' => false))
-            ->add('supportContact', new ContactType(), array('by_reference' => false))
-            // Tab Attributes
-            ->add('givenNameAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('surNameAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('commonNameAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('displayNameAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('emailAddressAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('organizationAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('organizationTypeAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('affiliationAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('entitlementAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('principleNameAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('isMemberOfAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('uidAttribute', new AttributeType(), array('by_reference' => false))
-            ->add('preferredLanguageAttribute', new AttributeType(), array('by_reference' => false))
-            // Tab Comments
-            ->add('comments');
+            ->add('applicationUrl');
+
+        // Tab Contact
+        foreach ($this->getContacts() as $contact) {
+            $builder->add($contact, new ContactType(), array('by_reference' => false));
+        }
+
+        // Tab Attributes
+        foreach ($this->getAttributes() as $attribute) {
+            $builder->add($attribute, new AttributeType(), array('by_reference' => false));
+        }
+
+        // Tab Comments
+        $builder->add('comments');
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
     }
@@ -119,28 +113,22 @@ class SubscriptionType extends AbstractType
         $formData['descriptionNl'] = $metadata->descriptionNl;
         $formData['applicationUrl'] = $metadata->applicationUrlEn;
 
-        if ($metadata->administrativeContact instanceof Contact) {
-            $formData['administrativeContact'] = array();
-            $formData['administrativeContact']['firstName'] = $metadata->administrativeContact->getFirstName();
-            $formData['administrativeContact']['lastName'] = $metadata->administrativeContact->getLastName();
-            $formData['administrativeContact']['email'] = $metadata->administrativeContact->getEmail();
-            $formData['administrativeContact']['phone'] = $metadata->administrativeContact->getPhone();
+        foreach ($this->getContacts() as $contact) {
+            if ($metadata->$contact instanceof Contact) {
+                $formData[$contact] = array();
+                $formData[$contact]['firstName'] = $metadata->$contact->getFirstName();
+                $formData[$contact]['lastName'] = $metadata->$contact->getLastName();
+                $formData[$contact]['email'] = $metadata->$contact->getEmail();
+                $formData[$contact]['phone'] = $metadata->$contact->getPhone();
+            }
         }
 
-        if ($metadata->technicalContact instanceof Contact) {
-            $formData['technicalContact'] = array();
-            $formData['technicalContact']['firstName'] = $metadata->technicalContact->getFirstName();
-            $formData['technicalContact']['lastName'] = $metadata->technicalContact->getLastName();
-            $formData['technicalContact']['email'] = $metadata->technicalContact->getEmail();
-            $formData['technicalContact']['phone'] = $metadata->technicalContact->getPhone();
-        }
-
-        if ($metadata->supportContact instanceof Contact) {
-            $formData['supportContact'] = array();
-            $formData['supportContact']['firstName'] = $metadata->supportContact->getFirstName();
-            $formData['supportContact']['lastName'] = $metadata->supportContact->getLastName();
-            $formData['supportContact']['email'] = $metadata->supportContact->getEmail();
-            $formData['supportContact']['phone'] = $metadata->supportContact->getPhone();
+        foreach ($this->getAttributes() as $attribute) {
+            if ($metadata->$attribute instanceof Attribute) {
+                $formData[$attribute] = array();
+                $formData[$attribute]['requested'] = $metadata->$attribute->isRequested();
+                $formData[$attribute]['motivation'] = $metadata->$attribute->getMotivation();
+            }
         }
 
         return $formData;
@@ -160,22 +148,37 @@ class SubscriptionType extends AbstractType
         $metadata->descriptionNl = array_key_exists('descriptionNl', $formData) ? $formData['descriptionNl'] : $subscription->getDescriptionNl();
         $metadata->applicationUrlEn = array_key_exists('applicationUrl', $formData) ? $formData['applicationUrl'] : $subscription->getApplicationUrl();
 
-        $metadata->administrativeContact = $this->getContactData($subscription, $formData, 'administrative');
-        $metadata->technicalContact = $this->getContactData($subscription, $formData, 'technical');
-        $metadata->supportContact = $this->getContactData($subscription, $formData, 'support');
+        foreach ($this->getContacts() as $contact) {
+            $metadata->$contact = $this->getContactData($subscription, $formData, $contact);
+        }
+
+        foreach ($this->getAttributes() as $attribute) {
+            $metadata->$attribute = $this->getAttributeData($subscription, $formData, $attribute);
+        }
 
         return $metadata;
     }
 
+    /**
+     * @param Subscription $subscription
+     * @param array        $formData
+     * @param string       $type
+     *
+     * @return Contact
+     */
     private function getContactData(Subscription $subscription, array $formData, $type)
     {
         /** @var Contact $orgContact */
-        $orgContact = $subscription->{'get' .ucfirst($type) . 'Contact'}();
+        $orgContact = $subscription->{'get' . ucfirst($type)}();
 
-        $contact = clone $orgContact;
+        if ($orgContact instanceof Contact) {
+            $contact = clone $orgContact;
+        } else {
+            $contact = new Contact();
+        }
 
-        if (array_key_exists($type . 'Contact', $formData)) {
-            $formData = $formData[$type . 'Contact'];
+        if (array_key_exists($type, $formData)) {
+            $formData = $formData[$type];
 
             if (array_key_exists('firstName', $formData)) {
                 $contact->setFirstName($formData['firstName']);
@@ -198,6 +201,39 @@ class SubscriptionType extends AbstractType
     }
 
     /**
+     * @param Subscription $subscription
+     * @param array        $formData
+     * @param string       $type
+     *
+     * @return Attribute
+     */
+    private function getAttributeData(Subscription $subscription, array $formData, $type)
+    {
+        /** @var Attribute $orgAttribute */
+        $orgAttribute = $subscription->{'get' . ucfirst($type)}();
+
+        if ($orgAttribute instanceof Attribute) {
+            $attribute = clone $orgAttribute;
+        } else {
+            $attribute = new Attribute();
+        }
+
+        if (array_key_exists($type, $formData)) {
+            $formData = $formData[$type];
+
+            if (array_key_exists('requested', $formData)) {
+                $attribute->setRequested(true);
+            }
+
+            if (array_key_exists('motivation', $formData)) {
+                $attribute->setMotivation($formData['motivation']);
+            }
+        }
+
+        return $attribute;
+    }
+
+    /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -215,5 +251,39 @@ class SubscriptionType extends AbstractType
     public function getName()
     {
         return 'subscription';
+    }
+
+    /**
+     * @return array
+     */
+    private function getContacts()
+    {
+        return array(
+            'administrativeContact',
+            'technicalContact',
+            'supportContact'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getAttributes()
+    {
+        return array(
+            'givenNameAttribute',
+            'surNameAttribute',
+            'commonNameAttribute',
+            'displayNameAttribute',
+            'emailAddressAttribute',
+            'organizationAttribute',
+            'organizationTypeAttribute',
+            'affiliationAttribute',
+            'entitlementAttribute',
+            'principleNameAttribute',
+            'isMemberOfAttribute',
+            'uidAttribute',
+            'preferredLanguageAttribute'
+        );
     }
 }
