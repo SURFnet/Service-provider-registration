@@ -1,0 +1,27 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}New Subscription{% endblock %}
+
+{% block body %}
+    <div class="col-md-9">
+        <form method="post" {{ form_enctype(form) }} class="form-horizontal">
+            {{ bootstrap_set_style('horizontal') }}
+
+            {{ form_errors(form) }}
+
+            {{ form_row(form.ticketNo) }}
+            {{ form_row(form.contact) }}
+            {{ form_row(form.locale) }}
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="{{ path('admin.subscription.overview') }}" class="btn btn-default">Cancel</a>
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+
+        </form>
+    </div>
+{% endblock %}

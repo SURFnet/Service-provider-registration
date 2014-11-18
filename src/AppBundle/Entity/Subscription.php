@@ -32,9 +32,10 @@ class Subscription
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"creation"})
+     * @Assert\Choice(choices = {"en", "nl"}, groups={"creation"})
      */
-    private $locale;
+    private $locale = 'en';
 
     /**
      * @var int
@@ -46,15 +47,15 @@ class Subscription
     /**
      * @var string
      * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"creation"})
      */
     private $ticketNo;
 
     /**
      * @var Contact
      * @ORM\Column(type="object", nullable=true)
-     * @Assert\Type(type="AppBundle\Model\Contact")
-     * @Assert\NotBlank()
+     * @Assert\Type(type="AppBundle\Model\Contact", groups={"Default", "creation"})
+     * @Assert\NotBlank(groups={"Default", "creation"})
      * @Assert\Valid()
      */
     private $contact;

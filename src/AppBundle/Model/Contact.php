@@ -23,8 +23,8 @@ class Contact
 
     /**
      * @var string
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank(groups={"Default", "creation"})
+     * @Assert\Email(groups={"Default", "creation"})
      */
     private $email;
 
