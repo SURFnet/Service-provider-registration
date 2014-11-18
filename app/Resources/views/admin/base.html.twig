@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SURFnet SP Registration | Admin</title>
+
+    {% block stylesheets %}
+        <link href="{{ asset('compiled/css/bootstrap.css') }}" rel="stylesheet" media="screen">
+        {% stylesheets
+        'css/style.css'
+        output='css/compiled/common.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet" media="screen">
+        {% endstylesheets %}
+    {% endblock %}
+
+    <script src="{{ asset('compiled/js/jquery.js') }}"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">SURFnet</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                {{ knp_menu_render('menu', { 'style': 'navbar' }) }}
+            </div>
+        </div>
+    </nav>
+
+    <div class="row">
+        <div class="page-header">
+            <h1>{% block title %}{% endblock %}</h1>
+        </div>
+        {% block body %}{% endblock %}
+    </div>
+</div>
+
+{% block javascripts %}
+    <script src="{{ asset('compiled/js/bootstrap.js') }}"></script>
+    {% javascripts output='js/compiled/admin.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+</body>
+</html>
