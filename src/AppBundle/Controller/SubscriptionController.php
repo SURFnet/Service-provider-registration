@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Form\SubscriptionType;
-use Doctrine\Common\Cache\ApcCache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -43,7 +42,7 @@ class SubscriptionController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
-                'locked'       => !$this->getLock($id)
+                'locked' => !$this->get('lock.manager')->getLock($id)
             )
         );
     }
@@ -65,7 +64,7 @@ class SubscriptionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $this->saveSubscription($subscription);
+            $this->get('subscription.manager')->saveSubscription($subscription);
         }
 
         return new Response();
@@ -128,7 +127,7 @@ class SubscriptionController extends Controller
      */
     public function lockAction($id)
     {
-        if (!$this->getLock($id)) {
+        if (!$this->get('lock.manager')->getLock($id)) {
             return new Response('', 423);
         }
 
@@ -157,7 +156,7 @@ class SubscriptionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $this->saveSubscription($subscription);
+            $this->get('subscription.manager')->saveSubscription($subscription);
         }
 
         if ($form->isValid()) {
@@ -169,7 +168,7 @@ class SubscriptionController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
-                'locked'       => !$this->getLock($id)
+                'locked' => !$this->get('lock.manager')->getLock($id)
             )
         );
     }
@@ -189,7 +188,7 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
         }
 
-        if (!$this->isValidSubscription($subscription)) {
+        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
         }
 
@@ -216,13 +215,13 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
         }
 
-        if (!$this->isValidSubscription($subscription)) {
+        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
         }
 
         $subscription->finish();
 
-        $this->saveSubscription($subscription);
+        $this->get('subscription.manager')->saveSubscription($subscription);
 
         return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
     }
@@ -245,32 +244,6 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * @param string $id
-     *
-     * @return bool
-     * @todo: move to 'manager'
-     * @todo: this is not atomic!
-     */
-    private function getLock($id)
-    {
-        /** @var ApcCache $cache */
-        $cache = $this->get('cache');
-        $session = $this->get('session');
-
-        $cacheId = 'lock-' . $id;
-        $sessionId = $session->getId();
-
-        $lock = $cache->fetch($cacheId);
-
-        // If there already is a lock for another session -> fail.
-        if ($lock !== false && $lock !== $sessionId) {
-            return false;
-        }
-
-        return $cache->save($cacheId, $sessionId, 12);
-    }
-
-    /**
      * @param Subscription $subscription
      * @param bool         $useCsrf
      *
@@ -282,7 +255,7 @@ class SubscriptionController extends Controller
             new SubscriptionType($this->get('parser')),
             $subscription,
             array(
-                'disabled'        => !$this->getLock($subscription->getId()),
+                'disabled' => !$this->get('lock.manager')->getLock($subscription->getId()),
                 'csrf_protection' => $useCsrf
             )
         );
@@ -296,11 +269,10 @@ class SubscriptionController extends Controller
      * @param bool   $checkLock
      *
      * @return Subscription
-     * @todo: move to 'manager'
      */
     private function getSubscription($id, $checkStatus = true, $checkLock = true)
     {
-        $subscription = $this->getDoctrine()->getRepository('AppBundle:Subscription')->find($id);
+        $subscription = $this->get('subscription.manager')->getSubscription($id, $checkStatus, $checkLock);
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();
@@ -309,35 +281,6 @@ class SubscriptionController extends Controller
         // @todo: not real nice to set the locale on the Request here...
         $this->getRequest()->setLocale($subscription->getLocale());
 
-        if ($checkLock && !$this->getLock($id)) {
-            throw new \RuntimeException('Subscription is locked');
-        }
-
-        if ($checkStatus && $subscription->isFinished()) {
-            throw new \InvalidArgumentException('Subscription has already been finished');
-        }
-
         return $subscription;
-    }
-
-    /**
-     * @param Subscription $subscription
-     * @todo: move to 'manager'
-     */
-    private function saveSubscription(Subscription $subscription)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $em->flush();
-    }
-
-    /**
-     * @param Subscription $subscription
-     *
-     * @return bool
-     * @todo: move to 'manager'
-     */
-    private function isValidSubscription(Subscription $subscription)
-    {
-        return count($this->get('validator')->validate($subscription)) === 0;
     }
 }

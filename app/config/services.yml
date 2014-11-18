@@ -15,3 +15,11 @@ services:
         arguments: [@guzzle.client]
         tags:
             - { name: validator.constraint_validator, alias: certificate }
+
+    subscription.manager:
+        class: AppBundle\Manager\SubscriptionManager
+        arguments: [@doctrine.orm.entity_manager, @validator, @lock.manager]
+
+    lock.manager:
+        class: AppBundle\Manager\LockManager
+        arguments: [@cache, @session]
