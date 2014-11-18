@@ -18,8 +18,13 @@ class ValidEntityIdValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        /** @var Subscription $subscription */
-        $subscription = $this->context->getRoot()->getData();
+        $root = $this->context->getRoot();
+
+        if ($root instanceOf Subscription) {
+            $subscription = $root;
+        } else {
+            $subscription = $root->getData();
+        }
 
         $metadataUrl = $subscription->getMetadataUrl();
 

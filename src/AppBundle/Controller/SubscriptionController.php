@@ -189,10 +189,9 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
         }
 
-        // @todo
-//        if (!$this->get('validator')->validate($subscription)) {
-//            return $this->redirect($this->generateUrl('form', array('id' => $id)));
-//        }
+        if (!$this->isValidSubscription($subscription)) {
+            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        }
 
         return $this->render(
             'subscription/overview.html.twig',
@@ -217,10 +216,9 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
         }
 
-        // @todo
-//        if (!$this->get('validator')->validate($subscription)) {
-//            return $this->redirect($this->generateUrl('form', array('id' => $id)));
-//        }
+        if (!$this->isValidSubscription($subscription)) {
+            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        }
 
         $subscription->finish();
 
@@ -330,5 +328,16 @@ class SubscriptionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $em->flush();
+    }
+
+    /**
+     * @param Subscription $subscription
+     *
+     * @return bool
+     * @todo: move to 'manager'
+     */
+    private function isValidSubscription(Subscription $subscription)
+    {
+        return count($this->get('validator')->validate($subscription)) === 0;
     }
 }
