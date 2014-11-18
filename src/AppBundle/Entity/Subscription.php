@@ -14,7 +14,7 @@ use Symfony\Component\Validator\ExecutionContextInterface;
  * Class Subscription
  *
  * @ORM\Entity
- * @GRID\Source(columns="id, ticketNo, status", filterable=false)
+ * @GRID\Source(columns="id, ticketNo, contact, status", filterable=false)
  */
 class Subscription
 {
@@ -54,6 +54,7 @@ class Subscription
     /**
      * @var Contact
      * @ORM\Column(type="object", nullable=true)
+     * @GRID\Column(type="text")
      * @Assert\Type(type="AppBundle\Model\Contact", groups={"Default", "creation"})
      * @Assert\NotBlank(groups={"Default", "creation"})
      * @Assert\Valid()

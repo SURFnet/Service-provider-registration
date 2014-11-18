@@ -98,3 +98,8 @@ braincrafted_bootstrap:
 knp_menu:
     providers:
         builder_alias: false
+
+apy_data_grid:
+    pagerfanta:
+        enable: true
+        view_class: Pagerfanta\View\TwitterBootstrap3View
