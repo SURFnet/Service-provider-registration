@@ -23,3 +23,16 @@ services:
     lock.manager:
         class: AppBundle\Manager\LockManager
         arguments: [@cache, @session]
+
+    menu_builder:
+        class: AppBundle\Menu\MenuBuilder
+        arguments: ["@knp_menu.factory"]
+
+    menu:
+        class: Knp\Menu\MenuItem
+        factory_service: menu_builder
+        factory_method: createAdminMenu
+        arguments: ["@request"]
+        scope: request
+        tags:
+            - { name: knp_menu.menu, alias: menu }
