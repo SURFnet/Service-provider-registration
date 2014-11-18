@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
             new Misd\GuzzleBundle\MisdGuzzleBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
 
             new AppBundle\AppBundle()
         );
