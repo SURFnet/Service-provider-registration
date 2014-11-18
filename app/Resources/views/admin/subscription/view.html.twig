@@ -1,18 +1,16 @@
-{% extends "base.html.twig" %}
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Subscription{% endblock %}
 
 {% block body %}
-    <h2>Are you sure?</h2>
-
-    <p>
-        The following bla bla, bla bla, bla bla, bla bla, bla bla
-    </p>
-
     <dl class="dl-horizontal">
         <dt>ticketNo</dt>
         <dd>{{ subscription.ticketNo }}</dd>
 
         <dt>contact</dt>
-        <dd>{{ subscription.contact.firstName }} {{ subscription.contact.lastName }} ({{ subscription.contact.email }} / {{ subscription.contact.phone }})</dd>
+        <dd>{{ subscription.contact.firstName }} {{ subscription.contact.lastName }} ({{ subscription.contact.email }}
+            / {{ subscription.contact.phone }})
+        </dd>
 
         <dt>metadataUrl</dt>
         <dd>{{ subscription.metadataUrl }}</dd>
@@ -98,11 +96,5 @@
         <dd>{{ subscription.comments }}</dd>
     </dl>
 
-    <a href="{{ path('form', {id: subscription.id}) }}" class="btn btn-default">
-        Cancel
-    </a>
-
-    <a href="{{ path('confirm', {id: subscription.id}) }}" class="btn btn-primary">
-        Confirm
-    </a>
+    <a href="{{ path('admin.subscription.overview') }}" class="btn btn-default">Back</a>
 {% endblock %}
