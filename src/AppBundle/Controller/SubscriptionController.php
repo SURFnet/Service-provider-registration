@@ -64,7 +64,7 @@ class SubscriptionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $this->get('subscription.manager')->saveSubscription($subscription);
+            $this->get('subscription.manager')->updateSubscription($subscription);
         }
 
         return new Response();
@@ -156,7 +156,7 @@ class SubscriptionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $this->get('subscription.manager')->saveSubscription($subscription);
+            $this->get('subscription.manager')->updateSubscription($subscription);
         }
 
         if ($form->isValid()) {
@@ -221,7 +221,7 @@ class SubscriptionController extends Controller
 
         $subscription->finish();
 
-        $this->get('subscription.manager')->saveSubscription($subscription);
+        $this->get('subscription.manager')->updateSubscription($subscription);
 
         return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
     }

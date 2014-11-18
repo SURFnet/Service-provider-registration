@@ -72,6 +72,15 @@ class SubscriptionManager
      */
     public function saveSubscription(Subscription $subscription)
     {
+        $this->em->persist($subscription);
+        $this->em->flush($subscription);
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
+    public function updateSubscription(Subscription $subscription)
+    {
         $this->em->flush($subscription);
     }
 
