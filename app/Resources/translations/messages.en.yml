@@ -1,41 +1,170 @@
-form:
-    title: Form
-    intro: Welcome!
+Dutch: Dutch
+English: English
 
-    tab:
-        info: info
-        general: general
-        metadata: metadata
-        contact: contact
-        attributes: attributes
-        comments: comments
+contact: Contact
+created: Created
+status: Status
+ticketNo: Ticket No.
+updated: Updated
+metadataUrl: Metadata URL
+logoUrl: Logo URL
+nameEn: Name (en)
+descriptionEn: Description (en)
+nameNl: Name (nl)
+descriptionNl: Description (nl)
+applicationUrl: Application URL
+administrativeContact: 'Administrative contact'
+technicalContact: 'Technical contact'
+supportContact: 'Support contact'
+givenNameAttribute: Given name attribute
+surNameAttribute: Sur name attribute
+commonNameAttribute: Common name attribute
+displayNameAttribute: Display name attribute
+emailAddressAttribute: Email address attribute
+organizationAttribute: Organization attribute
+organizationTypeAttribute: Organization type attribute
+affiliationAttribute: Affiliation attribute
+entitlementAttribute: Entitlement attribute
+principleNameAttribute: Principle name attribute
+isMemberOfAttribute: Is member of attribute
+uidAttribute: Uid attribute
+preferredLanguageAttribute: Preferred language attribute
+comments: Comments
 
-        intro:
-            info: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            general: intro
-            metadata: intro
-            contact: intro
-            attributes: intro
-            comments: intro
+Ticket no: Ticket No.
+First name: First name
+Last name: Last name
+Email: Email
+Phone: Phone
+Metadata url: Metadata URL
+Acs location: ACS location
+Entity id: Entity ID
+Certificate: Certificate
+Logo url: Logo URL
+Name en: Name (en)
+Description en: Description (en)
+Name nl: Name (nl)
+Description nl: Description (nl)
+Application url: Application URL
 
-    lock:
-        description: Please wait until the lock has been released.
-        title: Form has been locked!
+Given name attribute: Given name attribute
+Sur name attribute: Sur name attribute
+Common name attribute: Common name attribute
+Display name attribute: Display name attribute
+Email address attribute: Email address attribute
+Organization attribute: Organization attribute
+Organization type attribute: Organization type attribute
+Affiliation attribute: Affiliation attribute
+Entitlement attribute: Entitlement attribute
+Principle name attribute: Principle name attribute
+Is member of attribute: Is member of attribute
+Uid attribute: Uid attribute
+Preferred language attribute: Preferred language attribute
 
-    label:
-        ticketNo: Ticket no
+Comments: Comments
 
+overview:
+    subtitle: Are you sure?
+    intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
     button:
+        cancel: Cancel
+        confirm: Confirm
+
+thanks:
+    subtitle: Thanks!
+    intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
+form:
+    button:
+        finish: Finish
         next: Next
         previous: Previous
-        finish: Finish
+
+    help:
+        acsLocation: form.help.acsLocation   # FIXME
+
+        administrativeContact:
+            email: form.help.administrativeContact.email   # FIXME
+            firstName: form.help.administrativeContact.firstName   # FIXME
+            lastName: form.help.administrativeContact.lastName   # FIXME
+            phone: form.help.administrativeContact.phone   # FIXME
+
+        affiliationAttribute: form.help.affiliationAttribute   # FIXME
+        applicationUrl: form.help.applicationUrl   # FIXME
+        certificate: form.help.certificate   # FIXME
+        comments: form.help.comments   # FIXME
+        commonNameAttribute: form.help.commonNameAttribute   # FIXME
+
+        contact:
+            email: form.help.contact.email   # FIXME
+            firstName: form.help.contact.firstName   # FIXME
+            lastName: form.help.contact.lastName   # FIXME
+            phone: form.help.contact.phone   # FIXME
+
+        descriptionEn: form.help.descriptionEn   # FIXME
+        descriptionNl: form.help.descriptionNl   # FIXME
+        displayNameAttribute: form.help.displayNameAttribute   # FIXME
+        emailAddressAttribute: form.help.emailAddressAttribute   # FIXME
+        entitlementAttribute: form.help.entitlementAttribute   # FIXME
+        entityId: form.help.entityId   # FIXME
+        givenNameAttribute: form.help.givenNameAttribute   # FIXME
+        isMemberOfAttribute: form.help.isMemberOfAttribute   # FIXME
+        logoUrl: form.help.logoUrl   # FIXME
+        metadataUrl: form.help.metadataUrl   # FIXME
+        nameEn: form.help.nameEn   # FIXME
+        nameNl: form.help.nameNl   # FIXME
+        organizationAttribute: form.help.organizationAttribute   # FIXME
+        organizationTypeAttribute: form.help.organizationTypeAttribute   # FIXME
+        preferredLanguageAttribute: form.help.preferredLanguageAttribute   # FIXME
+        principleNameAttribute: form.help.principleNameAttribute   # FIXME
+
+        supportContact:
+            email: form.help.supportContact.email   # FIXME
+            firstName: form.help.supportContact.firstName   # FIXME
+            lastName: form.help.supportContact.lastName   # FIXME
+            phone: form.help.supportContact.phone   # FIXME
+
+        surNameAttribute: form.help.surNameAttribute   # FIXME
+
+        technicalContact:
+            email: form.help.technicalContact.email   # FIXME
+            firstName: form.help.technicalContact.firstName   # FIXME
+            lastName: form.help.technicalContact.lastName   # FIXME
+            phone: form.help.technicalContact.phone   # FIXME
+
+        ticketNo: form.help.ticketNo   # FIXME
+        uidAttribute: form.help.uidAttribute   # FIXME
+
+    intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
     legend:
-        administrativeContact: Administrative contact
-        technicalContact: Technical contact
-        supportContact: Support contact
+        administrativeContact: 'Administrative contact'
+        supportContact: 'Support contact'
+        technicalContact: 'Technical contact'
+
+    lock:
+        description: 'Please wait until the lock has been released.'
+        title: 'Form has been locked!'
 
     status:
-        saving: Saving...
         saved: Saved
+        saving: Saving...
 
+    tab:
+        attributes: attributes
+        comments: comments
+        contact: contact
+        general: general
+        info: info
+
+        intro:
+            attributes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            comments: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            contact: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            general: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            metadata: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
+        metadata: metadata
+
+    title: SURFnet SP Registration
