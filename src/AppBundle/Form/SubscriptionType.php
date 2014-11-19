@@ -212,7 +212,10 @@ class SubscriptionType extends AbstractType
         /** @var Attribute $orgAttribute */
         $orgAttribute = $subscription->{'get' . ucfirst($type)}();
 
-        if ($orgAttribute instanceof Attribute) {
+        // Only use the original values when 'validating' the metadata
+        $onlyMetadataSubmitted = count($formData) === 1;
+
+        if ($orgAttribute instanceof Attribute && $onlyMetadataSubmitted) {
             $attribute = clone $orgAttribute;
         } else {
             $attribute = new Attribute();
