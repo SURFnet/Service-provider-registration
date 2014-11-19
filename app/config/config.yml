@@ -103,3 +103,8 @@ apy_data_grid:
     pagerfanta:
         enable: true
         view_class: Pagerfanta\View\TwitterBootstrap3View
+
+stof_doctrine_extensions:
+    orm:
+        default:
+            timestampable: true

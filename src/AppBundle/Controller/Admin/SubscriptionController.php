@@ -163,7 +163,7 @@ class SubscriptionController extends Controller
         $grid->setId('adminGrid');
         $grid->setRouteUrl($this->generateUrl('admin.subscription.grid'));
 
-        $grid->setDefaultOrder('id', 'asc');
+        $grid->setDefaultOrder('created', 'desc');
         $grid->setLimits(array(5, 10, 15));
         $grid->setDefaultLimit(5);
 

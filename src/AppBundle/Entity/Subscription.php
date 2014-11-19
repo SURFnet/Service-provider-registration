@@ -7,6 +7,7 @@ use AppBundle\Model\Contact;
 use AppBundle\Validator\Constraints as AppAssert;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\ExecutionContextInterface;
  * Class Subscription
  *
  * @ORM\Entity
- * @GRID\Source(columns="id, ticketNo, contact, status", filterable=false)
+ * @GRID\Source(columns="id, ticketNo, contact, created, updated, status", filterable=false)
  */
 class Subscription
 {
@@ -26,6 +27,7 @@ class Subscription
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @GRID\Column(visible=false)
      */
     private $id;
 
@@ -43,6 +45,22 @@ class Subscription
      * @Assert\NotBlank()
      */
     private $status;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
 
     /**
      * @var string
@@ -320,6 +338,46 @@ class Subscription
     public function isFinished()
     {
         return $this->status === self::STATE_FINISHED;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     *
+     * @return $this
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     *
+     * @return $this
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
     }
 
     /**
