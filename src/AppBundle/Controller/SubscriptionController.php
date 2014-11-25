@@ -223,6 +223,8 @@ class SubscriptionController extends Controller
 
         $this->get('subscription.manager')->updateSubscription($subscription);
 
+        $this->get('mail.manager')->sendFinishedNotification($subscription);
+
         return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
     }
 

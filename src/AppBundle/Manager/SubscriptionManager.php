@@ -68,6 +68,14 @@ class SubscriptionManager
     }
 
     /**
+     * @return Subscription[]
+     */
+    public function getDraftSubscriptions()
+    {
+        return $this->repo->findBy(array('status' => Subscription::STATE_DRAFT));
+    }
+
+    /**
      * @param Subscription $subscription
      */
     public function saveSubscription(Subscription $subscription)

@@ -63,6 +63,8 @@ class SubscriptionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->get('subscription.manager')->saveSubscription($subscription);
 
+            $this->get('mail.manager')->sendInvitation($subscription);
+
             return $this->redirect($this->generateUrl('admin.subscription.overview'));
         }
 
