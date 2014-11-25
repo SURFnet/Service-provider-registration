@@ -1,0 +1,41 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Edit Template{% endblock %}
+
+{% block body %}
+    <div class="col-md-9">
+        <form method="post" {{ form_enctype(form) }} class="form-horizontal">
+            {{ bootstrap_set_style('horizontal') }}
+
+            {{ form_errors(form) }}
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label">{{ 'name'|humanize|trans }}</label>
+
+                <div class="col-lg-10">
+                    <p class="form-control-static">{{ template.name }}</p>
+                </div>
+            </div>
+
+            <div class="form-group{% if form.source.vars.errors|length > 0 %} has-error{% endif %}">
+                {{ form_label(form.source) }}
+                <div class="col-lg-10">
+                    {{ form_widget(form.source) }}
+                    {{ form_errors(form.source) }}
+                    <span class="help-block">You can use <a href="http://twig.sensiolabs.org/doc/templates.html"
+                                                            target="_blank">Twig</a>.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ path('admin.template.overview') }}" class="btn btn-default">Cancel</a>
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+
+        </form>
+    </div>
+{% endblock %}

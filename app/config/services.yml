@@ -36,3 +36,15 @@ services:
         scope: request
         tags:
             - { name: knp_menu.menu, alias: menu }
+
+    twig.database_loader:
+        class: AppBundle\Twig\DatabaseLoader
+        arguments: [ @doctrine.orm.entity_manager ]
+        tags:
+            - { name: twig.loader }
+
+    validator.twig:
+        class: AppBundle\Validator\Constraints\ValidTwigTemplateValidator
+        arguments: [@twig]
+        tags:
+            - { name: validator.constraint_validator, alias: twig_template }
