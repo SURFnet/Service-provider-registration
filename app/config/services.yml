@@ -24,6 +24,10 @@ services:
         class: AppBundle\Manager\LockManager
         arguments: [@cache, @session]
 
+    mail.manager:
+        class: AppBundle\Manager\MailManager
+        arguments: [@mailer, @templating, @translator, '%mail_from%', '%mail_receiver%']
+
     menu_builder:
         class: AppBundle\Menu\MenuBuilder
         arguments: ["@knp_menu.factory"]

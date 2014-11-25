@@ -169,3 +169,11 @@ form:
         metadata: metadata
 
     title: SURFnet SP Registration
+
+mail:
+    invitation:
+        subject: 'Invitation for SURFnet SP Registration'
+    report:
+        subject: 'SURFnet SP Registration Report'
+    notification:
+        subject: 'SURFnet SP Registration Finished'

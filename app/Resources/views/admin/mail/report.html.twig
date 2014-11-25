@@ -1,0 +1,35 @@
+Hi,<br/>
+
+<p>
+    Overview of all <b>draft</b> SP registrations:
+</p>
+
+<p>
+<table>
+    <thead>
+    <tr>
+        <th>Ticket No</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    {% for sub in subscriptions %}
+        <tr>
+            <td>{{ sub.ticketNo }}</td>
+            <td>{{ sub.created|date }}</td>
+            <td>{{ sub.updated|date }}</td>
+            <td>{{ sub.contact.email }}</td>
+            <td><a href="{{ url('form', {id: sub.id} ) }}">Edit</a></td>
+        </tr>
+    {% endfor %}
+</table>
+</p>
+
+<p>
+    Kind regards,
+</p>
+
+<p>
+    SURFconext
+</p>
