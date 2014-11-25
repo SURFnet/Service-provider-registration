@@ -108,3 +108,7 @@ stof_doctrine_extensions:
     orm:
         default:
             timestampable: true
+
+lexik_translation:
+    fallback_locale: en
+    managed_locales: [en,nl]

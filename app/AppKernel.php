@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Misd\GuzzleBundle\MisdGuzzleBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Lexik\Bundle\TranslationBundle\LexikTranslationBundle(),
 
             new AppBundle\AppBundle()
         );
