@@ -33,5 +33,8 @@ set :update_assets_version, true
 # Be more verbose by uncommenting the following line
 logger.level = Logger::MAX_LEVEL
 
+# Run migrations before warming the cache
+before "symfony:cache:warmup", "symfony:doctrine:schema:update"
+
 # Clean old releases after deploy
 after "deploy", "deploy:cleanup"
