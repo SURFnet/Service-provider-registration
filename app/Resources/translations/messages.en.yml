@@ -7,30 +7,12 @@ created: Created
 status: Status
 ticketNo: Ticket No.
 updated: Updated
-metadataUrl: Metadata URL
-logoUrl: Logo URL
-nameEn: Name (en)
-descriptionEn: Description (en)
-nameNl: Name (nl)
-descriptionNl: Description (nl)
-applicationUrl: Application URL
-administrativeContact: 'Administrative contact'
-technicalContact: 'Technical contact'
-supportContact: 'Support contact'
-givenNameAttribute: Given name attribute
-surNameAttribute: Sur name attribute
-commonNameAttribute: Common name attribute
-displayNameAttribute: Display name attribute
-emailAddressAttribute: Email address attribute
-organizationAttribute: Organization attribute
-organizationTypeAttribute: Organization type attribute
-affiliationAttribute: Affiliation attribute
-entitlementAttribute: Entitlement attribute
-principleNameAttribute: Principle name attribute
-isMemberOfAttribute: Is member of attribute
-uidAttribute: Uid attribute
-preferredLanguageAttribute: Preferred language attribute
-comments: Comments
+key: Key
+domain: Domain
+
+Administrative contact: 'Administrative contact'
+Technical contact: 'Technical contact'
+Support contact: 'Support contact'
 
 Ticket no: Ticket No.
 First name: First name
