@@ -2,7 +2,7 @@ services:
 
     parser:
         class: AppBundle\Metadata\Parser
-        arguments: [@guzzle.client]
+        arguments: [@guzzle.client, %kernel.root_dir%/Resources/schemas/]
 
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator

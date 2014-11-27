@@ -19,7 +19,7 @@ class Parser
     const NS_LANG = 'http://www.w3.org/XML/1998/namespace';
 
     const ATTR_ACS_POST_BINDING = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
-    const XSD_SAML_METADATA = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd';
+    const XSD_SAML_METADATA = 'saml-schema-metadata-2.0.xsd';
 
     /**
      * @var Client
@@ -32,11 +32,15 @@ class Parser
     private $cache;
 
     /**
-     * @param $guzzle
+     * Constructor
+     *
+     * @param Client $guzzle
+     * @param string $schemaLocation
      */
-    public function __construct($guzzle)
+    public function __construct($guzzle, $schemaLocation)
     {
         $this->guzzle = $guzzle;
+        $this->schemaLocation = $schemaLocation;
     }
 
     /**
@@ -285,26 +289,35 @@ class Parser
 
     /**
      * @param string $xml
-     *
-     * @todo: fix me
      */
     private function validate($xml)
     {
-        return;
-
-        $opts = array(
-            'http' => array(
-                'user_agent' => 'PHP libxml agent',
-            )
-        );
-        $context = stream_context_create($opts);
-        libxml_set_streams_context($context);
+        libxml_use_internal_errors(true);
 
         $doc = new \DOMDocument();
         $doc->loadXml($xml);
 
-        if (!$doc->schemaValidate(self::XSD_SAML_METADATA)) {
-            throw new \InvalidArgumentException('The metadata XML is invalid considering the associated XSD.');
+        if (!$doc->schemaValidate($this->schemaLocation . self::XSD_SAML_METADATA)) {
+            $errors = libxml_get_errors();
+
+            $errorArray = array();
+            foreach ($errors as $error) {
+                switch ($error->level) {
+                    case LIBXML_ERR_WARNING:
+                        $errorArray[] = "Warning $error->code: " . trim($error->message);
+                        break;
+                    case LIBXML_ERR_ERROR:
+                        $errorArray[] = "Error $error->code: " . trim($error->message);
+                        break;
+                    case LIBXML_ERR_FATAL:
+                        $errorArray[] = "Fatal Error $error->code: " . trim($error->message);
+                        break;
+                }
+            }
+
+            throw new \InvalidArgumentException(
+                "The metadata XML is invalid considering the associated XSD:\n" . implode(",\n", $errorArray)
+            );
         }
     }
 }
