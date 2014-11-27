@@ -5,6 +5,12 @@ namespace AppBundle\Model;
 use AppBundle\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class Metadata
+ *
+ * @todo: spread props over more classes, also see Subscription Entity
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class Metadata
 {
     public $acsLocation;

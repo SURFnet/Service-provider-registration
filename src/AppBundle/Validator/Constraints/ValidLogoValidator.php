@@ -41,5 +41,5 @@ class ValidLogoValidator extends ConstraintValidator
 
             return;
         }
-   }
+    }
 }

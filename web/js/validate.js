@@ -1,9 +1,9 @@
 (function ($) {
-    "use strict";
+    'use strict';
 
     var
-        nl2br = function (str, is_xhtml) {
-            var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        nl2br = function (str, isXhtml) {
+            var breakTag = (isXhtml || typeof isXhtml === 'undefined') ? '<br />' : '<br>';
             return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
         },
 
@@ -25,7 +25,7 @@
 
             clearErrors(field);
 
-            if (typeof field._xhr === "undefined" || typeof field._xhr.responseText === "undefined") {
+            if (typeof field._xhr === 'undefined' || typeof field._xhr.responseText === 'undefined') {
                 return;
             }
 
@@ -80,7 +80,7 @@
             $inputs = $form.find('input, select, textarea');
 
         $.listen('parsley:field:init', function (field) {
-            field.$element.closest(".form-group").addClass('has-feedback');
+            field.$element.closest('.form-group').addClass('has-feedback');
         });
 
         // Setup validation
@@ -90,7 +90,7 @@
             errorClass: 'has-error',
             successClass: 'has-success',
             classHandler: function (field) {
-                return field.$element.closest(".form-group");
+                return field.$element.closest('.form-group');
             },
             errorsWrapper: '<ul class="help-block"></ul>'
         }).subscribe('parsley:form:validated', function (form) {
@@ -134,6 +134,7 @@
         // A custom validator to check whether the adm. and tech. contact are not the same
         window.ParsleyValidator
             .addValidator('contactunique', function () {
+                /*jshint maxcomplexity:7 */
                 var fname1 = $('#subscription_administrativeContact_firstName').val(),
                     fname2 = $('#subscription_technicalContact_firstName').val(),
                     lname1 = $('#subscription_administrativeContact_lastName').val(),
@@ -145,7 +146,7 @@
                     return true;
                 }
 
-                return !(fname1 == fname2 && lname1 == lname2 && email1 == email2);
+                return !(fname1 === fname2 && lname1 === lname2 && email1 === email2);
             }, 32)
             .addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
             .addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
@@ -236,6 +237,6 @@
                 textarea.prop('disabled', true);
                 textarea.prop('required', false);
             }
-        })
+        });
     });
-})(jQuery);
+})(window.jQuery);

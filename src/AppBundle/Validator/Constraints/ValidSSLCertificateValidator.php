@@ -59,19 +59,18 @@ class ValidSSLCertificateValidator extends ConstraintValidator
         return;
 
         // @todo: fix this
-
-        $acsLocation = $this->context->getRoot()->getData()->getAcsLocation();
-
-        try {
-            $response = $this->guzzle->get($acsLocation)->send();
-        } catch (GuzzleException $e) {
-            return;
-        }
-
-        openssl_x509_export($cont['options']['ssl']['peer_certificate'], $acsCert, true);
-
-        if ($value === $acsCert) {
-            $this->context->addViolation('Certificate matches certificate of ACSLocation which is not allowed.');
-        }
+        // $acsLocation = $this->context->getRoot()->getData()->getAcsLocation();
+        //
+        // try {
+        //     $response = $this->guzzle->get($acsLocation)->send();
+        // } catch (GuzzleException $e) {
+        //     return;
+        // }
+        //
+        // openssl_x509_export($cont['options']['ssl']['peer_certificate'], $acsCert, true);
+        //
+        // if ($value === $acsCert) {
+        //     $this->context->addViolation('Certificate matches certificate of ACSLocation which is not allowed.');
+        // }
     }
 }

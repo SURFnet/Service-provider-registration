@@ -16,6 +16,11 @@ use Symfony\Component\Validator\ExecutionContextInterface;
  *
  * @ORM\Entity
  * @GRID\Source(columns="id, ticketNo, contact, created, updated, status", filterable=false)
+ *
+ * @todo: spread props over more classes
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Subscription
 {

@@ -100,6 +100,12 @@ class SubscriptionType extends AbstractType
         $event->setData($this->mapMetadataToFormData($subscription, $metadata));
     }
 
+    /**
+     * @param array    $formData
+     * @param Metadata $metadata
+     *
+     * @return array
+     */
     private function mapMetadataToFormData(array $formData, Metadata $metadata)
     {
         $formData['acsLocation'] = $metadata->acsLocation;
@@ -134,6 +140,12 @@ class SubscriptionType extends AbstractType
         return $formData;
     }
 
+    /**
+     * @param Subscription $subscription
+     * @param array        $formData
+     *
+     * @return Metadata
+     */
     private function getOriginalMetadata(Subscription $subscription, array $formData)
     {
         $metadata = new Metadata();
@@ -141,12 +153,11 @@ class SubscriptionType extends AbstractType
         $metadata->entityId = $subscription->getEntityId();
         $metadata->certificate = $subscription->getCertificate();
 
-        $metadata->logoUrl = array_key_exists('logoUrl', $formData) ? $formData['logoUrl'] : $subscription->getLogoUrl();
-        $metadata->nameEn = array_key_exists('nameEn', $formData) ? $formData['nameEn'] : $subscription->getNameEn();
-        $metadata->nameNl = array_key_exists('nameNl', $formData) ? $formData['nameNl'] : $subscription->getNameNl();
-        $metadata->descriptionEn = array_key_exists('descriptionEn', $formData) ? $formData['descriptionEn'] : $subscription->getDescriptionEn();
-        $metadata->descriptionNl = array_key_exists('descriptionNl', $formData) ? $formData['descriptionNl'] : $subscription->getDescriptionNl();
-        $metadata->applicationUrlEn = array_key_exists('applicationUrl', $formData) ? $formData['applicationUrl'] : $subscription->getApplicationUrl();
+        foreach ($this->getProps() as $key => $prop) {
+            $metadata->$key = array_key_exists($prop, $formData) ? $formData[$prop] : $subscription->{'get' . ucfirst(
+                $prop
+            )}();
+        }
 
         foreach ($this->getContacts() as $contact) {
             $metadata->$contact = $this->getContactData($subscription, $formData, $contact);
@@ -254,6 +265,21 @@ class SubscriptionType extends AbstractType
     public function getName()
     {
         return 'subscription';
+    }
+
+    /**
+     * @return array
+     */
+    private function getProps()
+    {
+        return array(
+            'logoUrl'          => 'logoUrl',
+            'nameEn'           => 'nameEn',
+            'nameNl'           => 'nameNl',
+            'descriptionEn'    => 'descriptionEn',
+            'descriptionNl'    => 'descriptionNl',
+            'applicationUrlEn' => 'applicationUrl',
+        );
     }
 
     /**

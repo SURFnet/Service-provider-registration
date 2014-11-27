@@ -38,7 +38,7 @@ class LockManager
      * @return bool
      * @todo: this is not atomic!
      */
-    public function getLock($id)
+    public function lock($id)
     {
         $cacheId = 'lock-' . $id;
         $sessionId = $this->session->getId();

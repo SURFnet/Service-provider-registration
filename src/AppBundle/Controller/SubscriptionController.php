@@ -42,7 +42,7 @@ class SubscriptionController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
-                'locked' => !$this->get('lock.manager')->getLock($id)
+                'locked' => !$this->get('lock.manager')->lock($id)
             )
         );
     }
@@ -77,6 +77,9 @@ class SubscriptionController extends Controller
      * @param Request $request
      *
      * @return Response
+     *
+     * @todo: clean, use recursive method
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateAction($id, Request $request)
     {
@@ -88,7 +91,6 @@ class SubscriptionController extends Controller
 
         $response = array('data' => array(), 'errors' => array());
 
-        // @todo: use recursive method
         foreach ($form as $field) {
             if ($field->count() > 1) {
                 foreach ($field as $child) {
@@ -127,7 +129,7 @@ class SubscriptionController extends Controller
      */
     public function lockAction($id)
     {
-        if (!$this->get('lock.manager')->getLock($id)) {
+        if (!$this->get('lock.manager')->lock($id)) {
             return new Response('', 423);
         }
 
@@ -168,7 +170,7 @@ class SubscriptionController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
-                'locked' => !$this->get('lock.manager')->getLock($id)
+                'locked' => !$this->get('lock.manager')->lock($id)
             )
         );
     }
@@ -257,7 +259,7 @@ class SubscriptionController extends Controller
             new SubscriptionType($this->get('parser')),
             $subscription,
             array(
-                'disabled' => !$this->get('lock.manager')->getLock($subscription->getId()),
+                'disabled' => !$this->get('lock.manager')->lock($subscription->getId()),
                 'csrf_protection' => $useCsrf
             )
         );

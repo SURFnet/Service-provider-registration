@@ -20,7 +20,7 @@ class ValidEntityIdValidator extends ConstraintValidator
     {
         $root = $this->context->getRoot();
 
-        if ($root instanceOf Subscription) {
+        if ($root instanceof Subscription) {
             $subscription = $root;
         } else {
             $subscription = $root->getData();

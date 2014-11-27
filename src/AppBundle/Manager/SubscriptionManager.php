@@ -60,7 +60,7 @@ class SubscriptionManager
             return $subscription;
         }
 
-        if ($checkLock && !$this->lockManager->getLock($id)) {
+        if ($checkLock && !$this->lockManager->lock($id)) {
             throw new \RuntimeException('Subscription is locked');
         }
 

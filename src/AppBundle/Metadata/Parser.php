@@ -10,6 +10,9 @@ use Guzzle\Http\Client;
 
 /**
  * Class Parser
+ *
+ * @todo: this class could use some refactoring
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Parser
 {
@@ -69,23 +72,7 @@ class Parser
         $descriptor = $children->SPSSODescriptor;
         $contactPersons = $children->ContactPerson;
 
-        if (!isset($descriptor->AssertionConsumerService)) {
-            throw new \InvalidArgumentException('Invalid metadata XML');
-        }
-
-        foreach ($descriptor->AssertionConsumerService as $acs) {
-            $acs = $acs->attributes();
-
-            if ((string)$acs['Binding'] === self::ATTR_ACS_POST_BINDING) {
-                $metadata->acsLocation = (string)$acs['Location'];
-            }
-
-            if ((int)$acs['index'] > 9) {
-                throw new \InvalidArgumentException(
-                    'The metadata should not contain an ACS with an index larger than 9.'
-                );
-            }
-        }
+        $this->parseAssertionConsumerService($descriptor, $metadata);
 
         if (isset($descriptor->KeyDescriptor)) {
             $this->parseCertificate($descriptor, $metadata);
@@ -105,6 +92,31 @@ class Parser
     }
 
     /**
+     * @param  \SimpleXMLElement $descriptor
+     * @param Metadata           $metadata
+     */
+    private function parseAssertionConsumerService($descriptor, Metadata $metadata)
+    {
+        if (!isset($descriptor->AssertionConsumerService)) {
+            throw new \InvalidArgumentException('Invalid metadata XML');
+        }
+
+        foreach ($descriptor->AssertionConsumerService as $acs) {
+            $acs = $acs->attributes();
+
+            if ((string)$acs['Binding'] === self::ATTR_ACS_POST_BINDING) {
+                $metadata->acsLocation = (string)$acs['Location'];
+            }
+
+            if ((int)$acs['index'] > 9) {
+                throw new \InvalidArgumentException(
+                    'The metadata should not contain an ACS with an index larger than 9.'
+                );
+            }
+        }
+    }
+
+    /**
      * @param \SimpleXMLElement $descriptor
      * @param Metadata          $metadata
      */
@@ -121,6 +133,8 @@ class Parser
     /**
      * @param \SimpleXMLElement $descriptor
      * @param Metadata          $metadata
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function parseUi($descriptor, Metadata $metadata)
     {
@@ -208,6 +222,8 @@ class Parser
     /**
      * @param \SimpleXMLElement $descriptor
      * @param Metadata          $metadata
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function parseAttributes($descriptor, Metadata $metadata)
     {

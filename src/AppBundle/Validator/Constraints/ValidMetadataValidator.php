@@ -40,5 +40,5 @@ class ValidMetadataValidator extends ConstraintValidator
 
             return;
         }
-   }
+    }
 }
