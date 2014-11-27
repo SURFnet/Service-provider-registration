@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/admin/subscriptions")
  */
-class SubscriptionController extends Controller
+class SubscriptionController extends Controller implements SecuredController
 {
     /**
      * @Route("/", name="admin.subscription.overview")

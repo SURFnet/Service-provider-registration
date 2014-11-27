@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/admin/texts")
  */
-class TextController extends Controller
+class TextController extends Controller implements SecuredController
 {
     /**
      * @Route("/", name="admin.text.overview")

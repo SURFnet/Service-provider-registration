@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/admin/templates")
  */
-class TemplateController extends Controller
+class TemplateController extends Controller implements SecuredController
 {
     /**
      * @Route("/", name="admin.template.overview")
