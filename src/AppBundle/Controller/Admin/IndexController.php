@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @Route("/admin")
  */
-class IndexController extends Controller
+class IndexController extends Controller implements SecuredController
 {
     /**
      * @Route("/", name="admin")

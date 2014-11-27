@@ -52,3 +52,8 @@ services:
         arguments: [@twig]
         tags:
             - { name: validator.constraint_validator, alias: twig_template }
+
+    listener.security:
+        class: AppBundle\EventListener\SimpleSAMLAuthListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
