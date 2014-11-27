@@ -56,6 +56,10 @@ class SubscriptionManager
     {
         $subscription = $this->repo->find($id);
 
+        if (empty($subscription)) {
+            return $subscription;
+        }
+
         if ($checkLock && !$this->lockManager->getLock($id)) {
             throw new \RuntimeException('Subscription is locked');
         }
