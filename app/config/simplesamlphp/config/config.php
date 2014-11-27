@@ -72,7 +72,7 @@ $config = array(
      * metadata listing and diagnostics pages.
      * You can also put a hash here; run "bin/pwgen.php" to generate one.
      */
-    'auth.adminpassword'            => $params['simplesamlphp']['admin_password'],
+    'auth.adminpassword'     => $params['simplesamlphp.admin_password'],
     'admin.protectindexpage'        => true,
     'admin.protectmetadata'         => false,
     /**
@@ -89,8 +89,8 @@ $config = array(
      * The email address will be used as the recipient address for error reports, and
      * also as the technical contact in generated metadata.
      */
-    'technicalcontact_name'         => $params['simplesamlphp']['technical_contact_name'],
-    'technicalcontact_email'        => $params['simplesamlphp']['technical_contact_email'],
+    'technicalcontact_name'  => $params['simplesamlphp.technical_contact_name'],
+    'technicalcontact_email' => $params['simplesamlphp.technical_contact_email'],
     /*
      * The timezone of the server. This option should be set to the timezone you want
      * simpleSAMLphp to report the time in. The default is to guess the timezone based

@@ -24,8 +24,7 @@ parameters:
     mail_from:     support@surfconext.nl
     mail_receiver: support@surfconext.nl
 
-    simplesamlphp:
-        admin_password: ~
-        technical_contact_name: ~
-        technical_contact_email: ~
-        idp: https://engine.surfconext.nl/authentication/idp/metadata
+    simplesamlphp.admin_password: ~
+    simplesamlphp.technical_contact_name: ~
+    simplesamlphp.technical_contact_email: ~
+    simplesamlphp.idp: https://engine.surfconext.nl/authentication/idp/metadata
