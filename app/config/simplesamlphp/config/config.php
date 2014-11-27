@@ -4,6 +4,9 @@
  *
  */
 
+$params = \Symfony\Component\Yaml\Yaml::parse(__DIR__ . '/../../../../app/config/parameters.yml');
+$params = $params['parameters'];
+
 $config = array(
 
     /**
@@ -69,8 +72,8 @@ $config = array(
      * metadata listing and diagnostics pages.
      * You can also put a hash here; run "bin/pwgen.php" to generate one.
      */
-    'auth.adminpassword'     => 'q',  // @todo: move to params
-    'admin.protectindexpage' => true,
+    'auth.adminpassword'            => $params['simplesamlphp']['admin_password'],
+    'admin.protectindexpage'        => true,
     'admin.protectmetadata'         => false,
     /**
      * This is a secret salt used by simpleSAMLphp when it needs to generate a secure hash
@@ -80,14 +83,14 @@ $config = array(
      * A possible way to generate a random salt is by running the following command from a unix shell:
      * tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
      */
-    'secretsalt'             => 'e1i41z011c9p9ugdiu2grx8xw2a6lk70', // @todo: move to params
+    'secretsalt'                    => $params['secret'],
     /*
      * Some information about the technical persons running this installation.
      * The email address will be used as the recipient address for error reports, and
      * also as the technical contact in generated metadata.
      */
-    'technicalcontact_name'  => 'Tjeerd Bijlsma', // @todo: move to params
-    'technicalcontact_email' => 'tjeerd@ibuildings.nl', // @todo: move to params
+    'technicalcontact_name'         => $params['simplesamlphp']['technical_contact_name'],
+    'technicalcontact_email'        => $params['simplesamlphp']['technical_contact_email'],
     /*
      * The timezone of the server. This option should be set to the timezone you want
      * simpleSAMLphp to report the time in. The default is to guess the timezone based
@@ -210,7 +213,6 @@ $config = array(
      * ),
      *
      */
-
 
     /*
      * This value is the duration of the session in seconds. Make sure that the time duration of
@@ -587,14 +589,14 @@ $config = array(
      *
      * (This option replaces the old 'session.handler'-option.)
      */
-    'store.type'                    => 'phpsession',
+    'store.type'                    => 'sql',
     /*
      * The DSN the sql datastore should connect to.
      *
      * See http://www.php.net/manual/en/pdo.drivers.php for the various
      * syntaxes.
      */
-    'store.sql.dsn'                 => 'sqlite:/path/to/sqlitedatabase.sq3',
+    'store.sql.dsn'                 => 'sqlite:'. __DIR__ . '/../../../../app/data/simplesaml.db3',
     /*
      * The username and password to use when connecting to the database.
      */
@@ -676,7 +678,6 @@ $config = array(
      * runs out of storage space.
      */
     'memcache_store.expires'        => 36 * (60 * 60), // 36 hours.
-
 
     /*
      * Should signing of generated metadata be enabled by default.

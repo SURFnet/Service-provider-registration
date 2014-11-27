@@ -1,5 +1,8 @@
 <?php
 
+$params = \Symfony\Component\Yaml\Yaml::parse(__DIR__ . '/../../../../app/config/parameters.yml');
+$params = $params['parameters'];
+
 $config = array(
 
     // This is a authentication source which handles admin authentication.
@@ -18,7 +21,7 @@ $config = array(
         'entityID' => null,
         // The entity ID of the IdP this should SP should contact.
         // Can be NULL/unset, in which case the user will be shown a list of available IdPs.
-        'idp' => 'https://engine.surfconext.nl/authentication/idp/metadata', // @todo: move to params
+        'idp'      => $params['simplesamlphp']['idp'],
         // The URL to the discovery service.
         // Can be NULL/unset, in which case a builtin discovery service will be used.
         'discoURL' => null,
@@ -180,7 +183,6 @@ $config = array(
         'authpapi:PAPI',
     ),
     */
-
 
     /*
     'facebook' => array(
