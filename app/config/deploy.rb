@@ -5,6 +5,7 @@ set :app_path,    "app"
 
 set :repository, "git@github.com:SURFnet/Service-provider-registration.git"
 set :scm,        :git
+set :branch,     "release"
 
 role :web, domain
 role :app, domain, :primary => true
