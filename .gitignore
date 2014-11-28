@@ -1,7 +1,5 @@
 /web/bundles/
-/web/compiled/
-/web/css/compiled/
-/web/js/compiled/
+/web/compiled/fonts
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
