@@ -61,13 +61,13 @@ Environments
 * cd [PROJECT-DIR]
 * git clone git@github.com:SURFnet/Service-provider-registration.git .
 
-### Setup Test/Staging/Prod
+### Setup Test/Staging/Prod (@ SURFnet)
 * @Server: configure apache/mysql etc
-* @SURNET deploy env: cd [PROJECT-DIR]
-* @SURNET deploy env: cap deploy:setup
-* @SURNET deploy env: cap deploy
-* @SURFnet deploy env: cap symfony:doctrine:load_fixtures
-* @SURFnet deploy end: cap deploy
+* @Deploy env: cd [PROJECT-DIR]
+* @Deploy env: cap deploy:setup
+* @Deploy env: cap deploy
+* @Deploy env: cap symfony:doctrine:load_fixtures
+* @Deploy env: cap deploy
 * @Server: Add to crontab: php app/console app:mail:report --env=prod 
 
 Configuration
