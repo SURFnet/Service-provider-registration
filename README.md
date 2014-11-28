@@ -79,6 +79,8 @@ Configuration
 
 Configuration parameters will initially be set by composer install. Afterwards they can be adjusted in app/config/parameters.yml.
 
+Logs can be found in app/logs
+
 Deployment
 ----------------------------------
 
