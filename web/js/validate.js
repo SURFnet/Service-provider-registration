@@ -69,10 +69,7 @@
         },
 
         clearErrors = function (field) {
-            window.ParsleyUI.removeError(field, 'remote');
-            window.ParsleyUI.removeError(field, 'required');
-            window.ParsleyUI.removeError(field, 'type');
-            window.ParsleyUI.removeError(field, 'contactunique');
+            field.reset();
         };
 
     $(function () {
@@ -118,11 +115,11 @@
             $(this).attr('data-parsley-errors-messages-disabled', 1);
             field.actualizeOptions();
 
-            field.subscribe('parsley:field:success', function (field) {
-                updateDataAndErrors(field);
-            }).subscribe('parsley:field:error', function (field) {
-                updateDataAndErrors(field);
-            });
+            field.addAsyncValidator('default', function () {
+                updateDataAndErrors(this);
+
+                return !this._ui.$errorsWrapper.hasClass('filled');
+            }, $(this).data('parsley-remote'));
         });
 
         // Prevent caching for the metadataUrl field because the response can be different based on earlier values
