@@ -45,7 +45,7 @@ Environments
 ----------------------------------
 
 ### Setup Development
-* git clone ....
+* git clone git@github.com:SURFnet/Service-provider-registration.git .
 * vagrant up
 * vagrant ssh
 * cd /vagrant
@@ -61,7 +61,7 @@ Environments
 ### Setup Test/Staging/Prod
 * cd [PROJECT-DIR]
 * export SYMFONY_ENV=prod
-* git clone ....
+* git clone git@github.com:SURFnet/Service-provider-registration.git .
 * curl -s https://getcomposer.org/installer | php
 * php composer.phar install -o --no-dev
 * HTTPDUSER=\`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1\`
