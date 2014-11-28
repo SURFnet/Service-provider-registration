@@ -64,9 +64,9 @@ Environments
 * git clone ....
 * curl -s https://getcomposer.org/installer | php
 * php composer.phar install -o --no-dev
-* HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
-* sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs app/data
-* sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs app/data
+* HTTPDUSER=``ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1``
+* sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:``whoami``:rwX app/cache app/logs app/data
+* sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:``whoami``:rwX app/cache app/logs app/data
 * php app/console doctrine:schema:create --force
 * php app/console doctrine:fixtures:load
 * php app/console lexik:translations:import -g -c
