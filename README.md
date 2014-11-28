@@ -34,6 +34,8 @@ Requirements
                 Allow from All
             </Directory>
         </VirtualHost>
+        
+* HTTPS/SSL would be highly recommended
 
 ### MySQL
 
