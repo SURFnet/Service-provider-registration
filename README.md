@@ -35,9 +35,11 @@ Requirements
             </Directory>
         </VirtualHost>
         
-* HTTPS/SSL would be highly recommended
+* HTTPS/SSL is highly recommended
 
 ### MySQL
+
+### SMTP
 
 Environments
 ----------------------------------
@@ -71,6 +73,11 @@ Environments
 * php app/console ass:dump
 * php app/console cache:clear
 * Add to crontab: php app/console app:mail:report --env=prod 
+
+Configuration
+----------------------------------
+
+Configuration parameters will initially be set by composer install. Afterwards they can be adjusted in app/config/parameters.yml.
 
 Deployment
 ----------------------------------
