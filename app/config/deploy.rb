@@ -36,5 +36,15 @@ logger.level = Logger::MAX_LEVEL
 # Run migrations before warming the cache
 before "symfony:cache:warmup", "symfony:doctrine:schema:update"
 
+# Update translations
+namespace :symfony do
+  desc "Updates translations"
+  task :update_translations, :roles => :app, :except => { :no_release => true } do
+    stream "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} lexik:translations:import -g -c #{console_options}'"
+  end
+end
+
+after "symfony:doctrine:schema:update", "symfony:update_translations"
+
 # Clean old releases after deploy
 after "deploy", "deploy:cleanup"
