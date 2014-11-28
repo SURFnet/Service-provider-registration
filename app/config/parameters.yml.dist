@@ -24,6 +24,7 @@ parameters:
     mail_from:     support@surfconext.nl
     mail_receiver: support@surfconext.nl
 
+    simplesamlphp.path: simplesaml/
     simplesamlphp.admin_password: ~
     simplesamlphp.technical_contact_name: ~
     simplesamlphp.technical_contact_email: ~
