@@ -19,10 +19,10 @@ Requirements
             ServerName [HOSTNAME]
             ServerAlias www.[HOSTNAME]
         
-            Alias /simplesaml [PROJECT-DIR]/vendor/simplesamlphp/simplesamlphp/www
+            Alias /simplesaml [PROJECT-DIR]/current/vendor/simplesamlphp/simplesamlphp/www
         
-            DocumentRoot [PROJECT-DIR]/web
-            <Directory [PROJECT-DIR]/web>
+            DocumentRoot [PROJECT-DIR]/current/web
+            <Directory [PROJECT-DIR]/current/web>
                 AllowOverride All
                 Order allow,deny
                 Allow from All
@@ -88,7 +88,8 @@ Deployment
 * git commit/push
 
 ### Deploy release (@ SURFnet deploy env) - Automatic using Capifony
-* git clone/pull master branch
+* cd [PROJECT-DIR]
+* git clone new or pull existing checkout
 * cap deploy
 
 Test Data
