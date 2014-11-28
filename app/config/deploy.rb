@@ -1,17 +1,19 @@
 set :application, "SURFnet Service Provider Registration"
-set :domain,      "vps20.ibuildings.com"
-set :deploy_to,   "/var/www/surfform"
+set :domain,      "support.surfconext.nl"
+set :deploy_to,   "/www/support/data/"
 set :app_path,    "app"
 
 set :repository, "git@github.com:SURFnet/Service-provider-registration.git"
 set :scm,        :git
+set :branch,     "release"
 
 role :web, domain
 role :app, domain, :primary => true
 
 ssh_options[:forward_agent] = true
-set :user,                "root"
+set :user,                "bas"
 set :use_sudo,            false
+set :webserver_user,      "support_surfconext"
 
 set :permission_method,   :acl
 set :use_set_permissions, true
@@ -27,7 +29,7 @@ set :shared_children, [app_path + "/logs", app_path + "/data", web_path + "/uplo
 set :use_composer, true
 set :copy_vendors, true
 
-set :dump_assetic_assets,   true
+set :dump_assetic_assets,   false
 set :update_assets_version, true
 
 # Be more verbose by uncommenting the following line

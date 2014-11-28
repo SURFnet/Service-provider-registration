@@ -6,12 +6,6 @@ Welcome!
 Requirements
 ----------------------------------
 
-### System
-* sudo yum install npm
-* sudo npm install -g less
-* sudo npm install -g uglify-js
-* sudo npm install -g uglifycss
-
 ### PHP
 * min. PHP 5.3.3
 * apc
@@ -25,10 +19,10 @@ Requirements
             ServerName [HOSTNAME]
             ServerAlias www.[HOSTNAME]
         
-            Alias /simplesaml [PROJECT-DIR]/vendor/simplesamlphp/simplesamlphp/www
+            Alias /simplesaml [PROJECT-DIR]/current/vendor/simplesamlphp/simplesamlphp/www
         
-            DocumentRoot [PROJECT-DIR]/web
-            <Directory [PROJECT-DIR]/web>
+            DocumentRoot [PROJECT-DIR]/current/web
+            <Directory [PROJECT-DIR]/current/web>
                 AllowOverride All
                 Order allow,deny
                 Allow from All
@@ -48,6 +42,10 @@ Environments
 * git clone git@github.com:SURFnet/Service-provider-registration.git .
 * vagrant up
 * vagrant ssh
+* sudo yum install npm
+* sudo npm install -g less
+* sudo npm install -g uglify-js
+* sudo npm install -g uglifycss
 * cd /vagrant
 * curl -s https://getcomposer.org/installer | php
 * composer install
@@ -58,47 +56,41 @@ Environments
 * php app/console cache:clear
 * php app/console ass:dump
 
-### Setup Test/Staging/Prod
+### Setup Deploy env (@ SURFnet)
+* install capifony
 * cd [PROJECT-DIR]
-* export SYMFONY_ENV=prod
 * git clone git@github.com:SURFnet/Service-provider-registration.git .
-* curl -s https://getcomposer.org/installer | php
-* php composer.phar install -o --no-dev
-* HTTPDUSER=\`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1\`
-* sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:\`whoami\`:rwX app/cache app/logs app/data
-* sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:\`whoami\`:rwX app/cache app/logs app/data
-* php app/console doctrine:schema:create --force
-* php app/console doctrine:fixtures:load
-* php app/console lexik:translations:import -g -c
-* php app/console ass:dump
-* php app/console cache:clear
-* Add to crontab: php app/console app:mail:report --env=prod 
+
+### Setup Test/Staging/Prod
+* @Server: configure apache/mysql etc
+* @SURNET deploy env: cd [PROJECT-DIR]
+* @SURNET deploy env: cap deploy:setup
+* @SURNET deploy env: cap deploy
+* @SURFnet deploy env: cap symfony:doctrine:load_fixtures
+* @SURFnet deploy end: cap deploy
+* @Server: Add to crontab: php app/console app:mail:report --env=prod 
 
 Configuration
 ----------------------------------
 
 Configuration parameters will initially be set by composer install. Afterwards they can be adjusted in app/config/parameters.yml.
 
-Logs can be found in app/logs
+Logs can be found in app/logs.
 
 Deployment
 ----------------------------------
 
-For now project is hosted on vps20.ibuildings.com
+### Prepare Release (@ development)
+* Switch to release branch
+* Merge in master
+* rm -rf web/js/compiled web/css/compiled web/compiled/css web/compiled/js
+* php app/console ass:dump -e prod
+* git commit/push
 
-### Automatic (Capifony)
-* cap deploy (uses ssh key forwarding for user root@vps20)
-
-### Manual
+### Deploy release (@ SURFnet deploy env) - Automatic using Capifony
 * cd [PROJECT-DIR]
-* export SYMFONY_ENV=prod
-* git pull
-* php composer.phar composer install -o --no-dev
-* vi app/config.yml -> raise 'assets_version'
-* php app/console ass:dump
-* php app/console doctrine:schema:update
-* php app/console lexik:translations:import -g -c
-* php app/console cache:warmup
+* git clone new or pull existing checkout
+* cap deploy
 
 Test Data
 ----------------------------------
