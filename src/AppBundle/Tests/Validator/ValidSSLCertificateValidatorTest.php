@@ -6,9 +6,14 @@
 class ValidSSLCertificateValidatorTest extends \Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest
 {
     /**
-     * @var \Guzzle\Http\Message\Response
+     * @var \AppBundle\Metadata\CertificateFetcher
      */
-    private $mockResponse;
+    private $fetcher;
+
+    /**
+     * @var \AppBundle\Metadata\CertificateParser
+     */
+    private $parser;
 
     protected function getApiVersion()
     {
@@ -17,22 +22,23 @@ class ValidSSLCertificateValidatorTest extends \Symfony\Component\Validator\Test
 
     protected function createValidator()
     {
-        $this->mockResponse = new \Guzzle\Http\Message\Response(200);
-        $this->mockResponse->setBody('');
+        $this->fetcher = $this->getMockBuilder('\AppBundle\Metadata\CertificateFetcher')->getMock();
+        $this->fetcher->method('fetch')->willReturn(file_get_contents(__DIR__ . '/Fixtures/abn.cer'));
 
-        $plugin = new \Guzzle\Plugin\Mock\MockPlugin();
-        $plugin->addResponse($this->mockResponse);
+        $this->parser = new \AppBundle\Metadata\CertificateParser();
 
-        $guzzle = new \Guzzle\Http\Client();
-        $guzzle->addSubscriber($plugin);
-
-        return new \AppBundle\Validator\Constraints\ValidSSLCertificateValidator($guzzle);
+        return new \AppBundle\Validator\Constraints\ValidSSLCertificateValidator($this->fetcher, $this->parser);
     }
 
     public function testSuccess()
     {
+        $subscription = new \AppBundle\Entity\Subscription();
+        $subscription->setAcsLocation('q');
+
+        $this->setRoot($subscription);
+
         $cert = file_get_contents(__DIR__ . '/Fixtures/certificate.cer');
-        $this->validator->validate($cert, new \AppBundle\Validator\Constraints\ValidEntityId());
+        $this->validator->validate($cert, new \AppBundle\Validator\Constraints\ValidSSLCertificate());
 
         $this->assertNoViolation();
     }
@@ -60,5 +66,33 @@ class ValidSSLCertificateValidatorTest extends \Symfony\Component\Validator\Test
         $this->validator->validate($cert, new \AppBundle\Validator\Constraints\ValidSSLCertificate());
 
         $this->assertViolation('Invalid key length');
+    }
+
+    public function testInvalidAcsLocation()
+    {
+        $this->fetcher->method('fetch')->will($this->throwException(new \InvalidArgumentException));
+
+        $subscription = new \AppBundle\Entity\Subscription();
+        $subscription->setAcsLocation('q');
+
+        $this->setRoot($subscription);
+
+        $cert = file_get_contents(__DIR__ . '/Fixtures/certificate.cer');
+        $this->validator->validate($cert, new \AppBundle\Validator\Constraints\ValidSSLCertificate());
+
+        $this->assertViolation('Unable to retrieve SSL certificate of ACSLocation.');
+    }
+
+    public function testMatchingAcsLocation()
+    {
+        $subscription = new \AppBundle\Entity\Subscription();
+        $subscription->setAcsLocation('q');
+
+        $this->setRoot($subscription);
+
+        $cert = $this->parser->parse(file_get_contents(__DIR__ . '/Fixtures/abn.cer'));
+        $this->validator->validate($cert, new \AppBundle\Validator\Constraints\ValidSSLCertificate());
+
+        $this->assertViolation('Certificate matches certificate of ACSLocation which is not allowed.');
     }
 }

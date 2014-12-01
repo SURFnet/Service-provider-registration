@@ -12,3 +12,4 @@
 'Invalid metadata XML': 'Invalid metadata XML'
 'The metadata should not contain an ACS with an index larger than 9.': 'The metadata should not contain an ACS with an index larger than 9.'
 'The metadata XML is invalid considering the associated XSD.': 'The metadata XML is invalid considering the associated XSD.'
+'Unable to retrieve SSL certificate of ACSLocation.': 'Unable to retrieve SSL certificate of ACSLocation.'

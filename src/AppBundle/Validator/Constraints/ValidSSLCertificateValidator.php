@@ -1,8 +1,9 @@
 <?php
 namespace AppBundle\Validator\Constraints;
 
-use Guzzle\Common\Exception\GuzzleException;
-use Guzzle\Http\Client;
+use AppBundle\Entity\Subscription;
+use AppBundle\Metadata\CertificateFetcher;
+use AppBundle\Metadata\CertificateParser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -12,16 +13,25 @@ use Symfony\Component\Validator\ConstraintValidator;
 class ValidSSLCertificateValidator extends ConstraintValidator
 {
     /**
-     * @var Client
+     * @var CertificateFetcher
      */
-    private $guzzle;
+    private $fetcher;
 
     /**
-     * @param Client $guzzle
+     * @var CertificateParser
      */
-    public function __construct(Client $guzzle)
+    private $parser;
+
+    /**
+     * Constructor
+     *
+     * @param CertificateFetcher $fetcher
+     * @param CertificateParser  $parser
+     */
+    public function __construct(CertificateFetcher $fetcher, CertificateParser $parser)
     {
-        $this->guzzle = $guzzle;
+        $this->fetcher = $fetcher;
+        $this->parser = $parser;
     }
 
     /**
@@ -56,21 +66,32 @@ class ValidSSLCertificateValidator extends ConstraintValidator
             return;
         }
 
-        return;
+        $this->validateUniqueness($value);
+    }
 
-        // @todo: fix this
-        // $acsLocation = $this->context->getRoot()->getData()->getAcsLocation();
-        //
-        // try {
-        //     $response = $this->guzzle->get($acsLocation)->send();
-        // } catch (GuzzleException $e) {
-        //     return;
-        // }
-        //
-        // openssl_x509_export($cont['options']['ssl']['peer_certificate'], $acsCert, true);
-        //
-        // if ($value === $acsCert) {
-        //     $this->context->addViolation('Certificate matches certificate of ACSLocation which is not allowed.');
-        // }
+    /**
+     * @param string $value
+     */
+    private function validateUniqueness($value)
+    {
+        if ($this->context->getRoot() instanceof Subscription) {
+            $acsLocation = $this->context->getRoot()->getAcsLocation();
+        } else {
+            $acsLocation = $this->context->getRoot()->getData()->getAcsLocation();
+        }
+
+        try {
+            $acsCert = $this->fetcher->fetch($acsLocation);
+        } catch (\InvalidArgumentException $e) {
+            $this->context->addViolation('Unable to retrieve SSL certificate of ACSLocation.');
+
+            return;
+        }
+
+        $acsCert = $this->parser->parse($acsCert);
+
+        if ($value === $acsCert) {
+            $this->context->addViolation('Certificate matches certificate of ACSLocation which is not allowed.');
+        }
     }
 }
