@@ -26,7 +26,11 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $guzzle = new \Guzzle\Http\Client();
         $guzzle->addSubscriber($plugin);
 
-        $this->parser = new \AppBundle\Metadata\Parser($guzzle, __DIR__ . '/../../../../app/Resources/schemas/');
+        $this->parser = new \AppBundle\Metadata\Parser(
+            $guzzle,
+            new \AppBundle\Metadata\CertificateParser(),
+            __DIR__ . '/../../../../app/Resources/schemas/'
+        );
     }
 
     public function testSuccess()

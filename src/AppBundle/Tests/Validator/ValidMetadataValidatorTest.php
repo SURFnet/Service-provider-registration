@@ -26,7 +26,11 @@ class ValidMetadataValidatorTest extends \Symfony\Component\Validator\Tests\Cons
         $guzzle = new \Guzzle\Http\Client();
         $guzzle->addSubscriber($plugin);
 
-        $parser = new \AppBundle\Metadata\Parser($guzzle, __DIR__ . '/../../../../app/Resources/schemas/');
+        $parser = new \AppBundle\Metadata\Parser(
+            $guzzle,
+            new \AppBundle\Metadata\CertificateParser(),
+            __DIR__ . '/../../../../app/Resources/schemas/'
+        );
 
         return new \AppBundle\Validator\Constraints\ValidMetadataValidator($parser);
     }

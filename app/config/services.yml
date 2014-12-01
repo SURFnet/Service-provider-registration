@@ -1,8 +1,14 @@
 services:
 
+    cert.fetcher:
+        class: AppBundle\Metadata\CertificateFetcher
+
+    cert.parser:
+        class: AppBundle\Metadata\CertificateParser
+
     parser:
         class: AppBundle\Metadata\Parser
-        arguments: [@guzzle.client, %kernel.root_dir%/Resources/schemas/]
+        arguments: [@guzzle.client, @cert.parser, %kernel.root_dir%/Resources/schemas/]
 
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator
@@ -12,7 +18,7 @@ services:
 
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
-        arguments: [@guzzle.client]
+        arguments: [@cert.fetcher, @cert.parser]
         tags:
             - { name: validator.constraint_validator, alias: certificate }
 
