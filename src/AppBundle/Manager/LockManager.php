@@ -21,15 +21,22 @@ class LockManager
     private $session;
 
     /**
+     * @var int
+     */
+    private $lockTime;
+
+    /**
      * Constructor
      *
      * @param Cache   $cache
      * @param Session $session
+     * @param int     $defaultLockTime
      */
-    public function __construct(Cache $cache, Session $session)
+    public function __construct(Cache $cache, Session $session, $defaultLockTime = 12)
     {
         $this->cache = $cache;
         $this->session = $session;
+        $this->lockTime = $defaultLockTime;
     }
 
     /**
@@ -50,6 +57,6 @@ class LockManager
             return false;
         }
 
-        return $this->cache->save($cacheId, $sessionId, 12);
+        return $this->cache->save($cacheId, $sessionId, $this->lockTime);
     }
 }

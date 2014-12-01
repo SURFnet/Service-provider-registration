@@ -30,6 +30,11 @@ class Parser
     private $guzzle;
 
     /**
+     * @var CertificateParser
+     */
+    private $certParser;
+
+    /**
      * @var Metadata[]
      */
     private $cache;
@@ -37,12 +42,14 @@ class Parser
     /**
      * Constructor
      *
-     * @param Client $guzzle
-     * @param string $schemaLocation
+     * @param Client            $guzzle
+     * @param CertificateParser $certParser
+     * @param string            $schemaLocation
      */
-    public function __construct($guzzle, $schemaLocation)
+    public function __construct(Client $guzzle, CertificateParser $certParser, $schemaLocation)
     {
         $this->guzzle = $guzzle;
+        $this->certParser = $certParser;
         $this->schemaLocation = $schemaLocation;
     }
 
@@ -123,9 +130,7 @@ class Parser
     private function parseCertificate($descriptor, Metadata $metadata)
     {
         foreach ($descriptor->KeyDescriptor->children(self::NS_SIG) as $keyInfo) {
-            $metadata->certificate = "-----BEGIN CERTIFICATE-----\n";
-            $metadata->certificate .= trim((string)$keyInfo->X509Data->X509Certificate);
-            $metadata->certificate .= "\n-----END CERTIFICATE-----";
+            $metadata->certificate = $this->certParser->parse((string)$keyInfo->X509Data->X509Certificate);
             break;
         }
     }
