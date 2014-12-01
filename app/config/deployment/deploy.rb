@@ -1,14 +1,15 @@
+set :stages,        %w(production development)
+set :default_stage, "production"
+set :stage_dir,     "app/config/deployment"
+require 'capistrano/ext/multistage'
+
 set :application, "SURFnet Service Provider Registration"
-set :domain,      "support.surfconext.nl"
 set :deploy_to,   "/www/support/spform/"
 set :app_path,    "app"
 
 set :repository, "git@github.com:SURFnet/Service-provider-registration.git"
 set :scm,        :git
 set :branch,     "release"
-
-role :web, domain
-role :app, domain, :primary => true
 
 ssh_options[:forward_agent] = true
 set :user,                "bas"
