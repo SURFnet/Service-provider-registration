@@ -5,9 +5,20 @@
  */
 class LockManagerTest extends PHPUnit_Framework_TestCase
 {
-    public function testLocking()
+    /**
+     * @var \AppBundle\Manager\LockManager
+     */
+    private $lockManager1;
+
+    /**
+     * @var \AppBundle\Manager\LockManager
+     */
+    private $lockManager2;
+
+    public function setup()
     {
         $cache = new \Doctrine\Common\Cache\FilesystemCache('/tmp/spformtest');
+        $cache->setNamespace(mktime() . rand(0, 100));
 
         $session1 = new \Symfony\Component\HttpFoundation\Session\Session(
             new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage('S1')
@@ -19,25 +30,40 @@ class LockManagerTest extends PHPUnit_Framework_TestCase
         );
         $session2->start();
 
-        $lockManager1 = new \AppBundle\Manager\LockManager($cache, $session1);
-        $lockManager2 = new \AppBundle\Manager\LockManager($cache, $session2);
+        $this->lockManager1 = new \AppBundle\Manager\LockManager($cache, $session1, 5);
+        $this->lockManager2 = new \AppBundle\Manager\LockManager($cache, $session2, 5);
+    }
 
-        // Test successful locking
-        $this->assertTrue($lockManager1->lock(1));
-        $this->assertTrue($lockManager1->lock(1));
-        sleep(15);
-        $this->assertTrue($lockManager1->lock(1));
+    public function testSuccessfulLock()
+    {
+        $this->assertTrue($this->lockManager1->lock(1));
+    }
 
-        // Test failed from another session
-        $this->assertTrue($lockManager1->lock(1));
-        $this->assertFalse($lockManager2->lock(1));
+    public function testSuccessfulLockForDifferentResources()
+    {
+        $this->assertTrue($this->lockManager1->lock(3));
+        $this->assertTrue($this->lockManager1->lock(4));
+        $this->assertTrue($this->lockManager1->lock(5));
+    }
 
-        // Test successful lock after lock expired
-        sleep(15);
-        $this->assertTrue($lockManager2->lock(1));
+    public function testMultipleLocksForSameResource()
+    {
+        $this->assertTrue($this->lockManager1->lock(6));
+        $this->assertTrue($this->lockManager1->lock(6));
+        sleep(6);
+        $this->assertTrue($this->lockManager1->lock(6));
+    }
 
-        // Test locking of different resources
-        $this->assertTrue($lockManager1->lock(3));
-        $this->assertTrue($lockManager1->lock(4));
+    public function testFailedLockForSameResource()
+    {
+        $this->assertTrue($this->lockManager1->lock(7));
+        $this->assertFalse($this->lockManager2->lock(7));
+    }
+
+    public function testSuccessfulLockAfterLockExpired()
+    {
+        $this->assertTrue($this->lockManager1->lock(8));
+        sleep(6);
+        $this->assertTrue($this->lockManager2->lock(8));
     }
 }
