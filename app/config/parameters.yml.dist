@@ -28,4 +28,4 @@ parameters:
     simplesamlphp.admin_password: ~
     simplesamlphp.technical_contact_name: ~
     simplesamlphp.technical_contact_email: ~
-    simplesamlphp.idp: https://engine.surfconext.nl/authentication/idp/metadata
+    simplesamlphp.idp: https://engine.surfconext.nl/authentication/idp/metadata/vo:managementvo

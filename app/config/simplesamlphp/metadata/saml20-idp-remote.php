@@ -18,8 +18,8 @@ $metadata['https://openidp.feide.no'] = array(
     'certFingerprint'     => 'c9ed4dfb07caf13fc21e0fec1572047eb8a7a4cb'
 );
 
-$metadata['https://engine.surfconext.nl/authentication/idp/metadata'] = array(
-    'entityid'                  => 'https://engine.surfconext.nl/authentication/idp/metadata',
+$metadata['https://engine.surfconext.nl/authentication/idp/metadata/vo:managementvo'] = array(
+    'entityid'                  => 'https://engine.surfconext.nl/authentication/idp/metadata/vo:managementvo',
     'description'               =>
         array(
             'en' => 'SURFnet BV',
@@ -81,7 +81,7 @@ $metadata['https://engine.surfconext.nl/authentication/idp/metadata'] = array(
             0 =>
                 array(
                     'Binding'  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                    'Location' => 'https://engine.surfconext.nl/authentication/idp/single-sign-on',
+                    'Location' => 'https://engine.surfconext.nl/authentication/idp/single-sign-on/vo:managementvo',
                 ),
         ),
     'SingleLogoutService'       =>
