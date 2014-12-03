@@ -18,7 +18,7 @@ $metadata['https://openidp.feide.no'] = array(
     'certFingerprint'     => 'c9ed4dfb07caf13fc21e0fec1572047eb8a7a4cb'
 );
 
-$metadata['https://engine.surfconext.nl/authentication/idp/metadata'] = array(
+$metadata['https://engine.surfconext.nl/authentication/idp/metadata/vo:managementvo'] = array(
     'entityid'                  => 'https://engine.surfconext.nl/authentication/idp/metadata/vo:managementvo',
     'description'               =>
         array(
