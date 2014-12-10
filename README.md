@@ -46,6 +46,8 @@ Environments
 * sudo npm install -g less
 * sudo npm install -g uglify-js
 * sudo npm install -g uglifycss
+* sudo yum install ant
+* sudo yum install ant-apache-regexp
 * cd /vagrant
 * curl -s https://getcomposer.org/installer | php
 * composer install
