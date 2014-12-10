@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Entity\Template;
 use AppBundle\Form\Admin\TemplateType;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Grid;
@@ -48,6 +49,7 @@ class TemplateController extends Controller implements SecuredController
      */
     public function editAction($id, Request $request)
     {
+        /** @var Template $template */
         $template = $this->getDoctrine()->getManager()->find('AppBundle:Template', $id);
 
         $form = $this->createForm(
@@ -60,6 +62,11 @@ class TemplateController extends Controller implements SecuredController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            // Force cache refresh of template
+            $twig = $this->get('twig');
+            $twig->enableAutoReload();
+            $twig->loadTemplate($template->getName());
 
             return $this->redirect($this->generateUrl('admin.template.overview'));
         }
