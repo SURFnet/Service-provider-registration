@@ -151,7 +151,7 @@
         // Setup autosave
         $form.autosave({
             callbacks: {
-                trigger: 'modify',
+                trigger: ['modify','change'],
                 scope: 'all',
                 save: {
                     method: 'ajax',
