@@ -348,6 +348,8 @@ class Parser
                 }
             }
 
+            libxml_clear_errors();
+
             throw new \InvalidArgumentException(
                 "The metadata XML is invalid considering the associated XSD:\n" . implode(",\n", $errorArray)
             );
