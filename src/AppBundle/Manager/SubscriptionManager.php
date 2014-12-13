@@ -98,6 +98,15 @@ class SubscriptionManager
 
     /**
      * @param Subscription $subscription
+     */
+    public function deleteSubscription(Subscription $subscription)
+    {
+        $this->em->remove($subscription);
+        $this->em->flush();
+    }
+
+    /**
+     * @param Subscription $subscription
      *
      * @return bool
      */

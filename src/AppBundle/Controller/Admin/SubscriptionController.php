@@ -101,6 +101,26 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
+     * @Route("/{id}/delete", name="admin.subscription.delete")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function deleteAction($id)
+    {
+        $subscription = $this->get('subscription.manager')->getSubscription($id);
+
+        if (empty($subscription)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->get('subscription.manager')->deleteSubscription($subscription);
+
+        return $this->redirect($this->generateUrl('admin.subscription.overview'));
+    }
+
+    /**
      * @return Grid
      */
     private function buildGrid()
@@ -148,6 +168,9 @@ class SubscriptionController extends Controller implements SecuredController
         );
 
         $rowAction = new RowAction('view', 'admin.subscription.view');
+        $grid->addRowAction($rowAction);
+
+        $rowAction = new RowAction('delete', 'admin.subscription.delete', true);
         $grid->addRowAction($rowAction);
 
         $rowAction = new RowAction('edit', 'form', false, '_blank');
