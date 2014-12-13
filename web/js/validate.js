@@ -8,7 +8,7 @@
         },
 
         updateData = function (dataField, field, val) {
-            window.ParsleyUI.removeError(dataField, 'remote');
+            clearErrors(dataField);
 
             if (field.$element.attr('id') !== dataField.$element.attr('id')) {
                 if (dataField.$element.attr('type') === 'checkbox') {
@@ -17,6 +17,16 @@
                     dataField.$element.val(val);
                 }
             }
+        },
+
+        updateErrors = function (field, errors) {
+            clearErrors(field);
+
+            $.each(errors, function (key, error) {
+                window.ParsleyUI.addError(field, 'remote', nl2br(error));
+            });
+
+            window.ParsleyUI.manageFailingFieldTrigger(field);
         },
 
         // @todo: clean, use recursive method
@@ -35,12 +45,10 @@
                 if (val === Object(val)) {
                     $.each(val, function (key2, val2) {
                         var dataField = $('#subscription_' + key + '_' + key2).parsley();
-
                         updateData(dataField, field, val2);
                     });
                 } else {
                     var dataField = $('#subscription_' + key).parsley();
-
                     updateData(dataField, field, val);
                 }
             });
@@ -49,21 +57,11 @@
                 if (!$.isArray(val)) {
                     $.each(val, function (key2, val2) {
                         var field = $('#subscription_' + key + '_' + key2).parsley();
-
-                        clearErrors(field);
-
-                        $.each(val2, function (key, error) {
-                            window.ParsleyUI.addError(field, 'remote', nl2br(error));
-                        });
+                        updateErrors(field, val2);
                     });
                 } else {
                     var field = $('#subscription_' + key).parsley();
-
-                    clearErrors(field);
-
-                    $.each(val, function (key, error) {
-                        window.ParsleyUI.addError(field, 'remote', nl2br(error));
-                    });
+                    updateErrors(field, val);
                 }
             });
         },
@@ -76,6 +74,13 @@
         var $form = $('#form'),
             $inputs = $form.find('input, select, textarea');
 
+        // Prevent onEnter submit
+        $form.find('input, select').on('keypress', function (event) {
+            if (event.which == '13') {
+                event.preventDefault();
+            }
+        });
+
         $.listen('parsley:field:init', function (field) {
             field.$element.closest('.form-group').addClass('has-feedback');
         });
@@ -83,7 +88,7 @@
         // Setup validation
         // @todo double, help text
         $form.parsley({
-            trigger: 'keyup',
+            trigger: 'keypress',
             errorClass: 'has-error',
             successClass: 'has-success',
             classHandler: function (field) {
@@ -96,7 +101,7 @@
                 $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
             }
         }).subscribe('parsley:field:validate', function (field) {
-            window.ParsleyUI.removeError(field, 'remote');
+            clearErrors(field);
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
         }).subscribe('parsley:field:success', function (field) {
