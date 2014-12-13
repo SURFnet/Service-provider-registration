@@ -119,6 +119,7 @@ form:
         uidAttribute: form.help.uidAttribute   # FIXME
 
     legend:
+        generalContact: 'General contact'
         administrativeContact: 'Administrative contact'
         supportContact: 'Support contact'
         technicalContact: 'Technical contact'
