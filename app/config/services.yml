@@ -2,13 +2,14 @@ services:
 
     cert.fetcher:
         class: AppBundle\Metadata\CertificateFetcher
+        arguments: [@cache]
 
     cert.parser:
         class: AppBundle\Metadata\CertificateParser
 
     parser:
         class: AppBundle\Metadata\Parser
-        arguments: [@guzzle.client, @cert.parser, %kernel.root_dir%/Resources/schemas/]
+        arguments: [@guzzle.client, @cert.parser, @cache, %kernel.root_dir%/Resources/schemas/]
 
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator
