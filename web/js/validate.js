@@ -212,11 +212,7 @@
 
         $links.popover({
             container: 'body',
-            trigger: 'hover'
-        });
-
-        $links.on('click', function () {
-            return false;
+            trigger: 'focus'
         });
 
         $inputs.on('focusin', function () {
