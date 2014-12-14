@@ -106,7 +106,9 @@
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
         }).subscribe('parsley:field:success', function (field) {
             field.$element.next('i').remove();
-            field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
+            if (field.validationResult === true) {
+                field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
+            }
         }).subscribe('parsley:field:error', function (field) {
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
