@@ -65,25 +65,13 @@ form:
 
     help:
         acsLocation: form.help.acsLocation   # FIXME
-
-        administrativeContact:
-            email: form.help.administrativeContact.email   # FIXME
-            firstName: form.help.administrativeContact.firstName   # FIXME
-            lastName: form.help.administrativeContact.lastName   # FIXME
-            phone: form.help.administrativeContact.phone   # FIXME
-
+        administrativeContact: form.help.administrativeContact   # FIXME
         affiliationAttribute: form.help.affiliationAttribute   # FIXME
         applicationUrl: form.help.applicationUrl   # FIXME
         certificate: form.help.certificate   # FIXME
         comments: form.help.comments   # FIXME
         commonNameAttribute: form.help.commonNameAttribute   # FIXME
-
-        contact:
-            email: form.help.contact.email   # FIXME
-            firstName: form.help.contact.firstName   # FIXME
-            lastName: form.help.contact.lastName   # FIXME
-            phone: form.help.contact.phone   # FIXME
-
+        contact: form.help.contact   # FIXME
         descriptionEn: form.help.descriptionEn   # FIXME
         descriptionNl: form.help.descriptionNl   # FIXME
         displayNameAttribute: form.help.displayNameAttribute   # FIXME
@@ -100,26 +88,14 @@ form:
         organizationTypeAttribute: form.help.organizationTypeAttribute   # FIXME
         preferredLanguageAttribute: form.help.preferredLanguageAttribute   # FIXME
         principleNameAttribute: form.help.principleNameAttribute   # FIXME
-
-        supportContact:
-            email: form.help.supportContact.email   # FIXME
-            firstName: form.help.supportContact.firstName   # FIXME
-            lastName: form.help.supportContact.lastName   # FIXME
-            phone: form.help.supportContact.phone   # FIXME
-
+        supportContact: form.help.supportContact   # FIXME
         surNameAttribute: form.help.surNameAttribute   # FIXME
-
-        technicalContact:
-            email: form.help.technicalContact.email   # FIXME
-            firstName: form.help.technicalContact.firstName   # FIXME
-            lastName: form.help.technicalContact.lastName   # FIXME
-            phone: form.help.technicalContact.phone   # FIXME
-
+        technicalContact: form.help.technicalContact   # FIXME
         ticketNo: form.help.ticketNo   # FIXME
         uidAttribute: form.help.uidAttribute   # FIXME
 
     legend:
-        generalContact: 'General contact'
+        contact: 'General contact'
         administrativeContact: 'Administrative contact'
         supportContact: 'Support contact'
         technicalContact: 'Technical contact'
