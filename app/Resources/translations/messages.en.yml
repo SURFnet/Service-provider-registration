@@ -153,8 +153,8 @@ form:
 
 mail:
     invitation:
-        subject: 'Invitation for SURFnet SP Registration'
+        subject: 'Invitation for SURFnet SP Registration (%ticketNo%)'
     report:
         subject: 'SURFnet SP Registration Report'
     notification:
-        subject: 'SURFnet SP Registration Finished'
+        subject: 'SURFnet SP Registration Finished (%ticketNo%)'
