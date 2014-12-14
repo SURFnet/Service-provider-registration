@@ -215,6 +215,10 @@
             trigger: 'focus'
         });
 
+        $links.on('click', function () {
+            return false;
+        });
+
         $inputs.on('focusin', function () {
             $(this).closest('.row').find('.popover-link').popover('show');
         });
