@@ -1,1 +1,1 @@
-.form-control+.form-control-feedback{display:block;line-height:34px}.nav-tabs,.tab-content{margin-bottom:15px}div#pager{text-align:center;position:relative}
+.form-control+.form-control-feedback{display:block;line-height:34px}.form-group .control-label.required:after{content:"*";color:red;font-weight:bold}.nav-tabs,.tab-content{margin-bottom:15px}div#pager{text-align:center;position:relative}
