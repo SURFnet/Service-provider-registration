@@ -140,12 +140,14 @@ class Subscription
     /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 300)
      */
     private $descriptionNl;
 
     /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(max = 300)
      */
     private $descriptionEn;
 

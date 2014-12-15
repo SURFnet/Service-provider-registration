@@ -73,7 +73,7 @@
 
     <div class="row">
         <div class="col-md-11">
-            {{ form_row(form.descriptionEn) }}
+            {{ form_row(form.descriptionEn, {'attr': {'data-parsley-maxlength': 300}}) }}
         </div>
 
         <div class="col-md-1">
@@ -98,7 +98,7 @@
 
     <div class="row">
         <div class="col-md-11">
-            {{ form_row(form.descriptionNl) }}
+            {{ form_row(form.descriptionNl, {'attr': {'data-parsley-maxlength': 300}}) }}
         </div>
 
         <div class="col-md-1">
@@ -120,15 +120,3 @@
         </div>
     </div>
 </fieldset>
-
-{#<div class="row">#}
-    {#<div class="col-md-11">#}
-        {#{{ form_row(form.remote, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id})}}) }}#}
-    {#</div>#}
-
-    {#<div class="col-md-1">#}
-        {#<a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.remote'|trans }}">#}
-            {#{{ icon('question-circle') }}#}
-        {#</a>#}
-    {#</div>#}
-{#</div>#}
