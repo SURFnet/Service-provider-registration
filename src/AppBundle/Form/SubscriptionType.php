@@ -310,9 +310,10 @@ class SubscriptionType extends AbstractType
             'affiliationAttribute',
             'entitlementAttribute',
             'principleNameAttribute',
-            'isMemberOfAttribute',
             'uidAttribute',
-            'preferredLanguageAttribute'
+            'preferredLanguageAttribute',
+            'organizationalUnitAttribute',
+            'personalCodeAttribute',
         );
     }
 }

@@ -6,10 +6,6 @@
         <strong>{{ 'form.lock.title'|trans }}</strong> {{ 'form.lock.description'|trans }}
     </div>
 
-    <div class="well well-sm">
-        {{ 'form.intro'|trans }}
-    </div>
-
     <form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
           data-save="{{ path('save', {id: subscription.id}) }}"
           data-lock="{{ path('lock', {id: subscription.id}) }}">

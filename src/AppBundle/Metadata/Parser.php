@@ -5,6 +5,7 @@ namespace AppBundle\Metadata;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
+use Doctrine\Common\Cache\Cache;
 use Guzzle\Common\Exception\GuzzleException;
 use Guzzle\Http\Client;
 
@@ -35,7 +36,7 @@ class Parser
     private $certParser;
 
     /**
-     * @var Metadata[]
+     * @var Cache
      */
     private $cache;
 
@@ -44,12 +45,14 @@ class Parser
      *
      * @param Client            $guzzle
      * @param CertificateParser $certParser
+     * @param Cache             $cache
      * @param string            $schemaLocation
      */
-    public function __construct(Client $guzzle, CertificateParser $certParser, $schemaLocation)
+    public function __construct(Client $guzzle, CertificateParser $certParser, Cache $cache, $schemaLocation)
     {
         $this->guzzle = $guzzle;
         $this->certParser = $certParser;
+        $this->cache = $cache;
         $this->schemaLocation = $schemaLocation;
     }
 
@@ -60,17 +63,24 @@ class Parser
      */
     public function parse($metadataUrl)
     {
-        if (isset($this->cache[$metadataUrl]) && $this->cache[$metadataUrl] instanceof Metadata) {
-            return $this->cache[$metadataUrl];
+        if (false !== $metadata = $this->cache->fetch('metadata-' . $metadataUrl)) {
+            return $metadata;
         }
 
-        try {
-            $responseXml = $this->guzzle->get($metadataUrl, null, array('timeout' => 10))->send()->xml();
-        } catch (GuzzleException $e) {
-            throw new \InvalidArgumentException($e->getMessage());
+        if (false === $responseXml = $this->cache->fetch('xml-' . $metadataUrl)) {
+            try {
+                $responseXml = $this->guzzle->get($metadataUrl, null, array('timeout' => 10))->send()->xml();
+                $responseXml = $responseXml->asXML();
+            } catch (GuzzleException $e) {
+                throw new \InvalidArgumentException($e->getMessage());
+            }
+
+            $this->cache->save('xml-' . $metadataUrl, $responseXml, 60 * 60 * 24);
         }
 
-        $this->validate($responseXml->asXML());
+        $this->validate($responseXml);
+
+        $responseXml = simplexml_load_string($responseXml);
 
         $metadata = new Metadata();
         $metadata->entityId = (string)$responseXml['entityID'];
@@ -95,7 +105,9 @@ class Parser
             $this->parseAttributes($descriptor, $metadata);
         }
 
-        return $this->cache[$metadataUrl] = $metadata;
+        $this->cache->save('metadata-' . $metadataUrl, $metadata, 60 * 60 * 24);
+
+        return $metadata;
     }
 
     /**
@@ -295,14 +307,19 @@ class Parser
                     $metadata->principleNameAttribute = $attr;
                     break;
 
-                case 'urn:mace:dir:attribute-def:isMemberOf':
-                case 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1':
-                    $metadata->isMemberOfAttribute = $attr;
-                    break;
-
                 case 'urn:mace:dir:attribute-def:preferredLanguage':
                 case 'urn:oid:2.16.840.1.113730.3.1.39':
                     $metadata->preferredLanguageAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:eduPersonOrgUnitDN':
+                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.4':
+                    $metadata->organizationalUnitAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:schacPersonalUniqueCode':
+                case 'urn:oid:1.3.6.1.4.1.1466.155.121.1.15':
+                    $metadata->personalCodeAttribute = $attr;
                     break;
             }
         }
@@ -335,6 +352,8 @@ class Parser
                         break;
                 }
             }
+
+            libxml_clear_errors();
 
             throw new \InvalidArgumentException(
                 "The metadata XML is invalid considering the associated XSD:\n" . implode(",\n", $errorArray)

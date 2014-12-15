@@ -101,15 +101,20 @@ class Metadata
     /**
      * @var Attribute
      */
-    public $isMemberOfAttribute;
-
-    /**
-     * @var Attribute
-     */
     public $uidAttribute;
 
     /**
      * @var Attribute
      */
     public $preferredLanguageAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $organizationalUnitAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $personalCodeAttribute;
 }

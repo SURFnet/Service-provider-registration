@@ -29,6 +29,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->parser = new \AppBundle\Metadata\Parser(
             $guzzle,
             new \AppBundle\Metadata\CertificateParser(),
+            new \Doctrine\Common\Cache\ArrayCache(),
             __DIR__ . '/../../../../app/Resources/schemas/'
         );
     }
@@ -117,13 +118,14 @@ CER
         $this->assertEmpty($metadata->commonNameAttribute);
         $this->assertEmpty($metadata->entitlementAttribute);
         $this->assertEmpty($metadata->givenNameAttribute);
-        $this->assertEmpty($metadata->isMemberOfAttribute);
         $this->assertEmpty($metadata->organizationAttribute);
         $this->assertEmpty($metadata->organizationTypeAttribute);
         $this->assertEmpty($metadata->principleNameAttribute);
         $this->assertEmpty($metadata->surNameAttribute);
         $this->assertEmpty($metadata->uidAttribute);
         $this->assertEmpty($metadata->preferredLanguageAttribute);
+        $this->assertEmpty($metadata->organizationalUnitAttribute);
+        $this->assertEmpty($metadata->personalCodeAttribute);
     }
 
     public function testInvalidXML()

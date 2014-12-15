@@ -15,9 +15,13 @@ Requirements
 ### Apache
 * vhost
 
-        <VirtualHost *:80>
+        <VirtualHost *:443>
             ServerName [HOSTNAME]
             ServerAlias www.[HOSTNAME]
+            
+            SSLEngine on
+            SSLCertificateFile [SSL-CERT-DIR]/[CERT].crt
+            SSLCertificateKeyFile [SSL-KEY-DIR]/[KEY].key
         
             Alias /simplesaml [PROJECT-DIR]/current/vendor/simplesamlphp/simplesamlphp/www
         
@@ -28,8 +32,6 @@ Requirements
                 Allow from All
             </Directory>
         </VirtualHost>
-        
-* HTTPS/SSL is highly recommended
 
 ### MySQL
 
@@ -40,12 +42,17 @@ Environments
 
 ### Setup Development
 * git clone git@github.com:SURFnet/Service-provider-registration.git .
+* add to hosts file: 192.168.33.19 surf.dev surf.prod
 * vagrant up
 * vagrant ssh
 * sudo yum install npm
 * sudo npm install -g less
 * sudo npm install -g uglify-js
 * sudo npm install -g uglifycss
+* sudo yum install ant
+* sudo yum install ant-apache-regexp
+* openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout surf.key -out surf.crt
+* setup apache vhost (see above)
 * cd /vagrant
 * curl -s https://getcomposer.org/installer | php
 * composer install

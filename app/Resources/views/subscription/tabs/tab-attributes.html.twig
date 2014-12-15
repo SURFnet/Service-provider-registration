@@ -263,32 +263,6 @@
     <div class="row">
         <div class="col-md-11">
             <div class="form-group">
-                {{ form_label(form.isMemberOfAttribute) }}
-                <div class="col-lg-10">
-                    <div class="col-md-2">
-                        <div class="checkbox">
-                            {{ form_widget(form.isMemberOfAttribute.requested) }}
-                        </div>
-                    </div>
-                    <div class="col-md-10">
-                        <div class="form-group">
-                            {{ form_widget(form.isMemberOfAttribute.motivation, {attr: {'class': 'disabled' }}) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-1">
-            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.isMemberOfAttribute'|trans }}">
-                {{ icon('question-circle') }}
-            </a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-11">
-            <div class="form-group">
                 {{ form_label(form.uidAttribute) }}
                 <div class="col-lg-10">
                     <div class="col-md-2">
@@ -335,6 +309,60 @@
         <div class="col-md-1">
             <a href="#" class="btn btn-link popover-link"
                data-content="{{ 'form.help.preferredLanguageAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.organizationalUnitAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.organizationalUnitAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.organizationalUnitAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link"
+               data-content="{{ 'form.help.organizationalUnitAttribute'|trans }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-11">
+            <div class="form-group">
+                {{ form_label(form.personalCodeAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-md-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.personalCodeAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            {{ form_widget(form.personalCodeAttribute.motivation, {attr: {'class': 'disabled' }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <a href="#" class="btn btn-link popover-link"
+               data-content="{{ 'form.help.personalCodeAttribute'|trans }}">
                 {{ icon('question-circle') }}
             </a>
         </div>

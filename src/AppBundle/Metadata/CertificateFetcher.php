@@ -2,11 +2,21 @@
 
 namespace AppBundle\Metadata;
 
+use Doctrine\Common\Cache\Cache;
+
 /**
  * Class CertificateFetcher
  */
 class CertificateFetcher
 {
+    /**
+     * @param Cache $cache
+     */
+    public function __construct(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
     /**
      * @param string $url
      *
@@ -14,6 +24,10 @@ class CertificateFetcher
      */
     public function fetch($url)
     {
+        if (false !== $cert = $this->cache->fetch('cert-'. $url)) {
+            return $cert;
+        }
+
         $context = stream_context_create(
             array(
                 'ssl'  =>
@@ -38,6 +52,8 @@ class CertificateFetcher
         if (!openssl_x509_export($cont['options']['ssl']['peer_certificate'], $cert, true)) {
             throw new \InvalidArgumentException('Unable to parse SSL certificate.');
         }
+
+        $this->cache->save('cert-' . $url, $cert, 60 * 60 * 24);
 
         return $cert;
     }

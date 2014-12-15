@@ -15,16 +15,26 @@
             </a>
         </div>
     </div>
+</fieldset>
+
+<fieldset>
+    <legend>
+        <div class="row">
+            <div class="col-md-11">
+                {{ 'form.legend.contact'|trans }}
+            </div>
+
+            <div class="col-md-1">
+                <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.contact'|trans }}">
+                    {{ icon('question-circle') }}
+                </a>
+            </div>
+        </div>
+    </legend>
 
     <div class="row">
         <div class="col-md-11">
             {{ form_row(form.contact.firstName) }}
-        </div>
-
-        <div class="col-md-1">
-            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.contact.firstName'|trans }}">
-                {{ icon('question-circle') }}
-            </a>
         </div>
     </div>
 
@@ -32,35 +42,17 @@
         <div class="col-md-11">
             {{ form_row(form.contact.lastName) }}
         </div>
-
-        <div class="col-md-1">
-            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.contact.lastName'|trans }}">
-                {{ icon('question-circle') }}
-            </a>
-        </div>
     </div>
 
     <div class="row">
         <div class="col-md-11">
             {{ form_row(form.contact.email) }}
         </div>
-
-        <div class="col-md-1">
-            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.contact.email'|trans }}">
-                {{ icon('question-circle') }}
-            </a>
-        </div>
     </div>
 
     <div class="row">
         <div class="col-md-11">
             {{ form_row(form.contact.phone) }}
-        </div>
-
-        <div class="col-md-1">
-            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.contact.phone'|trans }}">
-                {{ icon('question-circle') }}
-            </a>
         </div>
     </div>
 </fieldset>

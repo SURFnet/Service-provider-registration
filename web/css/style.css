@@ -3,6 +3,12 @@
     line-height: 34px;
 }
 
+.form-group .control-label.required:after {
+    content: "*";
+    color: red;
+    font-weight: bold;
+}
+
 .nav-tabs, .tab-content {
     margin-bottom: 15px;
 }

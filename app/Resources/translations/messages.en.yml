@@ -37,12 +37,13 @@ Display name attribute: Display name attribute
 Email address attribute: Email address attribute
 Organization attribute: Organization attribute
 Organization type attribute: Organization type attribute
+Organizational unit attribute: Organizational unit attribute
 Affiliation attribute: Affiliation attribute
 Entitlement attribute: Entitlement attribute
 Principle name attribute: Principle name attribute
-Is member of attribute: Is member of attribute
 Uid attribute: Uid attribute
 Preferred language attribute: Preferred language attribute
+Personal code attribute: Personal code attribute
 
 Comments: Comments
 
@@ -65,25 +66,13 @@ form:
 
     help:
         acsLocation: form.help.acsLocation   # FIXME
-
-        administrativeContact:
-            email: form.help.administrativeContact.email   # FIXME
-            firstName: form.help.administrativeContact.firstName   # FIXME
-            lastName: form.help.administrativeContact.lastName   # FIXME
-            phone: form.help.administrativeContact.phone   # FIXME
-
+        administrativeContact: form.help.administrativeContact   # FIXME
         affiliationAttribute: form.help.affiliationAttribute   # FIXME
         applicationUrl: form.help.applicationUrl   # FIXME
         certificate: form.help.certificate   # FIXME
         comments: form.help.comments   # FIXME
         commonNameAttribute: form.help.commonNameAttribute   # FIXME
-
-        contact:
-            email: form.help.contact.email   # FIXME
-            firstName: form.help.contact.firstName   # FIXME
-            lastName: form.help.contact.lastName   # FIXME
-            phone: form.help.contact.phone   # FIXME
-
+        contact: form.help.contact   # FIXME
         descriptionEn: form.help.descriptionEn   # FIXME
         descriptionNl: form.help.descriptionNl   # FIXME
         displayNameAttribute: form.help.displayNameAttribute   # FIXME
@@ -91,36 +80,24 @@ form:
         entitlementAttribute: form.help.entitlementAttribute   # FIXME
         entityId: form.help.entityId   # FIXME
         givenNameAttribute: form.help.givenNameAttribute   # FIXME
-        isMemberOfAttribute: form.help.isMemberOfAttribute   # FIXME
         logoUrl: form.help.logoUrl   # FIXME
         metadataUrl: form.help.metadataUrl   # FIXME
         nameEn: form.help.nameEn   # FIXME
         nameNl: form.help.nameNl   # FIXME
+        organizationalUnitAttribute: form.help.organizationalUnitAttribute   # FIXME
         organizationAttribute: form.help.organizationAttribute   # FIXME
         organizationTypeAttribute: form.help.organizationTypeAttribute   # FIXME
+        personalCodeAttribute: form.help.personalCodeAttribute   # FIXME
         preferredLanguageAttribute: form.help.preferredLanguageAttribute   # FIXME
         principleNameAttribute: form.help.principleNameAttribute   # FIXME
-
-        supportContact:
-            email: form.help.supportContact.email   # FIXME
-            firstName: form.help.supportContact.firstName   # FIXME
-            lastName: form.help.supportContact.lastName   # FIXME
-            phone: form.help.supportContact.phone   # FIXME
-
+        supportContact: form.help.supportContact   # FIXME
         surNameAttribute: form.help.surNameAttribute   # FIXME
-
-        technicalContact:
-            email: form.help.technicalContact.email   # FIXME
-            firstName: form.help.technicalContact.firstName   # FIXME
-            lastName: form.help.technicalContact.lastName   # FIXME
-            phone: form.help.technicalContact.phone   # FIXME
-
+        technicalContact: form.help.technicalContact   # FIXME
         ticketNo: form.help.ticketNo   # FIXME
         uidAttribute: form.help.uidAttribute   # FIXME
 
-    intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-
     legend:
+        contact: 'General contact'
         administrativeContact: 'Administrative contact'
         supportContact: 'Support contact'
         technicalContact: 'Technical contact'
@@ -154,8 +131,8 @@ form:
 
 mail:
     invitation:
-        subject: 'Invitation for SURFnet SP Registration'
+        subject: 'Invitation for SURFnet SP Registration (%ticketNo%)'
     report:
         subject: 'SURFnet SP Registration Report'
     notification:
-        subject: 'SURFnet SP Registration Finished'
+        subject: 'SURFnet SP Registration Finished (%ticketNo%)'

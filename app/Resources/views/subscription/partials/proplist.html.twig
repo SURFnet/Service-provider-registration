@@ -121,13 +121,6 @@
         {% endif %}
     </dd>
 
-    <dt>{{ 'isMemberOfAttribute'|humanize|trans }}</dt>
-    <dd>
-        {% if subscription.isMemberOfAttribute %}
-            {{ subscription.isMemberOfAttribute.requested }} - {{ subscription.isMemberOfAttribute.motivation }}
-        {% endif %}
-    </dd>
-
     <dt>{{ 'uidAttribute'|humanize|trans }}</dt>
     <dd>
         {% if subscription.uidAttribute %}
@@ -139,6 +132,20 @@
     <dd>
         {% if subscription.preferredLanguageAttribute %}
             {{ subscription.preferredLanguageAttribute.requested }} - {{ subscription.preferredLanguageAttribute.motivation }}
+        {% endif %}
+    </dd>
+
+    <dt>{{ 'organizationalUnitAttribute'|humanize|trans }}</dt>
+    <dd>
+        {% if subscription.organizationalUnitAttribute %}
+            {{ subscription.organizationalUnitAttribute.requested }} - {{ subscription.organizationalUnitAttribute.motivation }}
+        {% endif %}
+    </dd>
+
+    <dt>{{ 'personalCodeAttribute'|humanize|trans }}</dt>
+    <dd>
+        {% if subscription.personalCodeAttribute %}
+            {{ subscription.personalCodeAttribute.requested }} - {{ subscription.personalCodeAttribute.motivation }}
         {% endif %}
     </dd>
 

@@ -59,7 +59,16 @@ class MailManager
         $contact = $subscription->getContact();
 
         $message = \Swift_Message::newInstance()
-            ->setSubject($this->translator->trans('mail.invitation.subject'))
+            ->setSubject(
+                $this->translator->trans(
+                    'mail.invitation.subject',
+                    array(
+                        '%ticketNo%' => $subscription->getTicketNo()
+                    ),
+                    null,
+                    $subscription->getLocale()
+                )
+            )
             ->setFrom($this->sender)
             ->setTo(array($contact->getEmail() => $contact->getFirstName() . ' ' . $contact->getLastName()))
             ->setBody(
@@ -79,7 +88,16 @@ class MailManager
     public function sendFinishedNotification(Subscription $subscription)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject($this->translator->trans('mail.notification.subject'))
+            ->setSubject(
+                $this->translator->trans(
+                    'mail.notification.subject',
+                    array(
+                        '%ticketNo%' => $subscription->getTicketNo()
+                    ),
+                    null,
+                    $subscription->getLocale()
+                )
+            )
             ->setFrom($this->sender)
             ->setTo($this->receiver)
             ->setBody(

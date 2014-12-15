@@ -269,14 +269,6 @@ class Subscription
      * @Assert\Type(type="AppBundle\Model\Attribute")
      * @Assert\Valid()
      */
-    private $isMemberOfAttribute;
-
-    /**
-     * @var Attribute
-     * @ORM\Column(type="object", nullable=true)
-     * @Assert\Type(type="AppBundle\Model\Attribute")
-     * @Assert\Valid()
-     */
     private $uidAttribute;
 
     /**
@@ -286,6 +278,22 @@ class Subscription
      * @Assert\Valid()
      */
     private $preferredLanguageAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $organizationalUnitAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $personalCodeAttribute;
 
     /**
      * @var string
@@ -888,26 +896,6 @@ class Subscription
     /**
      * @return Attribute
      */
-    public function getIsMemberOfAttribute()
-    {
-        return $this->isMemberOfAttribute;
-    }
-
-    /**
-     * @param Attribute $isMemberOfAttribute
-     *
-     * @return $this
-     */
-    public function setIsMemberOfAttribute($isMemberOfAttribute)
-    {
-        $this->isMemberOfAttribute = $isMemberOfAttribute;
-
-        return $this;
-    }
-
-    /**
-     * @return Attribute
-     */
     public function getUidAttribute()
     {
         return $this->uidAttribute;
@@ -941,6 +929,46 @@ class Subscription
     public function setPreferredLanguageAttribute($preferredLanguageAttribute)
     {
         $this->preferredLanguageAttribute = $preferredLanguageAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getOrganizationalUnitAttribute()
+    {
+        return $this->organizationalUnitAttribute;
+    }
+
+    /**
+     * @param Attribute $organizationalUnitAttribute
+     *
+     * @return Subscription
+     */
+    public function setOrganizationalUnitAttribute($organizationalUnitAttribute)
+    {
+        $this->organizationalUnitAttribute = $organizationalUnitAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getPersonalCodeAttribute()
+    {
+        return $this->personalCodeAttribute;
+    }
+
+    /**
+     * @param Attribute $personalCodeAttribute
+     *
+     * @return Subscription
+     */
+    public function setPersonalCodeAttribute($personalCodeAttribute)
+    {
+        $this->personalCodeAttribute = $personalCodeAttribute;
 
         return $this;
     }
