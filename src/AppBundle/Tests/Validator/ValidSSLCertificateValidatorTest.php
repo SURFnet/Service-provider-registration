@@ -22,7 +22,10 @@ class ValidSSLCertificateValidatorTest extends \Symfony\Component\Validator\Test
 
     protected function createValidator()
     {
-        $this->fetcher = $this->getMockBuilder('\AppBundle\Metadata\CertificateFetcher')->getMock();
+        $this->fetcher = $this
+            ->getMockBuilder('\AppBundle\Metadata\CertificateFetcher')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->fetcher->method('fetch')->willReturn(file_get_contents(__DIR__ . '/Fixtures/abn.cer'));
 
         $this->parser = new \AppBundle\Metadata\CertificateParser();

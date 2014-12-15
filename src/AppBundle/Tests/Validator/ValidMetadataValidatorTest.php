@@ -29,6 +29,7 @@ class ValidMetadataValidatorTest extends \Symfony\Component\Validator\Tests\Cons
         $parser = new \AppBundle\Metadata\Parser(
             $guzzle,
             new \AppBundle\Metadata\CertificateParser(),
+            new \Doctrine\Common\Cache\ArrayCache(),
             __DIR__ . '/../../../../app/Resources/schemas/'
         );
 
