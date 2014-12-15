@@ -311,6 +311,16 @@ class Parser
                 case 'urn:oid:2.16.840.1.113730.3.1.39':
                     $metadata->preferredLanguageAttribute = $attr;
                     break;
+
+                case 'urn:mace:dir:attribute-def:eduPersonOrgUnitDN':
+                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.4':
+                    $metadata->organizationalUnitAttribute = $attr;
+                    break;
+
+                case 'urn:mace:dir:attribute-def:schacPersonalUniqueCode':
+                case 'urn:oid:1.3.6.1.4.1.1466.155.121.1.15':
+                    $metadata->personalCodeAttribute = $attr;
+                    break;
             }
         }
     }

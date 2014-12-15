@@ -280,6 +280,22 @@ class Subscription
     private $preferredLanguageAttribute;
 
     /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $organizationalUnitAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $personalCodeAttribute;
+
+    /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
      */
@@ -913,6 +929,46 @@ class Subscription
     public function setPreferredLanguageAttribute($preferredLanguageAttribute)
     {
         $this->preferredLanguageAttribute = $preferredLanguageAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getOrganizationalUnitAttribute()
+    {
+        return $this->organizationalUnitAttribute;
+    }
+
+    /**
+     * @param Attribute $organizationalUnitAttribute
+     *
+     * @return Subscription
+     */
+    public function setOrganizationalUnitAttribute($organizationalUnitAttribute)
+    {
+        $this->organizationalUnitAttribute = $organizationalUnitAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getPersonalCodeAttribute()
+    {
+        return $this->personalCodeAttribute;
+    }
+
+    /**
+     * @param Attribute $personalCodeAttribute
+     *
+     * @return Subscription
+     */
+    public function setPersonalCodeAttribute($personalCodeAttribute)
+    {
+        $this->personalCodeAttribute = $personalCodeAttribute;
 
         return $this;
     }

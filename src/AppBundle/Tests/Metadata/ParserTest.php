@@ -124,6 +124,8 @@ CER
         $this->assertEmpty($metadata->surNameAttribute);
         $this->assertEmpty($metadata->uidAttribute);
         $this->assertEmpty($metadata->preferredLanguageAttribute);
+        $this->assertEmpty($metadata->organizationalUnitAttribute);
+        $this->assertEmpty($metadata->personalCodeAttribute);
     }
 
     public function testInvalidXML()

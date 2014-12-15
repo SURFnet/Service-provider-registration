@@ -107,4 +107,14 @@ class Metadata
      * @var Attribute
      */
     public $preferredLanguageAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $organizationalUnitAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $personalCodeAttribute;
 }

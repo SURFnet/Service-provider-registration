@@ -37,11 +37,13 @@ Display name attribute: Display name attribute
 Email address attribute: Email address attribute
 Organization attribute: Organization attribute
 Organization type attribute: Organization type attribute
+Organizational unit attribute: Organizational unit attribute
 Affiliation attribute: Affiliation attribute
 Entitlement attribute: Entitlement attribute
 Principle name attribute: Principle name attribute
 Uid attribute: Uid attribute
 Preferred language attribute: Preferred language attribute
+Personal code attribute: Personal code attribute
 
 Comments: Comments
 
@@ -82,8 +84,10 @@ form:
         metadataUrl: form.help.metadataUrl   # FIXME
         nameEn: form.help.nameEn   # FIXME
         nameNl: form.help.nameNl   # FIXME
+        organizationalUnitAttribute: form.help.organizationalUnitAttribute   # FIXME
         organizationAttribute: form.help.organizationAttribute   # FIXME
         organizationTypeAttribute: form.help.organizationTypeAttribute   # FIXME
+        personalCodeAttribute: form.help.personalCodeAttribute   # FIXME
         preferredLanguageAttribute: form.help.preferredLanguageAttribute   # FIXME
         principleNameAttribute: form.help.principleNameAttribute   # FIXME
         supportContact: form.help.supportContact   # FIXME

@@ -311,7 +311,9 @@ class SubscriptionType extends AbstractType
             'entitlementAttribute',
             'principleNameAttribute',
             'uidAttribute',
-            'preferredLanguageAttribute'
+            'preferredLanguageAttribute',
+            'organizationalUnitAttribute',
+            'personalCodeAttribute',
         );
     }
 }
