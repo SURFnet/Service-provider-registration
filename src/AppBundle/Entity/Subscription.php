@@ -269,14 +269,6 @@ class Subscription
      * @Assert\Type(type="AppBundle\Model\Attribute")
      * @Assert\Valid()
      */
-    private $isMemberOfAttribute;
-
-    /**
-     * @var Attribute
-     * @ORM\Column(type="object", nullable=true)
-     * @Assert\Type(type="AppBundle\Model\Attribute")
-     * @Assert\Valid()
-     */
     private $uidAttribute;
 
     /**
@@ -881,26 +873,6 @@ class Subscription
     public function setPrincipleNameAttribute($principleNameAttribute)
     {
         $this->principleNameAttribute = $principleNameAttribute;
-
-        return $this;
-    }
-
-    /**
-     * @return Attribute
-     */
-    public function getIsMemberOfAttribute()
-    {
-        return $this->isMemberOfAttribute;
-    }
-
-    /**
-     * @param Attribute $isMemberOfAttribute
-     *
-     * @return $this
-     */
-    public function setIsMemberOfAttribute($isMemberOfAttribute)
-    {
-        $this->isMemberOfAttribute = $isMemberOfAttribute;
 
         return $this;
     }

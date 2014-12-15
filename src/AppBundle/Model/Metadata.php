@@ -101,11 +101,6 @@ class Metadata
     /**
      * @var Attribute
      */
-    public $isMemberOfAttribute;
-
-    /**
-     * @var Attribute
-     */
     public $uidAttribute;
 
     /**

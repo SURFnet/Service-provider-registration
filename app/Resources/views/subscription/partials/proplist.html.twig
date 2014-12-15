@@ -121,13 +121,6 @@
         {% endif %}
     </dd>
 
-    <dt>{{ 'isMemberOfAttribute'|humanize|trans }}</dt>
-    <dd>
-        {% if subscription.isMemberOfAttribute %}
-            {{ subscription.isMemberOfAttribute.requested }} - {{ subscription.isMemberOfAttribute.motivation }}
-        {% endif %}
-    </dd>
-
     <dt>{{ 'uidAttribute'|humanize|trans }}</dt>
     <dd>
         {% if subscription.uidAttribute %}

@@ -40,7 +40,6 @@ Organization type attribute: Organization type attribute
 Affiliation attribute: Affiliation attribute
 Entitlement attribute: Entitlement attribute
 Principle name attribute: Principle name attribute
-Is member of attribute: Is member of attribute
 Uid attribute: Uid attribute
 Preferred language attribute: Preferred language attribute
 
@@ -79,7 +78,6 @@ form:
         entitlementAttribute: form.help.entitlementAttribute   # FIXME
         entityId: form.help.entityId   # FIXME
         givenNameAttribute: form.help.givenNameAttribute   # FIXME
-        isMemberOfAttribute: form.help.isMemberOfAttribute   # FIXME
         logoUrl: form.help.logoUrl   # FIXME
         metadataUrl: form.help.metadataUrl   # FIXME
         nameEn: form.help.nameEn   # FIXME

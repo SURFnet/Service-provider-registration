@@ -307,11 +307,6 @@ class Parser
                     $metadata->principleNameAttribute = $attr;
                     break;
 
-                case 'urn:mace:dir:attribute-def:isMemberOf':
-                case 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1':
-                    $metadata->isMemberOfAttribute = $attr;
-                    break;
-
                 case 'urn:mace:dir:attribute-def:preferredLanguage':
                 case 'urn:oid:2.16.840.1.113730.3.1.39':
                     $metadata->preferredLanguageAttribute = $attr;
