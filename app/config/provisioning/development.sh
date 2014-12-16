@@ -29,7 +29,7 @@ mkdir -p app/data
 
 rm -rf app/cache/prod* app/cache/dev*
 
-setfacl -R -m u:vagrant:rwX app/cache app/logs /dev/shm app/data && sudo setfacl -dR -m -m u:vagrant:rwX app/cache app/logs /dev/shm app/data
+setfacl -R -m u:vagrant:rwX app/cache app/logs app/data && sudo setfacl -dR -m -m u:vagrant:rwX app/cache app/logs app/data
 
 cp /vagrant/app/config/provisioning/development.parameters.yml /vagrant/app/config/parameters.yml
 
@@ -38,7 +38,7 @@ curl -sS https://getcomposer.org/installer | php
 php composer.phar install
 
 php app/console doctrine:schema:create
-php app/console doctrine:fixtures:load
+php app/console doctrine:fixtures:load -n
 php app/console lexik:translations:import -g -c
 php app/console ass:dump -e prod
 php app/console cache:clear
