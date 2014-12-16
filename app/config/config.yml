@@ -82,7 +82,7 @@ swiftmailer:
     spool:     { type: memory }
 
 norzechowicz_ace_editor:
-    base_path: "http://rawgit.com/ajaxorg/ace-builds/master"
+    base_path: "https://rawgit.com/ajaxorg/ace-builds/master"
 
 doctrine_cache:
     providers:

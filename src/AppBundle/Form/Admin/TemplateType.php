@@ -18,7 +18,15 @@ class TemplateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('source', 'ace_editor', array('width' => '100%', 'mode' => 'ace/mode/twig'));
+            ->add(
+                'source',
+                'ace_editor',
+                array(
+                    'height' => array('value' => '200', 'unit' => 'px'),
+                    'width'  => array('value' => '100', 'unit' => '%'),
+                    'mode'   => 'ace/mode/twig'
+                )
+            );
     }
 
     /**
