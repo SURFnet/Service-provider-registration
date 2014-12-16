@@ -214,7 +214,8 @@
 
         $links.popover({
             container: 'body',
-            trigger: 'focus'
+            trigger: 'focus',
+            html: true
         });
 
         $links.on('click', function () {

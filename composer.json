@@ -34,7 +34,8 @@
         "lexik/translation-bundle": "~2.1",
         "openid/php-openid": "dev-master#ee669c6a9d4d95b58ecd9b6945627276807694fb",
         "simplesamlphp/simplesamlphp": "~1.13",
-        "doctrine/doctrine-fixtures-bundle": "~2.2"
+        "doctrine/doctrine-fixtures-bundle": "~2.2",
+        "stfalcon/tinymce-bundle": "0.3.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

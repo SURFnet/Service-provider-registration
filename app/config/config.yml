@@ -114,3 +114,14 @@ stof_doctrine_extensions:
 lexik_translation:
     fallback_locale: en
     managed_locales: [en,nl]
+
+stfalcon_tinymce:
+    tinymce_jquery: true
+    language: %locale%
+    theme:
+        simple:
+            theme: "modern"
+            menubar: false
+            toolbar: "bold italic underline | bullist numlist outdent indent | link"
+            plugins:
+                - "autolink lists link contextmenu paste"
