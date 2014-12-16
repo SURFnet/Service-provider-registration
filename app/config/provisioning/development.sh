@@ -1,16 +1,16 @@
-yum install php-apc
-yum install php-mcrypt
-yum install php-mbstring
+yum -y install php-apc
+yum -y install php-mcrypt
+yum -y install php-mbstring
 
-yum install npm
+yum -y install npm
 npm install -g less
 npm install -g uglify-js
 npm install -g uglifycss
 
-yum install ant
-yum install ant-apache-regexp
+yum -y install ant
+yum -y install ant-apache-regexp
 
-yum install rubygems
+yum -y install rubygems
 gem install capifony
 
 chmod -R 777 /var/lib/php/session
