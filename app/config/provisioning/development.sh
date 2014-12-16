@@ -29,7 +29,7 @@ mkdir -p app/data
 
 rm -rf app/cache/prod* app/cache/dev*
 
-setfacl -R -m u:vagrant:rwX app/cache app/logs app/data && sudo setfacl -dR -m -m u:vagrant:rwX app/cache app/logs app/data
+setfacl -R -m u:vagrant:rwX app/cache app/logs app/data /dev/shm && sudo setfacl -dR -m u:vagrant:rwX app/cache app/logs app/data /dev/shm
 
 cp /vagrant/app/config/provisioning/development.parameters.yml /vagrant/app/config/parameters.yml
 
