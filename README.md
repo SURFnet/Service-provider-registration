@@ -41,30 +41,10 @@ Environments
 ----------------------------------
 
 ### Setup Development
+* cd [PROJECT-DIR]
 * git clone git@github.com:SURFnet/Service-provider-registration.git .
-* add to hosts file: 192.168.33.19 surf.dev surf.prod
+* add to local hosts file: 192.168.33.19 surf.dev
 * vagrant up
-* vagrant ssh
-* sudo yum install php-apc
-* sudo yum install php-mcrypt
-* sudo yum install php-mbstring
-* sudo yum install npm
-* sudo npm install -g less
-* sudo npm install -g uglify-js
-* sudo npm install -g uglifycss
-* sudo yum install ant
-* sudo yum install ant-apache-regexp
-* openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout surf.key -out surf.crt
-* setup apache vhost (see above)
-* cd /vagrant
-* sudo composer self-update
-* composer install
-* sudo setfacl -R -m u:apache:rwX -m u:vagrant:rwX app/cache app/logs /dev/shm app/data && sudo setfacl -dR -m u:apache:rwX -m u:vagrant:rwX app/cache app/logs /dev/shm app/data
-* php app/console doctrine:schema:create --force
-* php app/console doctrine:fixtures:load
-* php app/console lexik:translations:import -g -c
-* php app/console cache:clear
-* php app/console ass:dump
 
 ### Setup Deploy env (@ SURFnet)
 * install capifony

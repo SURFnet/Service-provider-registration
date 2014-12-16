@@ -9,6 +9,7 @@
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /app/data/*
+!app/data/.gitkeep
 /build/
 /vendor/
 /bin/
