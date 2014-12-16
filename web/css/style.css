@@ -9,6 +9,12 @@
     font-weight: bold;
 }
 
+#subscription_certificate {
+    font-family: monospace;
+    font-size: smaller;
+    height: 200px;
+}
+
 .nav-tabs, .tab-content {
     margin-bottom: 15px;
 }
