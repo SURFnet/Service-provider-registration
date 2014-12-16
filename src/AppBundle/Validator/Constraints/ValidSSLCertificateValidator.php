@@ -61,7 +61,12 @@ class ValidSSLCertificateValidator extends ConstraintValidator
         }
 
         if ($matches[1] < 2048) {
-            $this->context->addViolation('Invalid key length');
+            $this->context->addViolation(
+                'Key length is %length% bit, it should be 2048 bit or more.',
+                array(
+                    '%length%' => $matches[1]
+                )
+            );
 
             return;
         }

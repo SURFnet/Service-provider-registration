@@ -22,7 +22,7 @@
 
         <div class="tab-content">
             <div class="tab-pane fade in active" id="info">
-                <p>{{ 'form.tab.intro.info'|trans }}</p>
+                <p>{{ 'form.tab.intro.info'|trans|raw }}</p>
 
                 <div class="row">
                     <div class="col-md-offset-10 col-md-2 text-right">
@@ -35,7 +35,7 @@
 
             <div class="tab-pane fade" id="general">
 
-                <p>{{ 'form.tab.intro.general'|trans }}</p>
+                <p>{{ 'form.tab.intro.general'|trans|raw }}</p>
 
                 {% include 'subscription/tabs/tab-general.html.twig' %}
 
@@ -56,7 +56,7 @@
 
             <div class="tab-pane fade" id="metadata">
 
-                <p>{{ 'form.tab.intro.metadata'|trans }}</p>
+                <p>{{ 'form.tab.intro.metadata'|trans|raw }}</p>
 
                 {% include 'subscription/tabs/tab-metadata.html.twig' %}
 
@@ -77,7 +77,7 @@
 
             <div class="tab-pane fade" id="contact">
 
-                <p>{{ 'form.tab.intro.contact'|trans }}</p>
+                <p>{{ 'form.tab.intro.contact'|trans|raw }}</p>
 
                 {% include 'subscription/tabs/tab-contact.html.twig' %}
 
@@ -98,7 +98,7 @@
 
             <div class="tab-pane fade" id="attributes">
 
-                <p>{{ 'form.tab.intro.attributes'|trans }}</p>
+                <p>{{ 'form.tab.intro.attributes'|trans|raw }}</p>
 
                 {% include 'subscription/tabs/tab-attributes.html.twig' %}
 
@@ -118,7 +118,7 @@
             </div>
 
             <div class="tab-pane fade" id="comments">
-                <p>{{ 'form.tab.intro.comments'|trans }}</p>
+                <p>{{ 'form.tab.intro.comments'|trans|raw }}</p>
 
                 {% include 'subscription/tabs/tab-comments.html.twig' %}
 

@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Lexik\Bundle\TranslationBundle\LexikTranslationBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
 
             new AppBundle\AppBundle()
         );

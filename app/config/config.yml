@@ -21,8 +21,9 @@ framework:
     trusted_proxies: ~
     session:
         # handler_id set to null will use default session handler from php.ini
-        handler_id:  ~
-        cookie_secure: true
+        handler_id:      ~
+        cookie_secure:   true
+        cookie_httponly: true
     fragments:       ~
     http_method_override: true
 
@@ -81,7 +82,7 @@ swiftmailer:
     spool:     { type: memory }
 
 norzechowicz_ace_editor:
-    base_path: "http://rawgit.com/ajaxorg/ace-builds/master"
+    base_path: "https://rawgit.com/ajaxorg/ace-builds/master"
 
 doctrine_cache:
     providers:
@@ -113,3 +114,14 @@ stof_doctrine_extensions:
 lexik_translation:
     fallback_locale: en
     managed_locales: [en,nl]
+
+stfalcon_tinymce:
+    tinymce_jquery: true
+    language: %locale%
+    theme:
+        simple:
+            theme: "modern"
+            menubar: false
+            toolbar: "bold italic underline | bullist numlist outdent indent | link"
+            plugins:
+                - "autolink lists link contextmenu paste"

@@ -19,7 +19,11 @@ class TranslationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('locale', 'hidden');
-        $builder->add('content', 'textarea', array('required' => false, 'label' => false));
+        $builder->add(
+            'content',
+            'textarea',
+            array('required' => false, 'label' => false, 'attr' => array('class' => 'tinymce'))
+        );
     }
 
     /**

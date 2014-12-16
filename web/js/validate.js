@@ -76,7 +76,7 @@
 
         // Prevent onEnter submit
         $form.find('input, select').on('keypress', function (event) {
-            if (event.which == '13') {
+            if (event.which === 13) {
                 event.preventDefault();
             }
         });
@@ -214,7 +214,8 @@
 
         $links.popover({
             container: 'body',
-            trigger: 'focus'
+            trigger: 'focus',
+            html: true
         });
 
         $links.on('click', function () {

@@ -33,7 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # If true, then any SSH connections made will enable agent forwarding.
   # Default value: false
-  # config.ssh.forward_agent = true
+  config.ssh.forward_agent = true
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -55,6 +55,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # View the documentation for the provider you're using for more
   # information on available options.
+
+  config.vm.provision "shell", path: "app/config/provisioning/development.sh"
 
   # Enable provisioning with CFEngine. CFEngine Community packages are
   # automatically installed. For example, configure the host as a
