@@ -16,3 +16,4 @@
 /.idea/
 /.vagrant/
 cache.properties
+php_errors.log

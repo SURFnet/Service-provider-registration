@@ -45,6 +45,9 @@ Environments
 * add to hosts file: 192.168.33.19 surf.dev surf.prod
 * vagrant up
 * vagrant ssh
+* sudo yum install php-apc
+* sudo yum install php-mcrypt
+* sudo yum install php-mbstring
 * sudo yum install npm
 * sudo npm install -g less
 * sudo npm install -g uglify-js
@@ -54,7 +57,7 @@ Environments
 * openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout surf.key -out surf.crt
 * setup apache vhost (see above)
 * cd /vagrant
-* curl -s https://getcomposer.org/installer | php
+* sudo composer self-update
 * composer install
 * sudo setfacl -R -m u:apache:rwX -m u:vagrant:rwX app/cache app/logs /dev/shm app/data && sudo setfacl -dR -m u:apache:rwX -m u:vagrant:rwX app/cache app/logs /dev/shm app/data
 * php app/console doctrine:schema:create --force
