@@ -7,7 +7,7 @@
 'The metadata is invalid.': 'The metadata is invalid.'
 'The certificate is not valid.': 'The certificate8905tjioefgjho3480h is not valid.'
 'Cannot determine key length': 'Cannot determine key length'
-'Invalid key length': 'Invalid key length'
+'Key length is %length% bit, it should be 2048 bit or more.': 'Key length is %length% bit, it should be 2048 bit or more.'
 'Certificate matches certificate of ACSLocation which is not allowed.': 'Certificate matches certificate of ACSLocation which is not allowed.'
 'Invalid metadata XML': 'Invalid metadata XML'
 'The metadata should not contain an ACS with an index larger than 9.': 'The metadata should not contain an ACS with an index larger than 9.'
