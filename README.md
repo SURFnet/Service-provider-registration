@@ -37,6 +37,8 @@ Requirements
 
 ### SMTP
 
+### MEMCACHED
+
 Environments
 ----------------------------------
 
