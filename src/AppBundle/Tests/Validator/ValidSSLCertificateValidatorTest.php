@@ -68,7 +68,12 @@ class ValidSSLCertificateValidatorTest extends \Symfony\Component\Validator\Test
         $cert = file_get_contents(__DIR__ . '/Fixtures/google.cer');
         $this->validator->validate($cert, new \AppBundle\Validator\Constraints\ValidSSLCertificate());
 
-        $this->assertViolation('Invalid key length');
+        $this->assertViolation(
+            'Key length is %length% bit, it should be 2048 bit or more.',
+            array(
+                '%length%' => 256
+            )
+        );
     }
 
     public function testInvalidAcsLocation()

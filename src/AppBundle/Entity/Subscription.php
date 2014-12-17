@@ -89,7 +89,7 @@ class Subscription
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Url(protocols={"https"})
+     * @Assert\Url(protocols={"https"}, message = "url.notSecure")
      * @AppAssert\ValidMetadata()
      */
     private $metadataUrl;
