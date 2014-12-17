@@ -81,6 +81,15 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+monolog:
+    channels: ["metadata"]
+    handlers:
+        metadata:
+            type:     stream
+            path:     "%kernel.logs_dir%/metadata.log"
+            level:    debug
+            channels: metadata
+
 norzechowicz_ace_editor:
     base_path: "https://rawgit.com/ajaxorg/ace-builds/master"
 
