@@ -86,8 +86,9 @@ norzechowicz_ace_editor:
 
 doctrine_cache:
     providers:
-        apc_cache:
-            apc: ~
+        memcached:
+            memcached:
+                servers: %memcached_servers%
             namespace: cache_ns
             alias: cache
 
