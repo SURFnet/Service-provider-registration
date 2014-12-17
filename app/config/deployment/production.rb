@@ -1,4 +1,4 @@
-server 'support.surfconext.nl', :app, :web, :primary => true
+server 'info2.surfnet.nl', :app, :web, :primary => true
 
 default_run_options[:pty] = true
 
