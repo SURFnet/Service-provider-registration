@@ -21,8 +21,12 @@ class TranslationType extends AbstractType
         $builder->add('locale', 'hidden');
         $builder->add(
             'content',
-            'textarea',
-            array('required' => false, 'label' => false, 'attr' => array('class' => 'tinymce'))
+            'purified_textarea',
+            array(
+                'required' => false,
+                'label'    => false,
+                'attr'     => array('class' => 'tinymce')
+            )
         );
     }
 
