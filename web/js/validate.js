@@ -14,9 +14,9 @@
                 if (dataField.$element.attr('type') === 'checkbox') {
                     dataField.$element.prop('checked', val).trigger('change');
                 } else {
-                    dataField.$element.val(val);
+                        dataField.$element.val(val);
+                    }
                 }
-            }
         },
 
         updateErrors = function (field, errors) {
@@ -67,7 +67,10 @@
         },
 
         clearErrors = function (field) {
-            field.reset();
+            field._ui.$errorsWrapper.removeClass('filled').children().remove();
+            field._ui.$errorClassHandler.removeClass(field.options.errorClass);
+            field._ui.lastValidationResult = [];
+            field._ui.validationInformationVisible = false;
         };
 
     $(function () {
