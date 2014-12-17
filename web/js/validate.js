@@ -14,9 +14,9 @@
                 if (dataField.$element.attr('type') === 'checkbox') {
                     dataField.$element.prop('checked', val).trigger('change');
                 } else {
-                        dataField.$element.val(val);
-                    }
+                    dataField.$element.val(val);
                 }
+            }
         },
 
         updateErrors = function (field, errors) {
@@ -161,7 +161,7 @@
         // Setup autosave
         $form.autosave({
             callbacks: {
-                trigger: ['modify','change'],
+                trigger: ['modify', 'change'],
                 scope: 'all',
                 save: {
                     method: 'ajax',
