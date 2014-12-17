@@ -14,3 +14,5 @@
 'The metadata XML is invalid considering the associated XSD.': 'The metadata XML is invalid considering the associated XSD.'
 'Unable to retrieve SSL certificate of ACSLocation.': 'Unable to retrieve SSL certificate of ACSLocation.'
 url.notSecure: 'This value is not a valid HTTPS URL.'
+'Failed retrieving the metadata.': 'Failed retrieving the metadata.'
+'The metadata XML is invalid considering the associated XSD.': 'The metadata XML is invalid considering the associated XSD.'

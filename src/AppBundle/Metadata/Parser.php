@@ -6,8 +6,8 @@ use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
 use Doctrine\Common\Cache\Cache;
-use Guzzle\Common\Exception\GuzzleException;
 use Guzzle\Http\Client;
+use Monolog\Logger;
 
 /**
  * Class Parser
@@ -41,6 +41,11 @@ class Parser
     private $cache;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
      * @param Client            $guzzle
@@ -54,6 +59,14 @@ class Parser
         $this->certParser = $certParser;
         $this->cache = $cache;
         $this->schemaLocation = $schemaLocation;
+    }
+
+    /**
+     * @param Logger $logger
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -71,8 +84,9 @@ class Parser
             try {
                 $responseXml = $this->guzzle->get($metadataUrl, null, array('timeout' => 10))->send()->xml();
                 $responseXml = $responseXml->asXML();
-            } catch (GuzzleException $e) {
-                throw new \InvalidArgumentException($e->getMessage());
+            } catch (\Exception $e) {
+                $this->log('Metadata exception', $e);
+                throw new \InvalidArgumentException('Failed retrieving the metadata.');
             }
 
             $this->cache->save('xml-' . $metadataUrl, $responseXml, 60 * 60 * 24);
@@ -336,28 +350,22 @@ class Parser
         $doc->loadXml($xml);
 
         if (!$doc->schemaValidate($this->schemaLocation . self::XSD_SAML_METADATA)) {
-            $errors = libxml_get_errors();
-
-            $errorArray = array();
-            foreach ($errors as $error) {
-                switch ($error->level) {
-                    case LIBXML_ERR_WARNING:
-                        $errorArray[] = "Warning $error->code: " . trim($error->message);
-                        break;
-                    case LIBXML_ERR_ERROR:
-                        $errorArray[] = "Error $error->code: " . trim($error->message);
-                        break;
-                    case LIBXML_ERR_FATAL:
-                        $errorArray[] = "Fatal Error $error->code: " . trim($error->message);
-                        break;
-                }
-            }
-
+            $this->log('Metadata XML validation errors', libxml_get_errors());
             libxml_clear_errors();
-
-            throw new \InvalidArgumentException(
-                "The metadata XML is invalid considering the associated XSD:\n" . implode(",\n", $errorArray)
-            );
+            throw new \InvalidArgumentException('The metadata XML is invalid considering the associated XSD.');
         }
+    }
+
+    /**
+     * @param string $message
+     * @param mixed  $context
+     */
+    private function log($message, $context)
+    {
+        if (!$this->logger instanceof Logger) {
+            return;
+        }
+
+        $this->logger->addInfo($message, array('context' => $context));
     }
 }

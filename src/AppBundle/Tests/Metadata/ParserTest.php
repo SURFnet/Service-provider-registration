@@ -132,7 +132,7 @@ CER
     {
         $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/invalid_metadata.xml', 'r+'));
 
-        $this->setExpectedException('InvalidArgumentException', 'Unable to parse response body into XML');
+        $this->setExpectedException('InvalidArgumentException', 'Failed retrieving the metadata.');
 
         $this->parser->parse('q');
     }

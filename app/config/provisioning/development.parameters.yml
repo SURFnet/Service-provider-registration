@@ -16,6 +16,7 @@ parameters:
     debug_toolbar: true
     debug_redirects: false
     use_assetic_controller: false
+    memcached_servers: {localhost: 11211}
     router.request_context.host: surf.dev
     mail_from: support@surfconext.nl
     mail_receiver: support@surfconext.nl
