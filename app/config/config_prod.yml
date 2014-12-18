@@ -2,14 +2,16 @@ imports:
     - { resource: config.yml }
 
 framework:
+    annotations:
+        cache: cache
     validation:
-        cache: apc
+        cache: cache
 
 doctrine:
     orm:
-        metadata_cache_driver: apc
-        result_cache_driver: apc
-        query_cache_driver: apc
+        metadata_cache_driver: {type: service, id: cache}
+        result_cache_driver: {type: service, id: cache}
+        query_cache_driver: {type: service, id: cache}
 
 monolog:
     handlers:
