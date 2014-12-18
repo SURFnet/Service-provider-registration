@@ -91,7 +91,7 @@
         // Setup validation
         // @todo double, help text
         $form.parsley({
-            trigger: 'keypress',
+            trigger: 'keyup',
             errorClass: 'has-error',
             successClass: 'has-success',
             classHandler: function (field) {
@@ -104,7 +104,7 @@
                 $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
             }
         }).subscribe('parsley:field:validate', function (field) {
-            clearErrors(field);
+            field.reset();
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
         }).subscribe('parsley:field:success', function (field) {
