@@ -52,7 +52,7 @@ services:
 
     twig.database_loader:
         class: AppBundle\Twig\DatabaseLoader
-        arguments: [ @doctrine.orm.entity_manager ]
+        arguments: [ @doctrine.orm.entity_manager, @cache ]
         tags:
             - { name: twig.loader }
 
@@ -76,3 +76,7 @@ services:
         arguments: [@form.transformer.html_purifier]
         tags:
             - { name: form.type, alias: purified_textarea }
+
+    validator.mapping.cache.cache:
+        class: Symfony\Component\Validator\Mapping\Cache\DoctrineCache
+        arguments: [@cache]
