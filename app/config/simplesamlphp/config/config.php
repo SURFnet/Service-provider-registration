@@ -24,7 +24,7 @@ $config = array(
      * external url, no matter where you come from (direct access or via the
      * reverse proxy).
      */
-    'baseurlpath' => $params['simplesamlphp.path'],
+    'baseurlpath'                   => $params['simplesamlphp.path'],
     'certdir'                       => 'cert/',
     'loggingdir'                    => 'log/',
     'datadir'                       => 'data/',
@@ -72,7 +72,7 @@ $config = array(
      * metadata listing and diagnostics pages.
      * You can also put a hash here; run "bin/pwgen.php" to generate one.
      */
-    'auth.adminpassword'     => $params['simplesamlphp.admin_password'],
+    'auth.adminpassword'            => $params['simplesamlphp.admin_password'],
     'admin.protectindexpage'        => true,
     'admin.protectmetadata'         => false,
     /**
@@ -89,8 +89,8 @@ $config = array(
      * The email address will be used as the recipient address for error reports, and
      * also as the technical contact in generated metadata.
      */
-    'technicalcontact_name'  => $params['simplesamlphp.technical_contact_name'],
-    'technicalcontact_email' => $params['simplesamlphp.technical_contact_email'],
+    'technicalcontact_name'         => $params['simplesamlphp.technical_contact_name'],
+    'technicalcontact_email'        => $params['simplesamlphp.technical_contact_email'],
     /*
      * The timezone of the server. This option should be set to the timezone you want
      * simpleSAMLphp to report the time in. The default is to guess the timezone based
@@ -596,7 +596,7 @@ $config = array(
      * See http://www.php.net/manual/en/pdo.drivers.php for the various
      * syntaxes.
      */
-    'store.sql.dsn'                 => 'sqlite:'. __DIR__ . '/../../../../app/data/simplesaml.db3',
+    'store.sql.dsn'                 => 'sqlite:' . __DIR__ . '/../../../../app/data/simplesaml.db3',
     /*
      * The username and password to use when connecting to the database.
      */
@@ -658,9 +658,13 @@ $config = array(
      *
      */
     'memcache_store.servers'        => array(
-        array(
-            array('hostname' => 'localhost'),
-        ),
+        array_map(
+            function ($key, $value) {
+                return array('hostname' => $key, 'port' => $value);
+            },
+            array_keys($params['memcached_servers']),
+            $params['memcached_servers']
+        )
     ),
     /*
      * This value is the duration data should be stored in memcache. Data
