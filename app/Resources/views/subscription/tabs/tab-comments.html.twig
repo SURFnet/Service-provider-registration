@@ -5,7 +5,7 @@
         </div>
 
         <div class="col-xs-1">
-            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.comments'|trans|raw }}">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.comments'|trans|escape('html_attr') }}">
                 {{ icon('question-circle') }}
             </a>
         </div>

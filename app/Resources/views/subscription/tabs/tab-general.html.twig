@@ -10,7 +10,7 @@
         </div>
 
         <div class="col-xs-1">
-            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.ticketNo'|trans|raw }}">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.ticketNo'|trans|escape('html_attr') }}">
                 {{ icon('question-circle') }}
             </a>
         </div>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="col-xs-1">
-                <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.contact'|trans|raw }}">
+                <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.contact'|trans|escape('html_attr') }}">
                     {{ icon('question-circle') }}
                 </a>
             </div>
