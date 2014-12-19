@@ -75,7 +75,8 @@
 
     $(function () {
         var $form = $('#form'),
-            $inputs = $form.find('input, select, textarea');
+            $inputs = $form.find('input, select, textarea'),
+            $links = $form.find('.popover-link');
 
         // Prevent onEnter submit
         $form.find('input, select').on('keypress', function (event) {
@@ -213,11 +214,9 @@
         });
 
         // Setup help popovers
-        var $links = $form.find('.popover-link');
-
         $links.popover({
             container: 'body',
-            trigger: 'focus',
+            trigger: 'click',
             html: true
         });
 
@@ -229,8 +228,12 @@
             $(this).closest('.row').find('.popover-link').popover('show');
         });
 
-        $inputs.on('focusout', function () {
-            $(this).closest('.row').find('.popover-link').popover('hide');
+        $links.on('show.bs.popover', function () {
+            $links.not(this).popover('hide');
+        });
+
+        $('.nav-tabs a').on('hide.bs.tab', function () {
+            $links.popover('hide');
         });
 
         // Setup attribute checkboxes
