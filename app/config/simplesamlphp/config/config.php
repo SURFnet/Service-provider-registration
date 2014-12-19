@@ -589,7 +589,7 @@ $config = array(
      *
      * (This option replaces the old 'session.handler'-option.)
      */
-    'store.type'                    => 'sql',
+    'store.type'                    => 'memcache',
     /*
      * The DSN the sql datastore should connect to.
      *
