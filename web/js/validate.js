@@ -159,26 +159,34 @@
             .addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
             .addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
 
+        function save(options, formData) {
+            var self = this;
+
+            $.ajax({
+                url: $form.data('save'),
+                data: formData,
+                type: 'POST',
+                beforeSend: function () {
+                    $('#status-done').addClass('hidden');
+                    $('#status-progress').removeClass('hidden');
+                },
+                complete: function () {
+                    $('#status-progress').addClass('hidden');
+                    $('#status-done').removeClass('hidden');
+
+                    self.next('save');
+                }
+            });
+
+            return false;
+        }
+
         // Setup autosave
         $form.autosave({
             callbacks: {
                 trigger: ['modify', 'change'],
                 scope: 'all',
-                save: {
-                    method: 'ajax',
-                    options: {
-                        url: $form.data('save'),
-                        type: 'POST',
-                        beforeSend: function () {
-                            $('#status-done').addClass('hidden');
-                            $('#status-progress').removeClass('hidden');
-                        },
-                        complete: function () {
-                            $('#status-progress').addClass('hidden');
-                            $('#status-done').removeClass('hidden');
-                        }
-                    }
-                }
+                save: $.debounce(500, save)
             }
         });
 
