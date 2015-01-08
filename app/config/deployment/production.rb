@@ -1,5 +1,7 @@
 server 'support.surfconext.nl', :app, :web, :primary => true
 
+default_run_options[:pty] = true
+
 before "deploy:create_symlink" do
     custom.set_permissions
 end
