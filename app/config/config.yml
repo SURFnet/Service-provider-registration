@@ -135,3 +135,7 @@ stfalcon_tinymce:
             toolbar: "bold italic underline | bullist numlist outdent indent | link"
             plugins:
                 - "autolink lists link contextmenu paste"
+
+exercise_html_purifier:
+    default:
+        Attr.AllowedFrameTargets: "_blank"
