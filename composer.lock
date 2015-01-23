@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5521613f6dc933955620ebe5d44c39fb",
+    "hash": "cb795c519728d12852a31b31ee668323",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -2673,16 +2673,16 @@
         },
         {
             "name": "symfony/assetic-bundle",
-            "version": "v2.5.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/AsseticBundle.git",
-                "reference": "90ea7fb66d6d5245fd4afc16e4c8070214254fec"
+                "reference": "ab3d73839939a77592f4c56fb1f6ce6b6d0eef1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/90ea7fb66d6d5245fd4afc16e4c8070214254fec",
-                "reference": "90ea7fb66d6d5245fd4afc16e4c8070214254fec",
+                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/ab3d73839939a77592f4c56fb1f6ce6b6d0eef1e",
+                "reference": "ab3d73839939a77592f4c56fb1f6ce6b6d0eef1e",
                 "shasum": ""
             },
             "require": {
@@ -2733,7 +2733,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2014-10-15 12:03:38"
+            "time": "2015-01-02 21:26:11"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -4812,11 +4812,13 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "symfony/assetic-bundle": 20,
         "apy/datagrid-bundle": 20,
         "doctrine/migrations": 20,
         "openid/php-openid": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
