@@ -6,7 +6,6 @@ use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
 use Doctrine\Common\Cache\Cache;
-use Guzzle\Http\Client;
 use Monolog\Logger;
 
 /**
@@ -15,20 +14,12 @@ use Monolog\Logger;
  * @todo: this class could use some refactoring
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Parser
+class Parser extends Util
 {
-    const NS_SAML = 'urn:oasis:names:tc:SAML:2.0:metadata';
-    const NS_SIG = 'http://www.w3.org/2000/09/xmldsig#';
-    const NS_UI = 'urn:oasis:names:tc:SAML:metadata:ui';
-    const NS_LANG = 'http://www.w3.org/XML/1998/namespace';
-
-    const ATTR_ACS_POST_BINDING = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
-    const XSD_SAML_METADATA = 'saml-schema-metadata-2.0.xsd';
-
     /**
-     * @var Client
+     * @var Fetcher
      */
-    private $guzzle;
+    private $fetcher;
 
     /**
      * @var CertificateParser
@@ -36,37 +27,32 @@ class Parser
     private $certParser;
 
     /**
-     * @var Cache
+     * @var string
      */
-    private $cache;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private $schemaLocation;
 
     /**
      * Constructor
      *
-     * @param Client            $guzzle
+     * @param Fetcher           $fetcher
      * @param CertificateParser $certParser
-     * @param Cache             $cache
      * @param string            $schemaLocation
+     * @param string            $schemaLocation
+     * @param Cache             $cache
+     * @param Logger            $logger
      */
-    public function __construct(Client $guzzle, CertificateParser $certParser, Cache $cache, $schemaLocation)
-    {
-        $this->guzzle = $guzzle;
+    public function __construct(
+        Fetcher $fetcher,
+        CertificateParser $certParser,
+        $schemaLocation,
+        Cache $cache,
+        Logger $logger
+    ) {
+        $this->fetcher = $fetcher;
         $this->certParser = $certParser;
-        $this->cache = $cache;
         $this->schemaLocation = $schemaLocation;
-    }
 
-    /**
-     * @param Logger $logger
-     */
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
+        parent::__construct($cache, $logger);
     }
 
     /**
@@ -80,17 +66,7 @@ class Parser
             return $metadata;
         }
 
-        if (false === $responseXml = $this->cache->fetch('xml-' . $metadataUrl)) {
-            try {
-                $responseXml = $this->guzzle->get($metadataUrl, null, array('timeout' => 10))->send()->xml();
-                $responseXml = $responseXml->asXML();
-            } catch (\Exception $e) {
-                $this->log('Metadata exception', $e);
-                throw new \InvalidArgumentException('Failed retrieving the metadata.');
-            }
-
-            $this->cache->save('xml-' . $metadataUrl, $responseXml, 60 * 60 * 24);
-        }
+        $responseXml = $this->fetcher->fetch($metadataUrl);
 
         $this->validate($responseXml);
 
@@ -354,18 +330,5 @@ class Parser
             libxml_clear_errors();
             throw new \InvalidArgumentException('The metadata XML is invalid considering the associated XSD.');
         }
-    }
-
-    /**
-     * @param string $message
-     * @param mixed  $context
-     */
-    private function log($message, $context)
-    {
-        if (!$this->logger instanceof Logger) {
-            return;
-        }
-
-        $this->logger->addInfo($message, array('context' => $context));
     }
 }
