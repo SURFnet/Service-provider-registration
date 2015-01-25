@@ -5,7 +5,7 @@ framework:
     annotations:
         cache: cache
     validation:
-        cache: cache
+        cache: validator.mapping.cache.cache
 
 doctrine:
     orm:
