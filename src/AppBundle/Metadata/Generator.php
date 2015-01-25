@@ -4,20 +4,26 @@ namespace AppBundle\Metadata;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Model\Contact;
+use Doctrine\Common\Cache\Cache;
+use Monolog\Logger;
 
 /**
  * Class Generator
  */
-class Generator extends Util
+class Generator extends MetadataUtil
 {
     /**
      * Constructor
      *
      * @param Fetcher $fetcher
+     * @param Cache   $cache
+     * @param Logger  $logger
      */
-    public function __construct(Fetcher $fetcher)
+    public function __construct(Fetcher $fetcher, Cache $cache, Logger $logger)
     {
         $this->fetcher = $fetcher;
+
+        parent::__construct($cache, $logger);
     }
 
     /**
@@ -27,6 +33,11 @@ class Generator extends Util
      */
     public function generate(Subscription $subscription)
     {
+        $cacheId = 'generated-xml-' . $subscription->getId();
+        if (false !== ($xml = $this->cache->fetch($cacheId))) {
+            return $xml;
+        }
+
         $responseXml = $this->fetcher->fetch($subscription->getMetadataUrl());
 
         $responseXml = simplexml_load_string($responseXml);
@@ -69,7 +80,11 @@ class Generator extends Util
 
         // @todo: attributes
 
-        return $responseXml->asXML();
+        $xml = $responseXml->asXML();
+
+        $this->cache->save($cacheId, $xml);
+
+        return $xml;
     }
 
     /**

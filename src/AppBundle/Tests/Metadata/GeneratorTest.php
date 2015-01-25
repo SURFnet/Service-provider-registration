@@ -42,7 +42,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             new Logger('test', array(new NullHandler()))
         );
 
-        $this->generator = new Generator($fetcher);
+        $this->generator = new Generator(
+            $fetcher,
+            new ArrayCache(),
+            new Logger('test', array(new NullHandler()))
+        );
     }
 
     public function testSuccess()

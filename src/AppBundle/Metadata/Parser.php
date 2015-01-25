@@ -14,7 +14,7 @@ use Monolog\Logger;
  * @todo: this class could use some refactoring
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Parser extends Util
+class Parser extends MetadataUtil
 {
     /**
      * @var Fetcher

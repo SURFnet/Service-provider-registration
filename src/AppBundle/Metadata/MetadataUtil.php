@@ -6,9 +6,9 @@ use Doctrine\Common\Cache\Cache;
 use Monolog\Logger;
 
 /**
- * Class Util
+ * Class MetadataUtil
  */
-abstract class Util
+abstract class MetadataUtil
 {
     const NS_SAML = 'urn:oasis:names:tc:SAML:2.0:metadata';
     const NS_SIG = 'http://www.w3.org/2000/09/xmldsig#';

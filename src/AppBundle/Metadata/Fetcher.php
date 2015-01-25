@@ -9,7 +9,7 @@ use Monolog\Logger;
 /**
  * Class Fetcher
  */
-class Fetcher extends Util
+class Fetcher extends MetadataUtil
 {
     /**
      * @var Client
@@ -47,7 +47,7 @@ class Fetcher extends Util
             $xml = $this->guzzle->get($url, null, array('timeout' => 10))->send()->xml();
             $xml = $xml->asXML();
         } catch (\Exception $e) {
-            $this->logger->addInfo('Metadata exception', array('context' => $e));
+            $this->log('Metadata exception', $e);
             throw new \InvalidArgumentException('Failed retrieving the metadata.');
         }
 
