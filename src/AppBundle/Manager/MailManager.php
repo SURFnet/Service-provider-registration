@@ -93,9 +93,7 @@ class MailManager
                     'mail.notification.subject',
                     array(
                         '%ticketNo%' => $subscription->getTicketNo()
-                    ),
-                    null,
-                    $subscription->getLocale()
+                    )
                 )
             )
             ->setFrom($this->sender)
