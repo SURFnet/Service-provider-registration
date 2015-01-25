@@ -100,6 +100,10 @@ doctrine_cache:
                 servers: %memcached_servers%
             namespace: cache_ns
             alias: cache
+        metadata:
+            file_system:
+                directory: %kernel.root_dir%/data/metadata/
+            alias: cache.metadata
 
 braincrafted_bootstrap:
     output_dir: compiled
@@ -135,3 +139,7 @@ stfalcon_tinymce:
             toolbar: "bold italic underline | bullist numlist outdent indent | link"
             plugins:
                 - "autolink lists link contextmenu paste"
+
+exercise_html_purifier:
+    default:
+        Attr.AllowedFrameTargets: "_blank"

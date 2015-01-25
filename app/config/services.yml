@@ -7,11 +7,17 @@ services:
     cert.parser:
         class: AppBundle\Metadata\CertificateParser
 
+    fetcher:
+        class: AppBundle\Metadata\Fetcher
+        arguments: [@guzzle.client, @cache, @monolog.logger.metadata]
+
     parser:
         class: AppBundle\Metadata\Parser
-        arguments: [@guzzle.client, @cert.parser, @cache, %kernel.root_dir%/Resources/schemas/]
-        calls:
-            - [setLogger, ["@monolog.logger.metadata"]]
+        arguments: [@fetcher, @cert.parser, %kernel.root_dir%/Resources/schemas/, @cache, @monolog.logger.metadata]
+
+    generator:
+        class: AppBundle\Metadata\Generator
+        arguments: [@fetcher, @cache.metadata, @monolog.logger.metadata]
 
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator
@@ -27,7 +33,7 @@ services:
 
     subscription.manager:
         class: AppBundle\Manager\SubscriptionManager
-        arguments: [@doctrine.orm.entity_manager, @validator, @lock.manager]
+        arguments: [@doctrine.orm.entity_manager, @validator, @lock.manager, @generator]
 
     lock.manager:
         class: AppBundle\Manager\LockManager

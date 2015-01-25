@@ -3,6 +3,7 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Metadata\Generator;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Validator;
@@ -33,16 +34,22 @@ class SubscriptionManager
     /**
      * Constructor
      *
-     * @param EntityManager      $entityManager
+     * @param EntityManager $entityManager
      * @param ValidatorInterface $validator
-     * @param LockManager        $lockManager
+     * @param LockManager $lockManager
+     * @param Generator $generator
      */
-    public function __construct(EntityManager $entityManager, ValidatorInterface $validator, LockManager $lockManager)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        ValidatorInterface $validator,
+        LockManager $lockManager,
+        Generator $generator
+    ) {
         $this->em = $entityManager;
         $this->repo = $entityManager->getRepository('AppBundle:Subscription');
         $this->validator = $validator;
         $this->lockManager = $lockManager;
+        $this->generator = $generator;
     }
 
     /**
@@ -113,5 +120,19 @@ class SubscriptionManager
     public function isValidSubscription(Subscription $subscription)
     {
         return count($this->validator->validate($subscription)) === 0;
+    }
+
+    /**
+     * @param Subscription $subscription
+     *
+     * @return string
+     */
+    public function generateMetadata(Subscription $subscription)
+    {
+        if (!$subscription->isFinished()) {
+            throw new \InvalidArgumentException('Subscription should be finished before generating the Metadata.');
+        }
+
+        return $this->generator->generate($subscription);
     }
 }

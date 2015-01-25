@@ -26,11 +26,18 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $guzzle = new \Guzzle\Http\Client();
         $guzzle->addSubscriber($plugin);
 
-        $this->parser = new \AppBundle\Metadata\Parser(
+        $fetcher = new \AppBundle\Metadata\Fetcher(
             $guzzle,
-            new \AppBundle\Metadata\CertificateParser(),
             new \Doctrine\Common\Cache\ArrayCache(),
-            __DIR__ . '/../../../../app/Resources/schemas/'
+            new \Monolog\Logger('test', array(new \Monolog\Handler\NullHandler()))
+        );
+
+        $this->parser = new \AppBundle\Metadata\Parser(
+            $fetcher,
+            new \AppBundle\Metadata\CertificateParser(),
+            __DIR__ . '/../../../../app/Resources/schemas/',
+            new \Doctrine\Common\Cache\ArrayCache(),
+            new \Monolog\Logger('test', array(new \Monolog\Handler\NullHandler()))
         );
     }
 
@@ -113,19 +120,18 @@ CER
 
         $this->assertTrue($metadata->emailAddressAttribute->isRequested());
         $this->assertTrue($metadata->displayNameAttribute->isRequested());
-
-        $this->assertEmpty($metadata->affiliationAttribute);
-        $this->assertEmpty($metadata->commonNameAttribute);
-        $this->assertEmpty($metadata->entitlementAttribute);
-        $this->assertEmpty($metadata->givenNameAttribute);
-        $this->assertEmpty($metadata->organizationAttribute);
-        $this->assertEmpty($metadata->organizationTypeAttribute);
-        $this->assertEmpty($metadata->principleNameAttribute);
-        $this->assertEmpty($metadata->surNameAttribute);
-        $this->assertEmpty($metadata->uidAttribute);
-        $this->assertEmpty($metadata->preferredLanguageAttribute);
-        $this->assertEmpty($metadata->organizationalUnitAttribute);
-        $this->assertEmpty($metadata->personalCodeAttribute);
+        $this->assertTrue($metadata->affiliationAttribute->isRequested());
+        $this->assertTrue($metadata->commonNameAttribute->isRequested());
+        $this->assertTrue($metadata->entitlementAttribute->isRequested());
+        $this->assertTrue($metadata->givenNameAttribute->isRequested());
+        $this->assertTrue($metadata->organizationAttribute->isRequested());
+        $this->assertTrue($metadata->organizationTypeAttribute->isRequested());
+        $this->assertTrue($metadata->principleNameAttribute->isRequested());
+        $this->assertTrue($metadata->surNameAttribute->isRequested());
+        $this->assertTrue($metadata->uidAttribute->isRequested());
+        $this->assertTrue($metadata->preferredLanguageAttribute->isRequested());
+        $this->assertTrue($metadata->organizationalUnitAttribute->isRequested());
+        $this->assertTrue($metadata->personalCodeAttribute->isRequested());
     }
 
     public function testInvalidXML()
