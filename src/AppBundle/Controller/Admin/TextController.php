@@ -109,6 +109,8 @@ class TextController extends Controller implements SecuredController
         $grid->getColumn('key')->setOperatorsVisible(false);
         $grid->getColumn('domain')->setFilterable(false);
 
+        $grid->setPersistence(true);
+
         return $grid;
     }
 }
