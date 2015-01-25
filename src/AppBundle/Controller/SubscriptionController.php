@@ -42,7 +42,7 @@ class SubscriptionController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
-                'locked' => !$this->get('lock.manager')->lock($id)
+                'locked'       => !$this->get('lock.manager')->lock($id)
             )
         );
     }
@@ -170,7 +170,7 @@ class SubscriptionController extends Controller
             array(
                 'subscription' => $subscription,
                 'form'         => $form->createView(),
-                'locked' => !$this->get('lock.manager')->lock($id)
+                'locked'       => !$this->get('lock.manager')->lock($id)
             )
         );
     }
@@ -278,7 +278,7 @@ class SubscriptionController extends Controller
             new SubscriptionType($this->get('parser')),
             $subscription,
             array(
-                'disabled' => !$this->get('lock.manager')->lock($subscription->getId()),
+                'disabled'        => !$this->get('lock.manager')->lock($subscription->getId()),
                 'csrf_protection' => $useCsrf
             )
         );
@@ -303,6 +303,7 @@ class SubscriptionController extends Controller
 
         // @todo: not real nice to set the locale on the Request here...
         $this->getRequest()->setLocale($subscription->getLocale());
+        $this->get('translator')->setLocale($subscription->getLocale());
 
         return $subscription;
     }
