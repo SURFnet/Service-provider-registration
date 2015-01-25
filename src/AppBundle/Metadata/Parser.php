@@ -12,7 +12,6 @@ use Monolog\Logger;
  * Class Parser
  *
  * @todo: this class could use some refactoring
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Parser extends MetadataUtil
 {
@@ -229,8 +228,6 @@ class Parser extends MetadataUtil
     /**
      * @param \SimpleXMLElement $descriptor
      * @param Metadata          $metadata
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function parseAttributes($descriptor, Metadata $metadata)
     {
@@ -241,76 +238,10 @@ class Parser extends MetadataUtil
 
             $attributes = $attribute->attributes();
 
-            switch ($attributes['Name']) {
-                case 'urn:mace:dir:attribute-def:displayName':
-                case 'urn:oid:2.16.840.1.113730.3.1.241':
-                    $metadata->displayNameAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:eduPersonAffiliation':
-                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.1':
-                    $metadata->affiliationAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:mail':
-                case 'urn:oid:0.9.2342.19200300.100.1.3':
-                    $metadata->emailAddressAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:cn':
-                case 'urn:oid:2.5.4.3':
-                    $metadata->commonNameAttribute = $attr;
-                    break;
-
-                case 'urn:mace:terena.org:attribute-def:schacHomeOrganization':
-                case 'urn:oid:1.3.6.1.4.1.25178.1.2.9':
-                    $metadata->organizationAttribute = $attr;
-                    break;
-
-                case 'urn:mace:terena.org:attribute-def:schacHomeOrganizationType ':
-                case 'urn:oid:1.3.6.1.4.1.25178.1.2.10':
-                    $metadata->organizationTypeAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:sn':
-                case 'urn:oid:2.5.4.4':
-                    $metadata->surNameAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:givenName':
-                case 'urn:oid:2.5.4.42':
-                    $metadata->givenNameAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:eduPersonEntitlement':
-                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7':
-                    $metadata->entitlementAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:uid':
-                case 'urn:oid:0.9.2342.19200300.100.1.1':
-                    $metadata->uidAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:eduPersonPrincipalName':
-                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6':
-                    $metadata->principleNameAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:preferredLanguage':
-                case 'urn:oid:2.16.840.1.113730.3.1.39':
-                    $metadata->preferredLanguageAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:eduPersonOrgUnitDN':
-                case 'urn:oid:1.3.6.1.4.1.5923.1.1.1.4':
-                    $metadata->organizationalUnitAttribute = $attr;
-                    break;
-
-                case 'urn:mace:dir:attribute-def:schacPersonalUniqueCode':
-                case 'urn:oid:1.3.6.1.4.1.1466.155.121.1.15':
-                    $metadata->personalCodeAttribute = $attr;
-                    break;
+            foreach ($this->getAttributeMap() as $property => $names) {
+                if (in_array($attributes['Name'], $names)) {
+                    $metadata->{$property . 'Attribute'} = $attr;
+                }
             }
         }
     }
