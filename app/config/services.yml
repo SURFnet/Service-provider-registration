@@ -17,7 +17,7 @@ services:
 
     generator:
         class: AppBundle\Metadata\Generator
-        arguments: [@fetcher, @cache, @monolog.logger.metadata]
+        arguments: [@fetcher, @cache.metadata, @monolog.logger.metadata]
 
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator
@@ -33,7 +33,7 @@ services:
 
     subscription.manager:
         class: AppBundle\Manager\SubscriptionManager
-        arguments: [@doctrine.orm.entity_manager, @validator, @lock.manager]
+        arguments: [@doctrine.orm.entity_manager, @validator, @lock.manager, @generator]
 
     lock.manager:
         class: AppBundle\Manager\LockManager

@@ -248,6 +248,25 @@ class SubscriptionController extends Controller
     }
 
     /**
+     * @Route("/{id}/metadata", name="export")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function exportAction($id)
+    {
+        $subscription = $this->getSubscription($id, false);
+
+        $xml = $this->get('subscription.manager')->generateMetadata($subscription);
+
+        $response = new Response($xml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
+    }
+
+    /**
      * @param Subscription $subscription
      * @param bool         $useCsrf
      *
