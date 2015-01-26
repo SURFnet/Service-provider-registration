@@ -8,6 +8,6 @@ end
 
 namespace :custom do
     task :set_permissions, :roles => :app, :except => { :no_release => true } do
-        run "#{try_sudo} /usr/local/sbin/fix-www-permissions.sh /www/support/"
+        sudo "/usr/local/sbin/fix-www-permissions.sh /www/support/"
     end
 end
