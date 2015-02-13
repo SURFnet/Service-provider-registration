@@ -50,7 +50,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSuccess()
+    /**
+     * @return Subscription
+     */
+    private function buildSubscription()
     {
         $subscription = new Subscription();
         $subscription->setNameNl('UNAMENL');
@@ -59,6 +62,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $subscription->setDescriptionEn('UPDATEDDESCREN');
         $subscription->setApplicationUrl('http://www.google.nl');
         $subscription->setLogoUrl('http://www.google.com');
+
+        return $subscription;
+    }
+
+    public function testSuccess()
+    {
+        $subscription = $this->buildSubscription();
 
         $contact = new Contact();
         $contact->setFirstName('Henk');
@@ -147,5 +157,21 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // Removed existing attribute based on second key
         $this->assertNotContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:preferredLanguage"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:2.16.840.1.113730.3.1.39"', $xml);
+    }
+
+    public function testUiCreation()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertContains('<ui:DisplayName xml:lang="nl">UNAMENL</ui:DisplayName>', $xml);
+        $this->assertContains('<ui:DisplayName xml:lang="en">UNAMEEN</ui:DisplayName>', $xml);
+        $this->assertContains('<ui:Description xml:lang="nl">UPDATEDDESCRNL</ui:Description>', $xml);
+        $this->assertContains('<ui:Description xml:lang="en">UPDATEDDESCREN</ui:Description>', $xml);
+        $this->assertContains('<ui:InformationURL xml:lang="en">http://www.google.nl</ui:InformationURL>', $xml);
+        $this->assertContains('<ui:Logo>http://www.google.com</ui:Logo>', $xml);
     }
 }

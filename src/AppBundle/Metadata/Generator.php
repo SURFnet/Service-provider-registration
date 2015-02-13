@@ -63,7 +63,8 @@ class Generator extends MetadataUtil
      */
     private function generateUi(\SimpleXMLElement $xml, Subscription $subscription)
     {
-        $ui = $xml->Extensions->children(self::NS_UI)->UIInfo;
+        $extensions = $this->setNode($xml, 'md:Extensions', null, array(), array('md' => self::NS_SAML));
+        $ui = $this->setNode($extensions, 'ui:UIInfo', null, array(), array('ui' => self::NS_UI));
 
         $this->setNode(
             $ui,
@@ -78,7 +79,8 @@ class Generator extends MetadataUtil
             'ui:Description',
             $subscription->getDescriptionEn(),
             array('xml:lang' => 'en'),
-            array('ui' => self::NS_UI)
+            array('ui' => self::NS_UI),
+            array('xml' => self::NS_LANG)
         );
 
         $this->setNode(
@@ -86,7 +88,8 @@ class Generator extends MetadataUtil
             'ui:Description',
             $subscription->getDescriptionNl(),
             array('xml:lang' => 'nl'),
-            array('ui' => self::NS_UI)
+            array('ui' => self::NS_UI),
+            array('xml' => self::NS_LANG)
         );
 
         $this->setNode(
@@ -94,7 +97,8 @@ class Generator extends MetadataUtil
             'ui:DisplayName',
             $subscription->getNameEn(),
             array('xml:lang' => 'en'),
-            array('ui' => self::NS_UI)
+            array('ui' => self::NS_UI),
+            array('xml' => self::NS_LANG)
         );
 
         $this->setNode(
@@ -102,7 +106,8 @@ class Generator extends MetadataUtil
             'ui:DisplayName',
             $subscription->getNameNl(),
             array('xml:lang' => 'nl'),
-            array('ui' => self::NS_UI)
+            array('ui' => self::NS_UI),
+            array('xml' => self::NS_LANG)
         );
 
         $this->setNode(
@@ -110,7 +115,8 @@ class Generator extends MetadataUtil
             'ui:InformationURL',
             $subscription->getApplicationUrl(),
             array('xml:lang' => 'en'),
-            array('ui' => self::NS_UI)
+            array('ui' => self::NS_UI),
+            array('xml' => self::NS_LANG)
         );
     }
 
@@ -222,7 +228,8 @@ class Generator extends MetadataUtil
      * @param string            $nodeName
      * @param string            $value
      * @param array             $attributes
-     * @param array             $nss
+     * @param array             $cnss
+     * @param array             $anss
      *
      * @return \SimpleXMLElement
      */
@@ -231,18 +238,25 @@ class Generator extends MetadataUtil
         $nodeName,
         $value = null,
         $attributes = array(),
-        $nss = array()
+        $cnss = array(),
+        $anss = array()
     ) {
-        $node = $this->findNode($rootNode, $nodeName, $attributes, $nss);
+        $node = $this->findNode($rootNode, $nodeName, $attributes, array_merge($cnss, $anss));
 
         if (isset($node)) {
-            $node[0] = $value;
-        } else {
-            $node = $rootNode->addChild($nodeName, $value);
-
-            foreach ($attributes as $aName => $aValue) {
-                $node->addAttribute($aName, $aValue);
+            if ($value !== null) {
+                $node[0] = $value;
             }
+
+            return $node;
+        }
+
+        $ns = count($cnss) > 0 ? reset($cnss) : null;
+        $node = $rootNode->addChild($nodeName, $value, $ns);
+
+        foreach ($attributes as $aName => $aValue) {
+            $ns = count($anss) > 0 ? reset($anss) : null;
+            $node->addAttribute($aName, $aValue, $ns);
         }
 
         return $node;
