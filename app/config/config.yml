@@ -110,6 +110,8 @@ braincrafted_bootstrap:
     jquery_path: js/jquery.min.js
     icon_prefix: fa
     fonts_dir: %kernel.root_dir%/../web/compiled/fonts
+    customize:
+        variables_file: %kernel.root_dir%/Resources/less/variables.less
 
 knp_menu:
     providers:

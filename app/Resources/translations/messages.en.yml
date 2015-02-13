@@ -69,6 +69,7 @@ form:
         administrativeContact: form.help.administrativeContact   # FIXME
         affiliationAttribute: form.help.affiliationAttribute   # FIXME
         applicationUrl: form.help.applicationUrl   # FIXME
+        eulaUrl: form.help.eulaUrl   # FIXME
         certificate: form.help.certificate   # FIXME
         comments: form.help.comments   # FIXME
         commonNameAttribute: form.help.commonNameAttribute   # FIXME

@@ -54,4 +54,20 @@ class ValidLogoValidatorTest extends \Symfony\Component\Validator\Tests\Constrai
 
         $this->assertViolation('Logo is too small, it should be at least 500 x 300 px.');
     }
+
+    public function testWidthImage()
+    {
+        $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
+        $this->validator->validate(__DIR__ . '/Fixtures/width.png', $constraint);
+
+        $this->assertViolation('Logo is too small, it should be at least 500 x 300 px.');
+    }
+
+    public function testHeightImage()
+    {
+        $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
+        $this->validator->validate(__DIR__ . '/Fixtures/height.png', $constraint);
+
+        $this->assertViolation('Logo is too small, it should be at least 500 x 300 px.');
+    }
 }

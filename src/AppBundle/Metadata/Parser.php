@@ -239,7 +239,7 @@ class Parser extends MetadataUtil
             $attributes = $attribute->attributes();
 
             foreach ($this->getAttributeMap() as $property => $names) {
-                if (in_array($attributes['Name'], $names)) {
+                if (in_array($attributes['Name'], $names['name'])) {
                     $metadata->{$property . 'Attribute'} = $attr;
                 }
             }

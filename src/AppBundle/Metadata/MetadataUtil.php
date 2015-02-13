@@ -59,61 +59,103 @@ abstract class MetadataUtil
     protected function getAttributeMap()
     {
         return array(
-            'displayName' => array(
-                'urn:mace:dir:attribute-def:displayName',
-                'urn:oid:2.16.840.1.113730.3.1.241'
+            'displayName'        => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:displayName',
+                    'urn:oid:2.16.840.1.113730.3.1.241'
+                ),
+                'friendlyName' => 'Display name'
             ),
-            'affiliation' => array(
-                'urn:mace:dir:attribute-def:eduPersonAffiliation',
-                'urn:oid:1.3.6.1.4.1.5923.1.1.1.1'
+            'affiliation'        => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:eduPersonAffiliation',
+                    'urn:oid:1.3.6.1.4.1.5923.1.1.1.1'
+                ),
+                'friendlyName' => 'Affiliation'
             ),
-            'emailAddress' => array(
-                'urn:mace:dir:attribute-def:mail',
-                'urn:oid:0.9.2342.19200300.100.1.3'
+            'emailAddress'       => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:mail',
+                    'urn:oid:0.9.2342.19200300.100.1.3'
+                ),
+                'friendlyName' => 'Email address'
             ),
-            'commonName' => array(
-                'urn:mace:dir:attribute-def:cn',
-                'urn:oid:2.5.4.3'
+            'commonName'         => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:cn',
+                    'urn:oid:2.5.4.3'
+                ),
+                'friendlyName' => 'Common name'
             ),
-            'organization' => array(
-                'urn:mace:terena.org:attribute-def:schacHomeOrganization',
-                'urn:oid:1.3.6.1.4.1.25178.1.2.9'
+            'organization'       => array(
+                'name'         => array(
+                    'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+                    'urn:oid:1.3.6.1.4.1.25178.1.2.9'
+                ),
+                'friendlyName' => 'Organization'
             ),
-            'organizationType' => array(
-                'urn:mace:terena.org:attribute-def:schacHomeOrganizationType ',
-                'urn:oid:1.3.6.1.4.1.25178.1.2.10'
+            'organizationType'   => array(
+                'name'         => array(
+                    'urn:mace:terena.org:attribute-def:schacHomeOrganizationType ',
+                    'urn:oid:1.3.6.1.4.1.25178.1.2.10'
+                ),
+                'friendlyName' => 'Organization Type'
             ),
-            'surName' => array(
-                'urn:mace:dir:attribute-def:sn',
-                'urn:oid:2.5.4.4'
+            'surName'            => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:sn',
+                    'urn:oid:2.5.4.4'
+                ),
+                'friendlyName' => 'Surname'
             ),
-            'givenName' => array(
-                'urn:mace:dir:attribute-def:givenName',
-                'urn:oid:2.5.4.42'
+            'givenName'          => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:givenName',
+                    'urn:oid:2.5.4.42'
+                ),
+                'friendlyName' => 'Given name'
             ),
-            'entitlement' => array(
-                'urn:mace:dir:attribute-def:eduPersonEntitlement',
-                'urn:oid:1.3.6.1.4.1.5923.1.1.1.7'
+            'entitlement'        => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:eduPersonEntitlement',
+                    'urn:oid:1.3.6.1.4.1.5923.1.1.1.7'
+                ),
+                'friendlyName' => 'Entitlement'
             ),
-            'uid' => array(
-                'urn:mace:dir:attribute-def:uid',
-                'urn:oid:0.9.2342.19200300.100.1.1'
+            'uid'                => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:uid',
+                    'urn:oid:0.9.2342.19200300.100.1.1'
+                ),
+                'friendlyName' => 'uid'
             ),
-            'principleName' => array(
-                'urn:mace:dir:attribute-def:eduPersonPrincipalName',
-                'urn:oid:1.3.6.1.4.1.5923.1.1.1.6'
+            'principleName'      => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:eduPersonPrincipalName',
+                    'urn:oid:1.3.6.1.4.1.5923.1.1.1.6'
+                ),
+                'friendlyName' => 'PrincipalName'
             ),
-            'preferredLanguage' => array(
-                'urn:mace:dir:attribute-def:preferredLanguage',
-                'urn:oid:2.16.840.1.113730.3.1.39'
+            'preferredLanguage'  => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:preferredLanguage',
+                    'urn:oid:2.16.840.1.113730.3.1.39'
+                ),
+                'friendlyName' => 'preferredLanguage'
             ),
             'organizationalUnit' => array(
-                'urn:mace:dir:attribute-def:eduPersonOrgUnitDN',
-                'urn:oid:1.3.6.1.4.1.5923.1.1.1.4'
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:eduPersonOrgUnitDN',
+                    'urn:oid:1.3.6.1.4.1.5923.1.1.1.4'
+                ),
+                'friendlyName' => 'organizationalUnit'
             ),
-            'personalCode' => array(
-                'urn:mace:dir:attribute-def:schacPersonalUniqueCode',
-                'urn:oid:1.3.6.1.4.1.1466.155.121.1.15'
+            'personalCode'       => array(
+                'name'         => array(
+                    'urn:mace:dir:attribute-def:schacPersonalUniqueCode',
+                    'urn:oid:1.3.6.1.4.1.1466.155.121.1.15'
+                ),
+                'friendlyName' => 'Employee/student number'
             )
         );
     }

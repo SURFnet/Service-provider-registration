@@ -50,7 +50,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSuccess()
+    /**
+     * @return Subscription
+     */
+    private function buildSubscription()
     {
         $subscription = new Subscription();
         $subscription->setNameNl('UNAMENL');
@@ -59,6 +62,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $subscription->setDescriptionEn('UPDATEDDESCREN');
         $subscription->setApplicationUrl('http://www.google.nl');
         $subscription->setLogoUrl('http://www.google.com');
+
+        return $subscription;
+    }
+
+    public function testSuccess()
+    {
+        $subscription = $this->buildSubscription();
 
         $contact = new Contact();
         $contact->setFirstName('Henk');
@@ -117,16 +127,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<md:EmailAddress>test@domain.org</md:EmailAddress>', $xml);
         $this->assertContains('<md:TelephoneNumber>123456789</md:TelephoneNumber>', $xml);
 
-        // Created non existing attribute based on first key
-        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:eduPersonEntitlement"', $xml);
+        // Created non existing attribute based on first key (including FriendlyName)
+        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:eduPersonEntitlement" FriendlyName="Entitlement"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"', $xml);
 
-        // Replaced existing attributes based on first key
-        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName"', $xml);
+        // Replaced existing attributes based on first key (also replaced value of FriendlyName)
+        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:2.5.4.42"', $xml);
 
-        // Replaced existing attributes based on second key
-        $this->assertContains('md:RequestedAttribute Name="urn:oid:0.9.2342.19200300.100.1.1"', $xml);
+        // Replaced existing attributes based on second key (also added FriendlyName)
+        $this->assertContains('md:RequestedAttribute Name="urn:oid:0.9.2342.19200300.100.1.1" isRequired="true" FriendlyName="uid"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:uid"', $xml);
 
         // Non used attribute should not appear
@@ -147,5 +157,21 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // Removed existing attribute based on second key
         $this->assertNotContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:preferredLanguage"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:2.16.840.1.113730.3.1.39"', $xml);
+    }
+
+    public function testUiCreation()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertContains('<ui:DisplayName xml:lang="nl">UNAMENL</ui:DisplayName>', $xml);
+        $this->assertContains('<ui:DisplayName xml:lang="en">UNAMEEN</ui:DisplayName>', $xml);
+        $this->assertContains('<ui:Description xml:lang="nl">UPDATEDDESCRNL</ui:Description>', $xml);
+        $this->assertContains('<ui:Description xml:lang="en">UPDATEDDESCREN</ui:Description>', $xml);
+        $this->assertContains('<ui:InformationURL xml:lang="en">http://www.google.nl</ui:InformationURL>', $xml);
+        $this->assertContains('<ui:Logo>http://www.google.com</ui:Logo>', $xml);
     }
 }
