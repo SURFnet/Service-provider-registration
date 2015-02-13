@@ -119,4 +119,16 @@
             </a>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-xs-11">
+            {{ form_row(form.eulaUrl) }}
+        </div>
+
+        <div class="col-xs-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.eulaUrl'|trans|escape('html_attr') }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
 </fieldset>

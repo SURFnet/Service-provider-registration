@@ -160,6 +160,13 @@ class Subscription
     private $applicationUrl;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\Url()
+     */
+    private $eulaUrl;
+
+    /**
      * @var Contact
      * @ORM\Column(type="object", nullable=true)
      * @Assert\Type(type="AppBundle\Model\Contact")
@@ -632,6 +639,26 @@ class Subscription
     public function setApplicationUrl($applicationUrl)
     {
         $this->applicationUrl = $applicationUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEulaUrl()
+    {
+        return $this->eulaUrl;
+    }
+
+    /**
+     * @param string $eulaUrl
+     *
+     * @return $this
+     */
+    public function setEulaUrl($eulaUrl)
+    {
+        $this->eulaUrl = $eulaUrl;
 
         return $this;
     }
