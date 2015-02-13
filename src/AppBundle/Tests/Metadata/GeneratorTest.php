@@ -127,16 +127,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<md:EmailAddress>test@domain.org</md:EmailAddress>', $xml);
         $this->assertContains('<md:TelephoneNumber>123456789</md:TelephoneNumber>', $xml);
 
-        // Created non existing attribute based on first key
-        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:eduPersonEntitlement"', $xml);
+        // Created non existing attribute based on first key (including FriendlyName)
+        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:eduPersonEntitlement" FriendlyName="Entitlement"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.7"', $xml);
 
-        // Replaced existing attributes based on first key
-        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName"', $xml);
+        // Replaced existing attributes based on first key (also replaced value of FriendlyName)
+        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:2.5.4.42"', $xml);
 
-        // Replaced existing attributes based on second key
-        $this->assertContains('md:RequestedAttribute Name="urn:oid:0.9.2342.19200300.100.1.1"', $xml);
+        // Replaced existing attributes based on second key (also added FriendlyName)
+        $this->assertContains('md:RequestedAttribute Name="urn:oid:0.9.2342.19200300.100.1.1" isRequired="true" FriendlyName="uid"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:uid"', $xml);
 
         // Non used attribute should not appear

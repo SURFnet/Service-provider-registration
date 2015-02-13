@@ -172,9 +172,9 @@ class Generator extends MetadataUtil
             $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
 
             if ($attr instanceof Attribute && $attr->isRequested()) {
-                $this->generateAttribute($xml, $attributes);
+                $this->generateAttribute($xml, $attributes['name'], $attributes['friendlyName']);
             } else {
-                $this->removeAttribute($xml, $attributes);
+                $this->removeAttribute($xml, $attributes['name']);
             }
         }
     }
@@ -182,8 +182,9 @@ class Generator extends MetadataUtil
     /**
      * @param \SimpleXMLElement $xml
      * @param array             $names
+     * @param string            $friendlyName
      */
-    private function generateAttribute(\SimpleXMLElement $xml, array $names)
+    private function generateAttribute(\SimpleXMLElement $xml, array $names, $friendlyName)
     {
         // First try to find an existing node
         foreach ($names as $name) {
@@ -195,12 +196,20 @@ class Generator extends MetadataUtil
             );
 
             if ($node !== null) {
+                $node['FriendlyName'] = $friendlyName;
+
                 return;
             }
         }
 
         // If no existing node has been found, create and set one with the first name from the supplied names
-        $this->setNode($xml, 'md:RequestedAttribute', null, array('Name' => $names[0]), array('md' => self::NS_SAML));
+        $this->setNode(
+            $xml,
+            'md:RequestedAttribute',
+            null,
+            array('Name' => $names[0], 'FriendlyName' => $friendlyName),
+            array('md' => self::NS_SAML)
+        );
     }
 
     /**
