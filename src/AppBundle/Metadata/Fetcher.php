@@ -4,6 +4,7 @@ namespace AppBundle\Metadata;
 
 use Doctrine\Common\Cache\Cache;
 use Guzzle\Http\Client;
+use Guzzle\Http\Exception\CurlException;
 use Monolog\Logger;
 
 /**
@@ -46,6 +47,12 @@ class Fetcher extends MetadataUtil
         try {
             $xml = $this->guzzle->get($url, null, array('timeout' => 10))->send()->xml();
             $xml = $xml->asXML();
+        } catch (CurlException $e) {
+            $this->log('Metadata CURL exception', $e);
+
+            $curlError = ' (' . $this->getCurlErrorDescription($e->getErrorNo()) . ').';
+
+            throw new \InvalidArgumentException('Failed retrieving the metadata' . $curlError);
         } catch (\Exception $e) {
             $this->log('Metadata exception', $e);
             throw new \InvalidArgumentException('Failed retrieving the metadata.');
@@ -54,5 +61,25 @@ class Fetcher extends MetadataUtil
         $this->cache->save($cacheId, $xml, 60 * 60 * 24);
 
         return $xml;
+    }
+
+    /**
+     * @param int $errNo
+     *
+     * @return string
+     */
+    private function getCurlErrorDescription($errNo)
+    {
+        $error = '';
+        switch ($errNo) {
+            case 51:
+                $error = 'SSL certificate is not valid';
+        }
+
+        if (!empty($error)) {
+            $error .= ' - ';
+        }
+
+        return $error . 'code ' . $errNo;
     }
 }
