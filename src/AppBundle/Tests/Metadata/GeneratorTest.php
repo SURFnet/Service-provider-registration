@@ -174,4 +174,21 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<ui:InformationURL xml:lang="en">http://www.google.nl</ui:InformationURL>', $xml);
         $this->assertContains('<ui:Logo>http://www.google.com</ui:Logo>', $xml);
     }
+
+    public function testAttributeCreation()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+
+        $attr = new Attribute();
+        $attr->setRequested(true);
+
+        $subscription->setGivenNameAttribute($attr);
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertContains('AttributeConsumingService index="0"', $xml);
+        $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
+    }
 }
