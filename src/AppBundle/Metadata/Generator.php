@@ -166,15 +166,15 @@ class Generator extends MetadataUtil
      */
     private function generateAttributes(\SimpleXMLElement $xml, Subscription $subscription)
     {
-        $xml = $xml->AttributeConsumingService;
+        $node = $this->setNode($xml, 'md:AttributeConsumingService', null, array('index' => 0), array('md' => self::NS_SAML));
 
         foreach ($this->getAttributeMap() as $property => $attributes) {
             $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
 
             if ($attr instanceof Attribute && $attr->isRequested()) {
-                $this->generateAttribute($xml, $attributes['name'], $attributes['friendlyName']);
+                $this->generateAttribute($node, $attributes['name'], $attributes['friendlyName']);
             } else {
-                $this->removeAttribute($xml, $attributes['name']);
+                $this->removeAttribute($node, $attributes['name']);
             }
         }
     }
