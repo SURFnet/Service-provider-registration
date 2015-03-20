@@ -42,7 +42,19 @@
 {% endblock grid %}
 
 {% block grid_pager %}
-    <div id="pager">
-        {{ grid_pagerfanta(grid) }}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="pagination">{{ grid_pager_results_perpage(grid) }}</div>
+        </div>
+        <div class="col-md-4 text-center">{{ grid_pagerfanta(grid) }}</div>
+        <div class="col-md-4"></div>
     </div>
 {% endblock %}
+
+{% block grid_pager_results_perpage %}
+    <select class="form-control" onchange="return {{ grid.hash }}_resultsPerPage(this.value);">
+        {% for key, value in grid.limits %}
+            <option value="{{ key }}"{% if (key == grid.limit) %} selected="selected"{% endif %}>{{ value }}</option>
+        {% endfor %}
+    </select>
+{% endblock grid_pager_results_perpage %}

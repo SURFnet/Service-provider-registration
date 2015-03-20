@@ -218,8 +218,7 @@ class SubscriptionController extends Controller implements SecuredController
         $grid->setRouteUrl($this->generateUrl('admin.subscription.grid'));
 
         $grid->setDefaultOrder('created', 'desc');
-        $grid->setLimits(array(5, 10, 15));
-        $grid->setDefaultLimit(5);
+        $grid->setLimits(array(5, 10, 15, 25, 50, 99999 => 'all'));
 
         $grid->setActionsColumnTitle('');
 
