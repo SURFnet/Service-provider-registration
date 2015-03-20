@@ -138,3 +138,5 @@ mail:
         subject: 'SURFnet SP Registration Report'
     notification:
         subject: 'SURFnet SP Registration Finished (%ticketNo%)'
+    creation:
+        subject: 'SURFnet SP Registration has been Created (%ticketNo%)'

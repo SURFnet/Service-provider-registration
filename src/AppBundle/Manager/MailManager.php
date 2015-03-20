@@ -85,6 +85,33 @@ class MailManager
     /**
      * @param Subscription $subscription
      */
+    public function sendCreatedNotification(Subscription $subscription)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject(
+                $this->translator->trans(
+                    'mail.creation.subject',
+                    array(
+                        '%ticketNo%' => $subscription->getTicketNo()
+                    )
+                )
+            )
+            ->setFrom($this->sender)
+            ->setTo($this->receiver)
+            ->setBody(
+                $this->renderView(
+                    'admin/mail/creation.html.twig',
+                    array('subscription' => $subscription)
+                ),
+                'text/html'
+            );
+
+        $this->mailer->send($message);
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
     public function sendFinishedNotification(Subscription $subscription)
     {
         $message = \Swift_Message::newInstance()

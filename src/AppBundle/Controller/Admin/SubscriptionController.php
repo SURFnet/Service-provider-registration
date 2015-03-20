@@ -64,6 +64,7 @@ class SubscriptionController extends Controller implements SecuredController
             $this->get('subscription.manager')->saveSubscription($subscription);
 
             $this->get('mail.manager')->sendInvitation($subscription);
+            $this->get('mail.manager')->sendCreatedNotification($subscription);
 
             return $this->redirect($this->generateUrl('admin.subscription.overview'));
         }
