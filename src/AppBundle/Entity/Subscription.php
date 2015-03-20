@@ -15,7 +15,7 @@ use Symfony\Component\Validator\ExecutionContextInterface;
  * Class Subscription
  *
  * @ORM\Entity
- * @GRID\Source(columns="id, ticketNo, contact, created, updated, status", filterable=false)
+ * @GRID\Source(columns="id, ticketNo, contact, created, updated, status")
  *
  * @todo: spread props over more classes
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -48,6 +48,7 @@ class Subscription
     /**
      * @var int
      * @ORM\Column(type="integer")
+     * @GRID\Column(operatorsVisible=false, filter="select", selectFrom="values", values={0="Draft",1="Finished"})
      * @Assert\NotBlank()
      */
     private $status;
@@ -57,6 +58,7 @@ class Subscription
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @GRID\Column(filterable=false)
      */
     private $created;
 
@@ -65,12 +67,14 @@ class Subscription
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @GRID\Column(filterable=false)
      */
     private $updated;
 
     /**
      * @var string
      * @ORM\Column(type="string")
+     * @GRID\Column(operatorsVisible=false)
      * @Assert\NotBlank(groups={"creation"})
      */
     private $ticketNo;
@@ -78,7 +82,7 @@ class Subscription
     /**
      * @var Contact
      * @ORM\Column(type="object", nullable=true)
-     * @GRID\Column(type="text")
+     * @GRID\Column(type="text", operatorsVisible=false)
      * @Assert\Type(type="AppBundle\Model\Contact", groups={"Default", "creation"})
      * @Assert\NotBlank(groups={"Default", "creation"})
      * @Assert\Valid()
