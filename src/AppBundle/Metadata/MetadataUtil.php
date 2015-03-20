@@ -55,6 +55,8 @@ abstract class MetadataUtil
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getAttributeMap()
     {
