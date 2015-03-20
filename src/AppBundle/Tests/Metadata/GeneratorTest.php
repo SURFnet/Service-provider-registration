@@ -175,6 +175,18 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<ui:Logo>http://www.google.com</ui:Logo>', $xml);
     }
 
+    public function testExtensionCreationAtRightPosition()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertNotContains('<md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol"><md:AssertionConsumerService', $xml);
+        $this->assertContains('<md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol"><md:Extensions', $xml);
+    }
+
     public function testAttributeCreation()
     {
         $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));

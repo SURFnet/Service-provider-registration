@@ -19,7 +19,7 @@
     margin-bottom: 15px;
 }
 
-div#pager {
-    text-align: center;
-    position: relative;
+.page-header img {
+    display: block;
+    margin-bottom: 15px;
 }
