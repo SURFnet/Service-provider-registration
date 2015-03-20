@@ -121,6 +121,50 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
+     * @Route("/{id}/finish", name="admin.subscription.finish")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function finishAction($id)
+    {
+        $subscription = $this->get('subscription.manager')->getSubscription($id);
+
+        if (empty($subscription)) {
+            throw $this->createNotFoundException();
+        }
+
+        $subscription->finish();
+
+        $this->get('subscription.manager')->updateSubscription($subscription);
+
+        return $this->redirect($this->generateUrl('admin.subscription.overview'));
+    }
+
+    /**
+     * @Route("/{id}/draft", name="admin.subscription.draft")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function draftAction($id)
+    {
+        $subscription = $this->get('subscription.manager')->getSubscription($id);
+
+        if (empty($subscription)) {
+            throw $this->createNotFoundException();
+        }
+
+        $subscription->draft();
+
+        $this->get('subscription.manager')->updateSubscription($subscription);
+
+        return $this->redirect($this->generateUrl('admin.subscription.overview'));
+    }
+
+    /**
      * @return Grid
      */
     private function buildGrid()
@@ -167,6 +211,22 @@ class SubscriptionController extends Controller implements SecuredController
             }
         );
 
+        $this->addRowActions($grid);
+
+        $grid->setId('adminGrid');
+        $grid->setRouteUrl($this->generateUrl('admin.subscription.grid'));
+
+        $grid->setDefaultOrder('created', 'desc');
+        $grid->setLimits(array(5, 10, 15));
+        $grid->setDefaultLimit(5);
+
+        $grid->setActionsColumnTitle('');
+
+        return $grid;
+    }
+
+    private function addRowActions(Grid $grid)
+    {
         $rowAction = new RowAction('view', 'admin.subscription.view');
         $grid->addRowAction($rowAction);
 
@@ -197,15 +257,28 @@ class SubscriptionController extends Controller implements SecuredController
         );
         $grid->addRowAction($rowAction);
 
-        $grid->setId('adminGrid');
-        $grid->setRouteUrl($this->generateUrl('admin.subscription.grid'));
+        $rowAction = new RowAction('finish', 'admin.subscription.finish');
+        $rowAction->manipulateRender(
+            function (RowAction $action, Row $row) {
+                if ($row->getField('status') !== Subscription::STATE_DRAFT) {
+                    return null;
+                }
 
-        $grid->setDefaultOrder('created', 'desc');
-        $grid->setLimits(array(5, 10, 15));
-        $grid->setDefaultLimit(5);
+                return $action;
+            }
+        );
+        $grid->addRowAction($rowAction);
 
-        $grid->setActionsColumnTitle('');
+        $rowAction = new RowAction('draft', 'admin.subscription.draft');
+        $rowAction->manipulateRender(
+            function (RowAction $action, Row $row) {
+                if ($row->getField('status') !== Subscription::STATE_FINISHED) {
+                    return null;
+                }
 
-        return $grid;
+                return $action;
+            }
+        );
+        $grid->addRowAction($rowAction);
     }
 }

@@ -356,6 +356,14 @@ class Subscription
     }
 
     /**
+     *
+     */
+    public function draft()
+    {
+        $this->status = self::STATE_DRAFT;
+    }
+
+    /**
      * @return bool
      */
     public function isFinished()
