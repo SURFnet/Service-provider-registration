@@ -10,6 +10,8 @@ use Monolog\Logger;
 
 /**
  * Class Generator
+ *
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class Generator extends MetadataUtil
 {
@@ -63,7 +65,7 @@ class Generator extends MetadataUtil
      */
     private function generateUi(\SimpleXMLElement $xml, Subscription $subscription)
     {
-        $extensions = $this->setNode($xml, 'md:Extensions', null, array(), array('md' => self::NS_SAML));
+        $extensions = $this->setNode($xml, 'md:Extensions', null, array(), array('md' => self::NS_SAML), array(), 0);
         $ui = $this->setNode($extensions, 'ui:UIInfo', null, array(), array('ui' => self::NS_UI));
 
         $this->setNode(
@@ -166,7 +168,13 @@ class Generator extends MetadataUtil
      */
     private function generateAttributes(\SimpleXMLElement $xml, Subscription $subscription)
     {
-        $node = $this->setNode($xml, 'md:AttributeConsumingService', null, array('index' => 0), array('md' => self::NS_SAML));
+        $node = $this->setNode(
+            $xml,
+            'md:AttributeConsumingService',
+            null,
+            array('index' => 0),
+            array('md' => self::NS_SAML)
+        );
 
         foreach ($this->getAttributeMap() as $property => $attributes) {
             $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
@@ -233,12 +241,15 @@ class Generator extends MetadataUtil
     }
 
     /**
+     * Update (or Add if it not exists) a child node with the specified value
+     *
      * @param \SimpleXMLElement $rootNode
      * @param string            $nodeName
      * @param string            $value
      * @param array             $attributes
-     * @param array             $cnss
-     * @param array             $anss
+     * @param array             $cnss     child namespaces
+     * @param array             $anss     attribute namespaces
+     * @param null              $position to add the element, if null, it will be appended to rootNode
      *
      * @return \SimpleXMLElement
      */
@@ -248,7 +259,8 @@ class Generator extends MetadataUtil
         $value = null,
         $attributes = array(),
         $cnss = array(),
-        $anss = array()
+        $anss = array(),
+        $position = null
     ) {
         $node = $this->findNode($rootNode, $nodeName, $attributes, array_merge($cnss, $anss));
 
@@ -260,15 +272,7 @@ class Generator extends MetadataUtil
             return $node;
         }
 
-        $ns = count($cnss) > 0 ? reset($cnss) : null;
-        $node = $rootNode->addChild($nodeName, $value, $ns);
-
-        foreach ($attributes as $aName => $aValue) {
-            $ns = count($anss) > 0 ? reset($anss) : null;
-            $node->addAttribute($aName, $aValue, $ns);
-        }
-
-        return $node;
+        return $this->addNode($rootNode, $nodeName, $value, $attributes, $cnss, $anss, $position);
     }
 
     /**
@@ -302,5 +306,59 @@ class Generator extends MetadataUtil
         }
 
         return null;
+    }
+
+    /**
+     * @param \SimpleXMLElement $rootNode
+     * @param string            $nodeName
+     * @param null              $value
+     * @param array             $attributes
+     * @param array             $cnss
+     * @param array             $anss
+     * @param null              $position
+     *
+     * @return \SimpleXMLElement
+     */
+    private function addNode(
+        \SimpleXMLElement $rootNode,
+        $nodeName,
+        $value = null,
+        $attributes = array(),
+        $cnss = array(),
+        $anss = array(),
+        $position = null
+    ) {
+        $ns = count($cnss) > 0 ? reset($cnss) : null;
+        $node = $this->addChildNodeAt($rootNode, $nodeName, $value, $ns, $position);
+
+        foreach ($attributes as $aName => $aValue) {
+            $ns = count($anss) > 0 ? reset($anss) : null;
+            $node->setAttributeNS($ns, $aName, $aValue);
+        }
+
+        return simplexml_import_dom($node);
+    }
+
+    /**
+     * @param \SimpleXMLElement $parent
+     * @param string            $nodeName
+     * @param string            $value
+     * @param string            $ns
+     * @param int               $position
+     *
+     * @return \DOMElement
+     */
+    private function addChildNodeAt(\SimpleXMLElement $parent, $nodeName, $value = null, $ns = null, $position = null)
+    {
+        $parent = dom_import_simplexml($parent);
+
+        $child = new \DOMElement($nodeName, $value, $ns);
+        $child = $parent->ownerDocument->importNode($child, true);
+
+        if ($position === null || $parent->childNodes->item($position) === null) {
+            return $parent->appendChild($child);
+        } else {
+            return $parent->insertBefore($child, $parent->childNodes->item($position));
+        }
     }
 }
