@@ -16,9 +16,9 @@ class LockManager
     private $cache;
 
     /**
-     * @var Session
+     * @var string
      */
-    private $session;
+    private $sessionId;
 
     /**
      * @var int
@@ -35,7 +35,7 @@ class LockManager
     public function __construct(Cache $cache, Session $session, $defaultLockTime = 12)
     {
         $this->cache = $cache;
-        $this->session = $session;
+        $this->sessionId = $session->getId();
         $this->lockTime = $defaultLockTime;
     }
 
@@ -48,15 +48,14 @@ class LockManager
     public function lock($id)
     {
         $cacheId = 'lock-' . $id;
-        $sessionId = $this->session->getId();
 
         $lock = $this->cache->fetch($cacheId);
 
         // If there already is a lock for another session -> fail.
-        if ($lock !== false && $lock !== $sessionId) {
+        if ($lock !== false && $lock !== $this->sessionId) {
             return false;
         }
 
-        return $this->cache->save($cacheId, $sessionId, $this->lockTime);
+        return $this->cache->save($cacheId, $this->sessionId, $this->lockTime);
     }
 }
