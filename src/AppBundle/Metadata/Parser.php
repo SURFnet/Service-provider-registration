@@ -2,6 +2,7 @@
 
 namespace AppBundle\Metadata;
 
+use AppBundle\Metadata\Exception\ParserException;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
@@ -257,9 +258,14 @@ class Parser extends MetadataUtil
         $doc->loadXml($xml);
 
         if (!$doc->schemaValidate($this->schemaLocation . self::XSD_SAML_METADATA)) {
-            $this->log('Metadata XML validation errors', libxml_get_errors());
+            $errors = libxml_get_errors();
             libxml_clear_errors();
-            throw new \InvalidArgumentException('The metadata XML is invalid considering the associated XSD.');
+
+            $this->log('Metadata XML validation errors:', $errors);
+
+            $ex = new ParserException('The metadata XML is invalid considering the associated XSD');
+            $ex->setParserErrors($errors);
+            throw $ex;
         }
     }
 }
