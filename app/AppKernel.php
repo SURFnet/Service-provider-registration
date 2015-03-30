@@ -19,7 +19,6 @@ class AppKernel extends Kernel
 
             new Norzechowicz\AceEditorBundle\NorzechowiczAceEditorBundle(),
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
-            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
             new Misd\GuzzleBundle\MisdGuzzleBundle(),
