@@ -16,3 +16,4 @@
 url.notSecure: 'This value is not a valid HTTPS URL.'
 'Failed retrieving the metadata.': 'Failed retrieving the metadata.'
 'The metadata XML is invalid considering the associated XSD.': 'The metadata XML is invalid considering the associated XSD.'
+'Invalid metadata: %errors%': 'The metadata could not be read due to the following error(s): %errors% Please fix the problem(s) and try again. For support contact support@surfconext.nl.'
