@@ -16,7 +16,7 @@ abstract class MetadataUtil
     const NS_LANG = 'http://www.w3.org/XML/1998/namespace';
 
     const ATTR_ACS_POST_BINDING = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
-    const XSD_SAML_METADATA = 'saml-schema-metadata-2.0.xsd';
+    const XSD_SAML_METADATA = 'surf.xsd';
 
     /**
      * @var Cache
