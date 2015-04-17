@@ -203,4 +203,32 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('AttributeConsumingService index="0"', $xml);
         $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
     }
+
+    public function testLogoWidthHeightCreation()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $logoUrl = __DIR__ . '/Fixtures/image.png';
+
+        $subscription = $this->buildSubscription();
+        $subscription->setLogoUrl($logoUrl);
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertContains('<ui:Logo width="1006" height="1006">' . $logoUrl . '</ui:Logo>', $xml);
+    }
+
+    public function testLogoWidthHeightCreationIfExists()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_lean.xml', 'r+'));
+
+        $logoUrl = __DIR__ . '/Fixtures/image.png';
+
+        $subscription = $this->buildSubscription();
+        $subscription->setLogoUrl($logoUrl);
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertContains('<mdui:Logo width="1006" height="1006">' . $logoUrl . '</mdui:Logo>', $xml);
+    }
 }
