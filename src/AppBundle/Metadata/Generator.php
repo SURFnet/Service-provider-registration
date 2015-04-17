@@ -54,7 +54,7 @@ class Generator extends MetadataUtil
 
         $xml = $xml->asXML();
 
-        $this->cache->save($cacheId, $xml);
+        $this->cache->save($cacheId, $xml, 60 * 60);
 
         return $xml;
     }
@@ -68,13 +68,7 @@ class Generator extends MetadataUtil
         $extensions = $this->setNode($xml, 'md:Extensions', null, array(), array('md' => self::NS_SAML), array(), 0);
         $ui = $this->setNode($extensions, 'ui:UIInfo', null, array(), array('ui' => self::NS_UI));
 
-        $this->setNode(
-            $ui,
-            'ui:Logo',
-            $subscription->getLogoUrl(),
-            array(),
-            array('ui' => self::NS_UI)
-        );
+        $this->generateLogo($ui, $subscription);
 
         $this->setNode(
             $ui,
@@ -120,6 +114,30 @@ class Generator extends MetadataUtil
             array('ui' => self::NS_UI),
             array('xml' => self::NS_LANG)
         );
+    }
+
+    /**
+     * @param \SimpleXMLElement $xml
+     * @param Subscription      $subscription
+     */
+    private function generateLogo(\SimpleXMLElement $xml, Subscription $subscription)
+    {
+        $node = $this->setNode(
+            $xml,
+            'ui:Logo',
+            $subscription->getLogoUrl(),
+            array(),
+            array('ui' => self::NS_UI)
+        );
+
+        $logoData = @getimagesize($subscription->getLogoUrl());
+
+        if ($logoData !== false) {
+            list($width, $height) = $logoData;
+
+            $node['width'] = $width;
+            $node['height'] = $height;
+        }
     }
 
     /**

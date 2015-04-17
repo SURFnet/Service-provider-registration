@@ -38,14 +38,15 @@ class Fetcher extends MetadataUtil
      */
     public function fetch($url)
     {
-        $cacheId = 'xml-' . $url;
+        // Temp. disabled caching
+        // $cacheId = 'xml-' . $url;
 
-        if (false !== $xml = $this->cache->fetch($cacheId)) {
-            return $xml;
-        }
+        // if (false !== $xml = $this->cache->fetch($cacheId)) {
+        //     return $xml;
+        // }
 
         try {
-            $xml = $this->guzzle->get($url, null, array('timeout' => 10))->send()->xml();
+            $xml = $this->guzzle->get($url, null, array('timeout' => 10, 'verify' => false))->send()->xml();
             $xml = $xml->asXML();
         } catch (CurlException $e) {
             $this->log('Metadata CURL exception', $e);
@@ -58,7 +59,8 @@ class Fetcher extends MetadataUtil
             throw new \InvalidArgumentException('Failed retrieving the metadata.');
         }
 
-        $this->cache->save($cacheId, $xml, 60 * 60 * 24);
+        // Temp. disabled caching
+        // $this->cache->save($cacheId, $xml, 60 * 60 * 24);
 
         return $xml;
     }
@@ -74,6 +76,10 @@ class Fetcher extends MetadataUtil
         switch ($errNo) {
             case 51:
                 $error = 'SSL certificate is not valid';
+                break;
+            case 60:
+                $error = 'SSL certificate cannot be authenticated';
+                break;
         }
 
         if (!empty($error)) {

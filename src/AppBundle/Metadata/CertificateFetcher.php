@@ -24,9 +24,10 @@ class CertificateFetcher
      */
     public function fetch($url)
     {
-        if (false !== $cert = $this->cache->fetch('cert-'. $url)) {
-            return $cert;
-        }
+        // Temp. disabled caching
+        // if (false !== $cert = $this->cache->fetch('cert-'. $url)) {
+        //     return $cert;
+        // }
 
         $context = stream_context_create(
             array(
@@ -53,7 +54,8 @@ class CertificateFetcher
             throw new \InvalidArgumentException('Unable to parse SSL certificate.');
         }
 
-        $this->cache->save('cert-' . $url, $cert, 60 * 60 * 24);
+        // Temp. disabled caching
+        // $this->cache->save('cert-' . $url, $cert, 60 * 60 * 24);
 
         return $cert;
     }
