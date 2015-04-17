@@ -62,9 +62,10 @@ class Parser extends MetadataUtil
      */
     public function parse($metadataUrl)
     {
-        if (false !== $metadata = $this->cache->fetch('metadata-' . $metadataUrl)) {
-            return $metadata;
-        }
+        // Temp. disabled caching
+        // if (false !== $metadata = $this->cache->fetch('metadata-' . $metadataUrl)) {
+        //     return $metadata;
+        // }
 
         $responseXml = $this->fetcher->fetch($metadataUrl);
 
@@ -95,7 +96,8 @@ class Parser extends MetadataUtil
             $this->parseAttributes($descriptor, $metadata);
         }
 
-        $this->cache->save('metadata-' . $metadataUrl, $metadata, 60 * 60 * 24);
+        // Temp. disabled caching
+        // $this->cache->save('metadata-' . $metadataUrl, $metadata, 60 * 60 * 24);
 
         return $metadata;
     }

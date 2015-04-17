@@ -54,7 +54,7 @@ class Generator extends MetadataUtil
 
         $xml = $xml->asXML();
 
-        $this->cache->save($cacheId, $xml);
+        $this->cache->save($cacheId, $xml, 60 * 60);
 
         return $xml;
     }

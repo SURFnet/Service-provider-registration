@@ -38,11 +38,12 @@ class Fetcher extends MetadataUtil
      */
     public function fetch($url)
     {
-        $cacheId = 'xml-' . $url;
+        // Temp. disabled caching
+        // $cacheId = 'xml-' . $url;
 
-        if (false !== $xml = $this->cache->fetch($cacheId)) {
-            return $xml;
-        }
+        // if (false !== $xml = $this->cache->fetch($cacheId)) {
+        //     return $xml;
+        // }
 
         try {
             $xml = $this->guzzle->get($url, null, array('timeout' => 10, 'verify' => false))->send()->xml();
@@ -58,7 +59,8 @@ class Fetcher extends MetadataUtil
             throw new \InvalidArgumentException('Failed retrieving the metadata.');
         }
 
-        $this->cache->save($cacheId, $xml, 60 * 60 * 24);
+        // Temp. disabled caching
+        // $this->cache->save($cacheId, $xml, 60 * 60 * 24);
 
         return $xml;
     }
