@@ -92,7 +92,7 @@
         // Setup validation
         // @todo double, help text
         $form.parsley({
-            trigger: 'keyup',
+            trigger: 'input',
             errorClass: 'has-error',
             successClass: 'has-success',
             classHandler: function (field) {
