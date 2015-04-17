@@ -45,7 +45,7 @@ class Fetcher extends MetadataUtil
         }
 
         try {
-            $xml = $this->guzzle->get($url, null, array('timeout' => 10))->send()->xml();
+            $xml = $this->guzzle->get($url, null, array('timeout' => 10, 'verify' => false))->send()->xml();
             $xml = $xml->asXML();
         } catch (CurlException $e) {
             $this->log('Metadata CURL exception', $e);
@@ -74,6 +74,10 @@ class Fetcher extends MetadataUtil
         switch ($errNo) {
             case 51:
                 $error = 'SSL certificate is not valid';
+                break;
+            case 60:
+                $error = 'SSL certificate cannot be authenticated';
+                break;
         }
 
         if (!empty($error)) {
