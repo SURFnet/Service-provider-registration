@@ -2,8 +2,6 @@ imports:
     - { resource: config.yml }
 
 framework:
-    annotations:
-        cache: cache
     validation:
         cache: validator.mapping.cache.cache
 
