@@ -35,7 +35,7 @@ class ValidLogoValidator extends ConstraintValidator
             return;
         }
 
-        if ($width > 300 || $height > 500) {
+        if ($width > 500 || $height > 300) {
             $this->context->addViolation('Logo is too big, it should be max. 500 x 300 px.');
 
             return;
