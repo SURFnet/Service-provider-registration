@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="SURFnet SP Registration Form-ci" default="build">
-    <target name="build"
+        <target name="build"
             depends="php-lint-ci,jshint-ci,phpmd-ci,phpcs-ci,phpcpd-ci,php-security-checker,phpunit-ci"/>
-
-    <target name="check-composer">
-        <available file="composer.phar" property="composer.installed"/>
-    </target>
-
-    <target name="composer-install" depends="check-composer" unless="composer.installed">
-        <get src="http://getcomposer.org/composer.phar" dest="composer.phar"/>
-    </target>
-
-    <target name="composer-update" depends="composer-install">
-        <exec executable="php" failonerror="true">
-            <arg line="composer.phar self-update"/>
-        </exec>
-    </target>
-
-    <target name="composer-run-install" depends="composer-update">
-        <exec executable="php" failonerror="true">
-            <arg line="composer.phar install --dev"/>
-        </exec>
-    </target>
 
     <target name="get-changeset.php.raw"
             description="creates a list of changed php files separated by newline">
@@ -65,10 +45,10 @@
     </target>
 
     <target name="jshint-ci">
-        <exec executable="node" failonerror="true">
+        <exec executable="node" failonerror="true" >
             <arg value="bin/jshint"/>
             <arg value="--config=.jshintrc"/>
-            <arg value="web/js"/>
+                        <arg value="web/js"/>
         </exec>
     </target>
 
