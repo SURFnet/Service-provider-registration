@@ -119,7 +119,9 @@ class MailManager
                 $this->translator->trans(
                     'mail.notification.subject',
                     array(
-                        '%ticketNo%' => $subscription->getTicketNo()
+                        '%ticketNo%' => $subscription->getTicketNo(),
+                        '%nameEn%'   => $subscription->getNameEn(),
+                        '%nameNl%'   => $subscription->getNameNl(),
                     )
                 )
             )
