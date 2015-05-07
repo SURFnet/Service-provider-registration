@@ -1,40 +1,59 @@
 {
-    "composerBinDir": "bin",
-    "projectName": "SURFnet SP Registration Form",
-    "buildArtifacts": {
-        "enabled": false
-    },
-    "travis": {
-        "enabled": false
-    },
-    "enablePhpTools": true,
-    "enableComposer": false,
-    "enablePhpLint": true,
-    "enablePhpMessDetector": true,
-    "phpMdExcludePatterns": [],
-    "enablePhpCodeSniffer": true,
-    "phpCodeSnifferCodingStyle": "PSR2",
-    "phpCsExcludeSymfony": true,
-    "phpCsExcludeCustomPatterns": [],
-    "phpCsExcludePatterns": [
-        "src\/*\/*Bundle\/Resources",
-        "src\/*\/*Bundle\/Tests",
-        "src\/*\/Bundle\/*Bundle\/Resources",
-        "src\/*\/Bundle\/*Bundle\/Tests"
-    ],
-    "enablePhpCopyPasteDetection": true,
-    "phpCpdExcludePatterns": [],
-    "enablePhpSecurityChecker": true,
-    "phpSrcPath": [
-        "src"
-    ],
-    "enablePhpUnit": true,
-    "customPhpUnitXml": true,
-    "phpUnitConfigPath": "app\/phpunit.xml.dist",
-    "enableJsTools": true,
-    "enableJsHint": true,
-    "javaScriptSrcPath": "web\/js",
-    "enableBehat": false,
-    "enablePreCommitHook": false,
-    "_qa_tools_run_completed": true
+	"composerBinDir": "bin",
+	"projectName": "SURFnet SP Registration Form",
+	"buildArtifacts": {
+		"enabled": false
+	},
+	"travis": {
+		"enabled": true,
+		"phpVersions": {
+			"4": "5.3"
+		},
+		"env": {
+			"enabled": true,
+			"vars": [
+				"SYMFONY_ENV=test"
+			]
+		},
+		"slack": {
+			"enabled": false
+		}
+	},
+	"enablePhpTools": true,
+	"enableComposer": false,
+	"enablePhpLint": true,
+	"enablePhpMessDetector": true,
+	"phpMdExcludePatterns": [
+
+	],
+	"enablePhpCodeSniffer": true,
+	"phpCodeSnifferCodingStyle": "PSR2",
+	"phpCsExcludeSymfony": true,
+	"phpCsExcludeCustomPatterns": [
+		""
+	],
+	"phpCsExcludePatterns": [
+		"src\/*\/*Bundle\/Resources",
+		"src\/*\/*Bundle\/Tests",
+		"src\/*\/Bundle\/*Bundle\/Resources",
+		"src\/*\/Bundle\/*Bundle\/Tests",
+		""
+	],
+	"enablePhpCopyPasteDetection": true,
+	"phpCpdExcludePatterns": [
+
+	],
+	"enablePhpSecurityChecker": true,
+	"phpSrcPath": [
+		"src"
+	],
+	"enablePhpUnit": true,
+	"customPhpUnitXml": true,
+	"phpUnitConfigPath": "app\/phpunit.xml.dist",
+	"enableJsTools": true,
+	"enableJsHint": true,
+	"javaScriptSrcPath": "web\/js",
+	"enableBehat": false,
+	"enablePreCommitHook": false,
+	"_qa_tools_run_completed": true
 }

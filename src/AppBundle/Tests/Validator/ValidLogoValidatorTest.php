@@ -15,10 +15,18 @@ class ValidLogoValidatorTest extends \Symfony\Component\Validator\Tests\Constrai
         return new \AppBundle\Validator\Constraints\ValidLogoValidator();
     }
 
-    public function testSuccess()
+    public function testSuccessPNG()
     {
         $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
-        $this->validator->validate(__DIR__ . '/Fixtures/image.png', $constraint);
+        $this->validator->validate('file://' .__DIR__ . '/Fixtures/small.png', $constraint);
+
+        $this->assertNoViolation();
+    }
+
+    public function testSuccessGIF()
+    {
+        $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
+        $this->validator->validate('file://' . __DIR__ . '/Fixtures/small.gif', $constraint);
 
         $this->assertNoViolation();
     }
@@ -42,17 +50,17 @@ class ValidLogoValidatorTest extends \Symfony\Component\Validator\Tests\Constrai
     public function testInvalidType()
     {
         $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
-        $this->validator->validate(__DIR__ . '/Fixtures/image.gif', $constraint);
+        $this->validator->validate(__DIR__ . '/Fixtures/image.jpg', $constraint);
 
-        $this->assertViolation('Logo should be a PNG.');
+        $this->assertViolation('Logo should be a PNG or GIF.');
     }
 
-    public function testSmallImage()
+    public function testBigImage()
     {
         $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
-        $this->validator->validate(__DIR__ . '/Fixtures/small.png', $constraint);
+        $this->validator->validate(__DIR__ . '/Fixtures/image.png', $constraint);
 
-        $this->assertViolation('Logo is too small, it should be at least 500 x 300 px.');
+        $this->assertViolation('Logo is too big, it should be max. 500 x 300 px.');
     }
 
     public function testWidthImage()
@@ -60,7 +68,7 @@ class ValidLogoValidatorTest extends \Symfony\Component\Validator\Tests\Constrai
         $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
         $this->validator->validate(__DIR__ . '/Fixtures/width.png', $constraint);
 
-        $this->assertViolation('Logo is too small, it should be at least 500 x 300 px.');
+        $this->assertViolation('Logo is too big, it should be max. 500 x 300 px.');
     }
 
     public function testHeightImage()
@@ -68,6 +76,14 @@ class ValidLogoValidatorTest extends \Symfony\Component\Validator\Tests\Constrai
         $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
         $this->validator->validate(__DIR__ . '/Fixtures/height.png', $constraint);
 
-        $this->assertViolation('Logo is too small, it should be at least 500 x 300 px.');
+        $this->assertViolation('Logo is too big, it should be max. 500 x 300 px.');
+    }
+
+    public function testInvalidSize()
+    {
+        $constraint = new \AppBundle\Validator\Constraints\ValidLogo();
+        $this->validator->validate('file://' . __DIR__ . '/Fixtures/large.png', $constraint);
+
+        $this->assertViolation('Logo is too large, it should be max. 1MiB (1.048.576 bytes)');
     }
 }

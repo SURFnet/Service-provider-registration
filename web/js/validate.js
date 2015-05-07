@@ -160,6 +160,7 @@
             .addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
 
         function save(options, formData) {
+            /*jshint validthis:true */
             var self = this;
 
             $.ajax({

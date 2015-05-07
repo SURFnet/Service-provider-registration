@@ -57,8 +57,7 @@
     </target>
 
     <!-- Convert newline separated to space separated -->
-    <target name="get-changeset.php-spacesep"
-            depends="get-changeset.php-relative.newlinesep,get-changeset.php-absolute.newlinesep"
+    <target name="get-changeset.php-spacesep" depends="get-changeset.php-relative.newlinesep,get-changeset.php-absolute.newlinesep"
             if="changeset.php.notempty">
         <loadresource property="changeset.php.relative.spacesep">
             <propertyresource name="changeset.php.relative.newlinesep"/>
@@ -75,8 +74,7 @@
     </target>
 
     <!-- Convert newline separated to comma separated -->
-    <target name="get-changeset.php-commasep"
-            depends="get-changeset.php-relative.newlinesep,get-changeset.php-absolute.newlinesep"
+    <target name="get-changeset.php-commasep" depends="get-changeset.php-relative.newlinesep,get-changeset.php-absolute.newlinesep"
             if="changeset.php.notempty">
         <loadresource property="changeset.php.relative.commasep">
             <propertyresource name="changeset.php.relative.newlinesep"/>
@@ -133,8 +131,7 @@
         <echo message="OK"/>
     </target>
 
-    <target name="jshint" depends="set-test-tree-location,get-changeset.js-absolute.spacesep"
-            if="changeset.js.notempty">
+    <target name="jshint" depends="set-test-tree-location,get-changeset.js-absolute.spacesep" if="changeset.js.notempty">
         <exec executable="node" failonerror="true">
             <arg value="${test-tree-location}/bin/jshint"/>
             <arg value="--config=${test-tree-location}/.jshintrc"/>
@@ -153,8 +150,7 @@
     <target name="phpcs" depends="get-changeset.php-spacesep" if="changeset.php.notempty">
         <exec executable="${test-tree-location}/bin/phpcs" failonerror="true">
             <arg value="--standard=${test-tree-location}/phpcs.xml"/>
-            <arg value="--warning-severity=0"/>
-            <!-- Don't show warnings-->
+            <arg value="--warning-severity=0"/> <!-- Don't show warnings-->
             <arg value="--extensions=php"/>
             <arg value="--report=full"/>
             <arg line="${changeset.php.absolute.spacesep}"/>
