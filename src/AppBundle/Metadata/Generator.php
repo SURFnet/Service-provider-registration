@@ -194,6 +194,18 @@ class Generator extends MetadataUtil
             array('md' => self::NS_SAML)
         );
 
+        if (null === $this->findNode($node, 'md:ServiceName', array(), array('md' => self::NS_SAML))) {
+            $this->setNode(
+                $node,
+                'md:ServiceName',
+                'SP',
+                array('xml:lang' => 'en'),
+                array('md' => self::NS_SAML),
+                array('xml' => self::NS_LANG),
+                0
+            );
+        }
+
         foreach ($this->getAttributeMap() as $property => $attributes) {
             $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
 

@@ -126,6 +126,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<md:SurName>Tester</md:SurName>', $xml);
         $this->assertContains('<md:EmailAddress>test@domain.org</md:EmailAddress>', $xml);
         $this->assertContains('<md:TelephoneNumber>123456789</md:TelephoneNumber>', $xml);
+        $this->assertContains('<md:ServiceName xml:lang="en">ServiceName</md:ServiceName>', $xml);
 
         // Created non existing attribute based on first key (including FriendlyName)
         $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:eduPersonEntitlement" FriendlyName="Entitlement"', $xml);
@@ -201,6 +202,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $xml = $this->generator->generate($subscription);
 
         $this->assertContains('AttributeConsumingService index="0"', $xml);
+        $this->assertContains('<md:ServiceName xml:lang="en">SP</md:ServiceName>', $xml);
         $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
     }
 
