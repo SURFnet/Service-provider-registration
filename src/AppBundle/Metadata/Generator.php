@@ -198,7 +198,7 @@ class Generator extends MetadataUtil
             $this->setNode(
                 $node,
                 'md:ServiceName',
-                'SP',
+                $subscription->getNameEn(),
                 array('xml:lang' => 'en'),
                 array('md' => self::NS_SAML),
                 array('xml' => self::NS_LANG),
