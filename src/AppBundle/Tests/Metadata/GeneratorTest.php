@@ -202,7 +202,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $xml = $this->generator->generate($subscription);
 
         $this->assertContains('AttributeConsumingService index="0"', $xml);
-        $this->assertContains('<md:ServiceName xml:lang="en">SP</md:ServiceName>', $xml);
+        $this->assertContains('<md:ServiceName xml:lang="en">UNAMEEN</md:ServiceName>', $xml);
         $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
     }
 
