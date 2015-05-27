@@ -122,15 +122,22 @@ class Generator extends MetadataUtil
      */
     private function generateLogo(\SimpleXMLElement $xml, Subscription $subscription)
     {
+        $logo = $subscription->getLogoUrl();
+        if (empty($logo)) {
+            $this->removeNode($xml, 'ui:Logo', array(), array('ui' => self::NS_UI));
+
+            return;
+        }
+
         $node = $this->setNode(
             $xml,
             'ui:Logo',
-            $subscription->getLogoUrl(),
+            $logo,
             array(),
             array('ui' => self::NS_UI)
         );
 
-        $logoData = @getimagesize($subscription->getLogoUrl());
+        $logoData = @getimagesize($logo);
 
         if ($logoData !== false) {
             list($width, $height) = $logoData;
@@ -367,6 +374,27 @@ class Generator extends MetadataUtil
         }
 
         return simplexml_import_dom($node);
+    }
+
+    /**
+     * @param \SimpleXMLElement $rootNode
+     * @param string            $nodeName
+     * @param array             $attributes
+     * @param array             $cnss
+     * @param array             $anss
+     */
+    private function removeNode(
+        \SimpleXMLElement $rootNode,
+        $nodeName,
+        $attributes = array(),
+        $cnss = array(),
+        $anss = array()
+    ) {
+        $node = $this->findNode($rootNode, $nodeName, $attributes, array_merge($cnss, $anss));
+
+        if ($node !== null) {
+            unset($node[0]);
+        }
     }
 
     /**

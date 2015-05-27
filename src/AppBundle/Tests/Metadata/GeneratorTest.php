@@ -233,4 +233,30 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains('<mdui:Logo width="1006" height="1006">' . $logoUrl . '</mdui:Logo>', $xml);
     }
+
+    public function testEmptyLogo()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+        $subscription->setLogoUrl(null);
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertNotContains('<mdui:Logo', $xml);
+        $this->assertNotContains('<ui:Logo', $xml);
+    }
+
+    public function testEmptyLogoIfExists()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_lean.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+        $subscription->setLogoUrl(null);
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertNotContains('<mdui:Logo', $xml);
+        $this->assertNotContains('<ui:Logo', $xml);
+    }
 }
