@@ -35,11 +35,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     private $generator;
 
     /**
-     * @var Fetcher
-     */
-    private $fetcher;
-
-    /**
      * @var Parser
      */
     private $parser;
@@ -67,12 +62,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             new Logger('test', array(new NullHandler()))
         );
 
-        $this->fetcher = $this->getMockBuilder('AppBundle\Metadata\Fetcher')
+        $fetcher = $this->getMockBuilder('AppBundle\Metadata\Fetcher')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->parser = new Parser(
-            $this->fetcher,
+            $fetcher,
             new CertificateParser(),
             __DIR__ . '/../../../../app/Resources/schemas/',
             new ArrayCache(),
@@ -190,8 +185,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:2.16.840.1.113730.3.1.39"', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testUiCreation()
@@ -210,8 +204,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<ui:Logo>http://www.google.com</ui:Logo>', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testExtensionCreationAtRightPosition()
@@ -226,8 +219,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol"><md:Extensions', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testAttributeCreation()
@@ -248,8 +240,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testLogoWidthHeightCreation()
@@ -266,8 +257,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<ui:Logo width="1006" height="1006">' . $logoUrl . '</ui:Logo>', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testLogoWidthHeightCreationIfExists()
@@ -284,8 +274,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<mdui:Logo width="1006" height="1006">' . $logoUrl . '</mdui:Logo>', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testEmptyLogo()
@@ -301,8 +290,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('<ui:Logo', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testEmptyLogoIfExists()
@@ -318,8 +306,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('<ui:Logo', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testNoAttributes()
@@ -335,8 +322,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('<md:RequestedAttribute', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testNoAttributesIfExists()
@@ -352,8 +338,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('<md:RequestedAttribute', $xml);
 
         // Make sure the generated metadata is valid
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testLeanEmptySubscription()
@@ -364,8 +349,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $xml = $this->generator->generate($subscription);
 
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        // Make sure the generated metadata is valid
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 
     public function testLeanestEmptySubscription()
@@ -376,7 +361,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $xml = $this->generator->generate($subscription);
 
-        $this->fetcher->method('fetch')->willReturn($xml);
-        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+        // Make sure the generated metadata is valid
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parseXml($xml));
     }
 }
