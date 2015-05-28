@@ -36,10 +36,10 @@ class Generator extends MetadataUtil
      */
     public function generate(Subscription $subscription)
     {
-        $cacheId = 'generated-xml-' . $subscription->getId();
-        if (false !== ($xml = $this->cache->fetch($cacheId))) {
-            return $xml;
-        }
+//        $cacheId = 'generated-xml-' . $subscription->getId();
+//        if (false !== ($xml = $this->cache->fetch($cacheId))) {
+//            return $xml;
+//        }
 
         $xml = $this->fetcher->fetch($subscription->getMetadataUrl());
         $xml = simplexml_load_string($xml);
@@ -54,7 +54,7 @@ class Generator extends MetadataUtil
 
         $xml = $xml->asXML();
 
-        $this->cache->save($cacheId, $xml, 60 * 60);
+//        $this->cache->save($cacheId, $xml, 60 * 60);
 
         return $xml;
     }
@@ -193,6 +193,12 @@ class Generator extends MetadataUtil
      */
     private function generateAttributes(\SimpleXMLElement $xml, Subscription $subscription)
     {
+        if (!$this->hasRequestedAttributes($subscription)) {
+            $this->removeNode($xml, 'md:AttributeConsumingService', array(), array('md' => self::NS_SAML));
+
+            return;
+        }
+
         $node = $this->setNode(
             $xml,
             'md:AttributeConsumingService',
@@ -222,6 +228,24 @@ class Generator extends MetadataUtil
                 $this->removeAttribute($node, $attributes['name']);
             }
         }
+    }
+
+    /**
+     * @param Subscription $subscription
+     *
+     * @return bool
+     */
+    private function hasRequestedAttributes(Subscription $subscription)
+    {
+        foreach ($this->getAttributeMap() as $property => $attributes) {
+            $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
+
+            if ($attr instanceof Attribute && $attr->isRequested()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

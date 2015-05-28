@@ -3,8 +3,10 @@
 namespace AppBundle\Tests\Metadata;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Metadata\CertificateParser;
 use AppBundle\Metadata\Fetcher;
 use AppBundle\Metadata\Generator;
+use AppBundle\Metadata\Parser;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use Doctrine\Common\Cache\ArrayCache;
@@ -26,6 +28,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $generator;
 
+    /**
+     * @var Fetcher
+     */
+    private $fetcher;
+
+    /**
+     * @var Parser
+     */
+    private $parser;
+
     public function setup()
     {
         $this->mockResponse = new Response(200);
@@ -45,6 +57,18 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->generator = new Generator(
             $fetcher,
+            new ArrayCache(),
+            new Logger('test', array(new NullHandler()))
+        );
+
+        $this->fetcher = $this->getMockBuilder('AppBundle\Metadata\Fetcher')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->parser = new Parser(
+            $this->fetcher,
+            new CertificateParser(),
+            __DIR__ . '/../../../../app/Resources/schemas/',
             new ArrayCache(),
             new Logger('test', array(new NullHandler()))
         );
@@ -158,6 +182,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // Removed existing attribute based on second key
         $this->assertNotContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:preferredLanguage"', $xml);
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:2.16.840.1.113730.3.1.39"', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 
     public function testUiCreation()
@@ -174,6 +202,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<ui:Description xml:lang="en">UPDATEDDESCREN</ui:Description>', $xml);
         $this->assertContains('<ui:InformationURL xml:lang="en">http://www.google.nl</ui:InformationURL>', $xml);
         $this->assertContains('<ui:Logo>http://www.google.com</ui:Logo>', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 
     public function testExtensionCreationAtRightPosition()
@@ -186,6 +218,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotContains('<md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol"><md:AssertionConsumerService', $xml);
         $this->assertContains('<md:SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol"><md:Extensions', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 
     public function testAttributeCreation()
@@ -204,6 +240,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('AttributeConsumingService index="0"', $xml);
         $this->assertContains('<md:ServiceName xml:lang="en">UNAMEEN</md:ServiceName>', $xml);
         $this->assertContains('md:RequestedAttribute Name="urn:mace:dir:attribute-def:givenName" FriendlyName="Given name"', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 
     public function testLogoWidthHeightCreation()
@@ -218,6 +258,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $xml = $this->generator->generate($subscription);
 
         $this->assertContains('<ui:Logo width="1006" height="1006">' . $logoUrl . '</ui:Logo>', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 
     public function testLogoWidthHeightCreationIfExists()
@@ -232,6 +276,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $xml = $this->generator->generate($subscription);
 
         $this->assertContains('<mdui:Logo width="1006" height="1006">' . $logoUrl . '</mdui:Logo>', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 
     public function testEmptyLogo()
@@ -245,6 +293,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotContains('<mdui:Logo', $xml);
         $this->assertNotContains('<ui:Logo', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 
     public function testEmptyLogoIfExists()
@@ -258,5 +310,43 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotContains('<mdui:Logo', $xml);
         $this->assertNotContains('<ui:Logo', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+    }
+
+    public function testNoAttributes()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertNotContains('<md:AttributeConsumingService', $xml);
+        $this->assertNotContains('<md:ServiceName', $xml);
+        $this->assertNotContains('<md:RequestedAttribute', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+    }
+
+    public function testNoAttributesIfExists()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_lean.xml', 'r+'));
+
+        $subscription = $this->buildSubscription();
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->assertNotContains('<md:AttributeConsumingService', $xml);
+        $this->assertNotContains('<md:ServiceName', $xml);
+        $this->assertNotContains('<md:RequestedAttribute', $xml);
+
+        // Make sure the generated metadata is valid
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
 }
