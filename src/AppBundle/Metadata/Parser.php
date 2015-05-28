@@ -67,8 +67,21 @@ class Parser extends MetadataUtil
         //     return $metadata;
         // }
 
-        $responseXml = $this->fetcher->fetch($metadataUrl);
+        $metadata = $this->parseXml($this->fetcher->fetch($metadataUrl));
 
+        // Temp. disabled caching
+        // $this->cache->save('metadata-' . $metadataUrl, $metadata, 60 * 60 * 24);
+
+        return $metadata;
+    }
+
+    /**
+     * @param string $responseXml
+     *
+     * @return Metadata
+     */
+    public function parseXml($responseXml)
+    {
         $this->validate($responseXml);
 
         $responseXml = simplexml_load_string($responseXml);
@@ -95,9 +108,6 @@ class Parser extends MetadataUtil
         if (isset($descriptor->AttributeConsumingService)) {
             $this->parseAttributes($descriptor, $metadata);
         }
-
-        // Temp. disabled caching
-        // $this->cache->save('metadata-' . $metadataUrl, $metadata, 60 * 60 * 24);
 
         return $metadata;
     }
