@@ -16,6 +16,12 @@ use Guzzle\Plugin\Mock\MockPlugin;
 use Monolog\Handler\NullHandler;
 use Monolog\Logger;
 
+/**
+ * Class GeneratorTest
+ *
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**

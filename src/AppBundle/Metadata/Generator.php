@@ -237,7 +237,7 @@ class Generator extends MetadataUtil
      */
     private function hasRequestedAttributes(Subscription $subscription)
     {
-        foreach ($this->getAttributeMap() as $property => $attributes) {
+        foreach (array_keys($this->getAttributeMap()) as $property) {
             $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
 
             if ($attr instanceof Attribute && $attr->isRequested()) {
