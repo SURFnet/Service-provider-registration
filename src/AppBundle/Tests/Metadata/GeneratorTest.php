@@ -355,4 +355,28 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->fetcher->method('fetch')->willReturn($xml);
         $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
     }
+
+    public function testLeanEmptySubscription()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_lean.xml', 'r+'));
+
+        $subscription = new Subscription();
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+    }
+
+    public function testLeanestEmptySubscription()
+    {
+        $this->mockResponse->setBody(fopen(__DIR__ . '/Fixtures/metadata_leanest.xml', 'r+'));
+
+        $subscription = new Subscription();
+
+        $xml = $this->generator->generate($subscription);
+
+        $this->fetcher->method('fetch')->willReturn($xml);
+        $this->assertInstanceOf('AppBundle\Model\Metadata', $this->parser->parse(null));
+    }
 }
