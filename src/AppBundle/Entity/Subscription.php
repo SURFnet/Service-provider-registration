@@ -48,7 +48,7 @@ class Subscription
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @GRID\Column(operatorsVisible=false, filter="select", selectFrom="values", values={0="Draft",1="Finished"})
+     * @GRID\Column(operatorsVisible=false, filter="select", selectFrom="values", values={0="Initial",1="Draft",2="Published"})
      * @Assert\NotBlank()
      */
     private $status;
