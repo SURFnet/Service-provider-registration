@@ -393,6 +393,14 @@ class Subscription
     }
 
     /**
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->status === self::STATE_DRAFT;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreated()
