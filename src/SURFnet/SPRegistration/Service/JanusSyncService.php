@@ -4,6 +4,7 @@ namespace SURFnet\SPRegistration\Service;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Manager\SubscriptionManager;
+use OpenConext\JanusClient\Entity\ConnectionDescriptor;
 use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 use OpenConext\JanusClient\Entity\ConnectionRepository;
 use OpenConext\JanusClient\NewConnectionRevision;
@@ -34,6 +35,25 @@ class JanusSyncService
      * @var ConnectionRequestTranslator
      */
     private $translator;
+
+    /**
+     * JanusSyncService constructor.
+     * @param SubscriptionManager $repository
+     * @param ConnectionDescriptorRepository $janusConnectionDescriptorRepository
+     * @param ConnectionRepository $janusConnectionRepository
+     * @param ConnectionRequestTranslator $translator
+     */
+    public function __construct(
+        SubscriptionManager $repository,
+        ConnectionDescriptorRepository $janusConnectionDescriptorRepository,
+        ConnectionRepository $janusConnectionRepository,
+        ConnectionRequestTranslator $translator
+    ) {
+        $this->repository = $repository;
+        $this->janusConnectionDescriptorRepository = $janusConnectionDescriptorRepository;
+        $this->janusConnectionRepository = $janusConnectionRepository;
+        $this->translator = $translator;
+    }
 
     /**
      * @param Subscription $request
@@ -77,10 +97,12 @@ class JanusSyncService
 
     /**
      * @param Subscription $subscription
-     * @param $descriptor
+     * @param ConnectionDescriptor $descriptor
      */
-    private function updatedInDatabase(Subscription $subscription, $descriptor)
-    {
+    private function updatedInDatabase(
+        Subscription $subscription,
+        ConnectionDescriptor $descriptor
+    ) {
         $connection = $this->janusConnectionRepository->fetchById(
             $descriptor->getId()
         );

@@ -8,6 +8,10 @@ use SAML2_Certificate_X509;
 use SAML2_Utilities_Certificate;
 use SURFnet\SPRegistration\ServiceRegistry\Constants as ServiceRegistry;
 
+/**
+ * Class MetadataMapper
+ * @package SURFnet\SPRegistration\Janus
+ */
 class MetadataMapper
 {
     /**
