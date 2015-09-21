@@ -8,10 +8,20 @@ use AppBundle\Model\Contact;
 use OpenConext\JanusClient\ArpAttributes;
 use OpenConext\JanusClient\ConnectionAccess;
 use OpenConext\JanusClient\Entity\Connection;
-use SURFnet\SPRegistration\ServiceRegistry\Consts as ServiceRegistry;
+use SAML2_Certificate_X509;
+use SAML2_Utilities_Certificate;
+use SURFnet\SPRegistration\ServiceRegistry\Constants as ServiceRegistry;
 
+/**
+ * Class ConnectionRequestTranslator
+ * @package SURFnet\SPRegistration\Entity
+ */
 class ConnectionRequestTranslator
 {
+    /**
+     * @param Subscription $request
+     * @return Connection
+     */
     public function translateToConnection(Subscription $request)
     {
         return new Connection(
@@ -26,6 +36,10 @@ class ConnectionRequestTranslator
         );
     }
 
+    /**
+     * @param Connection $connection
+     * @param Subscription $request
+     */
     public function translateFromConnection(
         Connection $connection,
         Subscription $request
@@ -57,9 +71,14 @@ class ConnectionRequestTranslator
         }
     }
 
+    /**
+     * @param Subscription $request
+     * @return array
+     */
     private function getMetadataFromRequest(Subscription $request)
     {
-        // @todo what happens on a 404?
+        // @todo we are guarenteed a working URL here, but the network is not
+        //       reliable so we should check anyway.
         list($width, $height) = getimagesize($request->getLogoUrl());
 
         $certData = '';
@@ -110,6 +129,10 @@ class ConnectionRequestTranslator
         );
     }
 
+    /**
+     * @param $request
+     * @return null|ArpAttributes
+     */
     private function getArpAttributesFromRequest($request)
     {
         $arp = array();
@@ -245,6 +268,11 @@ class ConnectionRequestTranslator
         );
     }
 
+    /**
+     * @param $contactType
+     * @param Connection $connection
+     * @return Contact|null
+     */
     private function getContactOfType($contactType, Connection $connection)
     {
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_0_CONTACTTYPE)) {
@@ -265,6 +293,10 @@ class ConnectionRequestTranslator
         return null;
     }
 
+    /**
+     * @param Connection $connection
+     * @return Contact
+     */
     private function getContact0(Connection $connection)
     {
         $contact = new Contact();
@@ -285,6 +317,10 @@ class ConnectionRequestTranslator
         return $contact;
     }
 
+    /**
+     * @param Connection $connection
+     * @return Contact
+     */
     private function getContact1(Connection $connection)
     {
         $contact = new Contact();
@@ -305,6 +341,10 @@ class ConnectionRequestTranslator
         return $contact;
     }
 
+    /**
+     * @param Connection $connection
+     * @return Contact
+     */
     private function getContact2(Connection $connection)
     {
         $contact = new Contact();
