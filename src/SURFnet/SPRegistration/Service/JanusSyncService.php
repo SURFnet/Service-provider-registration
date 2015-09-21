@@ -17,45 +17,6 @@ use SURFnet\SPRegistration\Entity\ConnectionRequestTranslator;
 class JanusSyncService
 {
     /**
-     * @var SubscriptionManager
-     */
-    private $repository;
-
-    /**
-     * @var ConnectionDescriptorRepository
-     */
-    private $janusConnectionDescriptorRepository;
-
-    /**
-     * @var ConnectionRepository
-     */
-    private $janusConnectionRepository;
-
-    /**
-     * @var ConnectionRequestTranslator
-     */
-    private $translator;
-
-    /**
-     * JanusSyncService constructor.
-     * @param SubscriptionManager $repository
-     * @param ConnectionDescriptorRepository $janusConnectionDescriptorRepository
-     * @param ConnectionRepository $janusConnectionRepository
-     * @param ConnectionRequestTranslator $translator
-     */
-    public function __construct(
-        SubscriptionManager $repository,
-        ConnectionDescriptorRepository $janusConnectionDescriptorRepository,
-        ConnectionRepository $janusConnectionRepository,
-        ConnectionRequestTranslator $translator
-    ) {
-        $this->repository = $repository;
-        $this->janusConnectionDescriptorRepository = $janusConnectionDescriptorRepository;
-        $this->janusConnectionRepository = $janusConnectionRepository;
-        $this->translator = $translator;
-    }
-
-    /**
      * @param Subscription $request
      */
     public function sync(Subscription $request)
@@ -114,4 +75,43 @@ class JanusSyncService
 
         $this->repository->saveSubscription($subscription);
     }
+
+    /**
+     * JanusSyncService constructor.
+     * @param SubscriptionManager $repository
+     * @param ConnectionDescriptorRepository $janusConnectionDescriptorRepository
+     * @param ConnectionRepository $janusConnectionRepository
+     * @param ConnectionRequestTranslator $translator
+     */
+    public function __construct(
+        SubscriptionManager $repository,
+        ConnectionDescriptorRepository $janusConnectionDescriptorRepository,
+        ConnectionRepository $janusConnectionRepository,
+        ConnectionRequestTranslator $translator
+    ) {
+        $this->repository = $repository;
+        $this->janusConnectionDescriptorRepository = $janusConnectionDescriptorRepository;
+        $this->janusConnectionRepository = $janusConnectionRepository;
+        $this->translator = $translator;
+    }
+
+    /**
+     * @var SubscriptionManager
+     */
+    private $repository;
+
+    /**
+     * @var ConnectionDescriptorRepository
+     */
+    private $janusConnectionDescriptorRepository;
+
+    /**
+     * @var ConnectionRepository
+     */
+    private $janusConnectionRepository;
+
+    /**
+     * @var ConnectionRequestTranslator
+     */
+    private $translator;
 }
