@@ -13,17 +13,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SyncSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var JanusSyncService
+     * @param Subscription $request
      */
-    private $service;
-
-    /**
-     * SyncSubscriber constructor.
-     * @param JanusSyncService $service
-     */
-    public function __construct(JanusSyncService $service)
+    public function sync(Subscription $request)
     {
-        $this->service = $service;
+        $this->service->sync($request);
     }
 
     /**
@@ -39,10 +33,16 @@ class SyncSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param Subscription $request
+     * SyncSubscriber constructor.
+     * @param JanusSyncService $service
      */
-    public function sync(Subscription $request)
+    public function __construct(JanusSyncService $service)
     {
-        $this->service->sync($request);
+        $this->service = $service;
     }
+
+    /**
+     * @var JanusSyncService
+     */
+    private $service;
 }

@@ -19,67 +19,13 @@ use SURFnet\SPRegistration\ServiceRegistry\Constants as ServiceRegistry;
 final class ConnectionRequestTranslator
 {
     /**
-     * @var ArpMapper
-     */
-    private $arpMapper;
-
-    /**
-     * @var ContactMapper
-     */
-    private $contactMapper;
-
-    /**
-     * @var MetadataMapper
-     */
-    private $metadataMapper;
-
-    /**
-     * ConnectionRequestTranslator constructor.
-     * @param ArpMapper $arpMapper
-     * @param ContactMapper $contactMapper
-     * @param MetadataMapper $metadataMapper
-     */
-    public function __construct(
-        ArpMapper $arpMapper,
-        ContactMapper $contactMapper,
-        MetadataMapper $metadataMapper
-    ) {
-        $this->arpMapper = $arpMapper;
-        $this->contactMapper = $contactMapper;
-        $this->metadataMapper = $metadataMapper;
-    }
-
-
-    /**
-     * Translate a Connection Request to an actual Janus Connection.
-     *
-     * @param Subscription $request
-     *   Connection request.
-     *
-     * @return Connection
-     *   Janus Connection based on request.
-     */
-    public function translateToConnection(Subscription $request)
-    {
-        return new Connection(
-            $request->getEntityId(),
-            Connection::TYPE_SP,
-            Connection::WORKFLOW_TEST,
-            $this->metadataMapper->mapRequestToMetadata($request),
-            $request->getMetadataUrl(),
-            '',
-            new ConnectionAccess(),
-            $this->arpMapper->mapRequestToArpAttributes($request)
-        );
-    }
-
-    /**
      * Update a Connection Request with a Janus Connection.
      *
      * @param Connection $connection
      *   Janus connection.
      * @param Subscription $request
      *   Connection Request to update.
+     * @return Subscription
      */
     public function translateFromConnection(
         Connection $connection,
@@ -137,4 +83,59 @@ final class ConnectionRequestTranslator
 
         return $request;
     }
+
+    /**
+     * Translate a Connection Request to an actual Janus Connection.
+     *
+     * @param Subscription $request
+     *   Connection request.
+     *
+     * @return Connection
+     *   Janus Connection based on request.
+     */
+    public function translateToConnection(Subscription $request)
+    {
+        return new Connection(
+            $request->getEntityId(),
+            Connection::TYPE_SP,
+            Connection::WORKFLOW_TEST,
+            $this->metadataMapper->mapRequestToMetadata($request),
+            $request->getMetadataUrl(),
+            '',
+            new ConnectionAccess(),
+            $this->arpMapper->mapRequestToArpAttributes($request)
+        );
+    }
+
+    /**
+     * ConnectionRequestTranslator constructor.
+     * @param ArpMapper $arpMapper
+     * @param ContactMapper $contactMapper
+     * @param MetadataMapper $metadataMapper
+     */
+    public function __construct(
+        ArpMapper $arpMapper,
+        ContactMapper $contactMapper,
+        MetadataMapper $metadataMapper
+    ) {
+        $this->arpMapper = $arpMapper;
+        $this->contactMapper = $contactMapper;
+        $this->metadataMapper = $metadataMapper;
+    }
+
+    /**
+     * @var ArpMapper
+     */
+    private $arpMapper;
+
+
+    /**
+     * @var ContactMapper
+     */
+    private $contactMapper;
+
+    /**
+     * @var MetadataMapper
+     */
+    private $metadataMapper;
 }
