@@ -135,9 +135,19 @@
 
         <div class="form-group">
             <div class="col-md-6">
+                {% if (subscription.isPublished) %}
+                    <button type="submit" class="btn btn-primary" {% if locked %}disabled="disabled"{% endif %}>
+                        {{ 'form.button.update'|trans }}
+                    </button>
+                    <a href="{{ path('overview_finish', {id: subscription.id}) }}" class="btn btn-success">
+                        {{ 'form.button.finish'|trans }}
+                    </a>
+                {% endif %}
+                {% if (subscription.isDraft) %}
                 <button type="submit" class="btn btn-primary" {% if locked %}disabled="disabled"{% endif %}>
-                    {{ 'form.button.finish'|trans }}
+                    {{ 'form.button.publish'|trans }}
                 </button>
+                {% endif %}
                 &nbsp;&nbsp;
                 <span id="status-progress" class="hidden">
                     <i class="fa fa-cog fa-spin"></i> {{ 'form.status.saving'|trans }}

@@ -32,7 +32,7 @@ class SubscriptionController extends Controller
         try {
             $subscription = $this->getSubscription($id, true, false);
         } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
+            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
         $form = $this->getForm($subscription);
@@ -145,12 +145,12 @@ class SubscriptionController extends Controller
      *
      * @return Response
      */
-    public function finishAction($id, Request $request)
+    public function storeAction($id, Request $request)
     {
         try {
             $subscription = $this->getSubscription($id);
         } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
+            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
         $form = $this->getForm($subscription);
@@ -162,6 +162,12 @@ class SubscriptionController extends Controller
         }
 
         if ($form->isValid()) {
+            if ($subscription->isPublished()) {
+                // @todo: flash message
+
+                return $this->redirect($this->generateUrl('form', array('id' => $id)));
+            }
+
             return $this->redirect($this->generateUrl('overview', array('id' => $id)));
         }
 
@@ -187,7 +193,7 @@ class SubscriptionController extends Controller
         try {
             $subscription = $this->getSubscription($id);
         } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
+            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
         if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
@@ -214,18 +220,19 @@ class SubscriptionController extends Controller
         try {
             $subscription = $this->getSubscription($id);
         } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
+            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
         if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
         }
 
-        $subscription->finish();
+        $subscription->publish();
 
         $this->get('subscription.manager')->updateSubscription($subscription);
 
-        $this->get('mail.manager')->sendFinishedNotification($subscription);
+        // @todo:
+        // $this->get('mail.manager')->sendFinishedNotification($subscription);
 
         return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
     }
@@ -241,6 +248,78 @@ class SubscriptionController extends Controller
     {
         return $this->render(
             'subscription/thanks.html.twig',
+            array(
+                'subscription' => $this->getSubscription($id, false),
+            )
+        );
+    }
+
+    /**
+     * @Route("/{id}/finish/overview", name="overview_finish")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function overviewForFinalizationAction($id)
+    {
+        try {
+            $subscription = $this->getSubscription($id);
+        } catch (\InvalidArgumentException $e) {
+            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+        }
+
+        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
+            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        }
+
+        return $this->render(
+            'subscription/finish_overview.html.twig',
+            array(
+                'subscription' => $subscription
+            )
+        );
+    }
+
+    /**
+     * @Route("/{id}/finish/confirm", name="confirm_finish")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function confirmForFinalizationAction($id)
+    {
+        try {
+            $subscription = $this->getSubscription($id);
+        } catch (\InvalidArgumentException $e) {
+            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+        }
+
+        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
+            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        }
+
+        $subscription->finish();
+
+        $this->get('subscription.manager')->updateSubscription($subscription);
+
+        $this->get('mail.manager')->sendFinishedNotification($subscription);
+
+        return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+    }
+
+    /**
+     * @Route("/{id}/finish/thanks", name="thanks_finish")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function thanksForFinalizationAction($id)
+    {
+        return $this->render(
+            'subscription/finish_thanks.html.twig',
             array(
                 'subscription' => $this->getSubscription($id, false),
             )
