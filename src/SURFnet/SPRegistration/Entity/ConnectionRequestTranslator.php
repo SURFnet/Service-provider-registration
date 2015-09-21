@@ -10,9 +10,6 @@ use SURFnet\SPRegistration\ServiceRegistry\Consts as ServiceRegistry;
 
 class ConnectionRequestTranslator
 {
-    const PEM_HEADER = '-----BEGIN CERTIFICATE-----';
-    const PEM_FOOTER = '-----END CERTIFICATE-----';
-
     public function translateToConnection(Subscription $request)
     {
         return new Connection(
@@ -53,7 +50,9 @@ class ConnectionRequestTranslator
         );
         $certData = $connection->getMetadata('certData');
         if ($certData) {
-            $request->setCertificate(SAML2_Certificate_X509::createFromCertificateData($certData)->getCertificate());
+            $request->setCertificate(
+                SAML2_Certificate_X509::createFromCertificateData($certData)->getCertificate()
+            );
         }
     }
 
@@ -61,6 +60,14 @@ class ConnectionRequestTranslator
     {
         // @todo what happens on a 404?
         list($width, $height) = getimagesize($request->getLogoUrl());
+
+        $certData = '';
+        if ($request->getCertificate()) {
+            $matches = array();
+            preg_match(SAML2_Utilities_Certificate::CERTIFICATE_PATTERN, $request->getCertificate(), $matches);
+            $key = SAML2_Certificate_X509::createFromCertificateData($matches[1]);
+            $certData = $key['X509Certificate'];
+        }
 
         return array(
             ServiceRegistry::NAME_EN                                => $request->getNameEn(),
@@ -98,27 +105,8 @@ class ConnectionRequestTranslator
 
             ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_BINDING     => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
             ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_LOCATION    => $request->getAcsLocation(),
-            ServiceRegistry::CERTDATA                               => $this->mapX509ToCertData($request->getCertificate()),
+            ServiceRegistry::CERTDATA                               => $certData,
         );
-    }
-
-    private function mapX509ToCertData($certificate)
-    {
-        $lines = explode("\n", $certificate);
-        $data = '';
-        foreach ($lines as $line) {
-            $line = rtrim($line);
-            // Skip the header
-            if ($line === self::PEM_HEADER) {
-                continue;
-            }
-            // End transformation on footer
-            if ($line === self::PEM_FOOTER) {
-                break;
-            }
-            $data .= $line;
-        }
-        return $data;
     }
 
     private function getArpAttributesFromRequest($request)
