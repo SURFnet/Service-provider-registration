@@ -2,7 +2,7 @@
 
 namespace SURFnet\SPRegistration\ServiceRegistry;
 
-class Constants
+final class Constants
 {
     const NAME_EN                               = 'name:en';
     const NAME_NL                               = 'name:nl';
