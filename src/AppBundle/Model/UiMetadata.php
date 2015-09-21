@@ -4,13 +4,13 @@ namespace AppBundle\Model;
 
 class UiMetadata
 {
-  public $logoUrl;
+    public $logoUrl;
 
-  public $nameEn;
+    public $nameEn;
 
-  public $nameNl;
+    public $nameNl;
 
-  public $descriptionEn;
+    public $descriptionEn;
 
-  public $descriptionNl;
+    public $descriptionNl;
 }

@@ -2,10 +2,11 @@
 
 namespace AppBundle\Model;
 
-class Saml2Metadata {
-  public $acsLocation;
+class Saml2Metadata
+{
+    public $acsLocation;
 
-  public $entityId;
+    public $entityId;
 
-  public $certificate;
+    public $certificate;
 }

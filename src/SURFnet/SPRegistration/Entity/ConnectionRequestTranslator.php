@@ -1,5 +1,7 @@
 <?php
 
+namespace SURFnet\SPRegistration\Entity;
+
 use AppBundle\Entity\Subscription;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
@@ -27,8 +29,7 @@ class ConnectionRequestTranslator
     public function translateFromConnection(
         Connection $connection,
         Subscription $request
-    )
-    {
+    ) {
         $request->setNameNl($connection->getMetadata(ServiceRegistry::NAME_NL));
         $request->setNameEn($connection->getMetadata(ServiceRegistry::NAME_EN));
         $request->setDescriptionEn($connection->getMetadata(ServiceRegistry::DESCRIPTION_EN));
@@ -70,42 +71,42 @@ class ConnectionRequestTranslator
         }
 
         return array(
-            ServiceRegistry::NAME_EN                                => $request->getNameEn(),
-            ServiceRegistry::NAME_NL                                => $request->getNameNl(),
+            ServiceRegistry::NAME_EN => $request->getNameEn(),
+            ServiceRegistry::NAME_NL => $request->getNameNl(),
 
-            ServiceRegistry::DESCRIPTION_EN                         => $request->getDescriptionEn(),
-            ServiceRegistry::DESCRIPTION_NL                         => $request->getDescriptionNl(),
-            ServiceRegistry::URL_NL                                 => $request->getApplicationUrl(),
-            ServiceRegistry::URL_EN                                 => $request->getApplicationUrl(),
-            ServiceRegistry::COIN_EULA                              => $request->getEulaUrl(),
+            ServiceRegistry::DESCRIPTION_EN => $request->getDescriptionEn(),
+            ServiceRegistry::DESCRIPTION_NL => $request->getDescriptionNl(),
+            ServiceRegistry::URL_NL => $request->getApplicationUrl(),
+            ServiceRegistry::URL_EN => $request->getApplicationUrl(),
+            ServiceRegistry::COIN_EULA => $request->getEulaUrl(),
 
-            ServiceRegistry::NAMEIDFORMAT                           => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+            ServiceRegistry::NAMEIDFORMAT => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
 
-            ServiceRegistry::LOGO_0_URL                             => $request->getLogoUrl(),
-            ServiceRegistry::LOGO_0_WIDTH                           => $width,
-            ServiceRegistry::LOGO_0_HEIGHT                          => $height,
+            ServiceRegistry::LOGO_0_URL => $request->getLogoUrl(),
+            ServiceRegistry::LOGO_0_WIDTH => $width,
+            ServiceRegistry::LOGO_0_HEIGHT => $height,
 
-            ServiceRegistry::CONTACTS_0_CONTACTTYPE                 => ServiceRegistry::CONTACT_TYPE_TECHNICAL,
-            ServiceRegistry::CONTACTS_0_EMAILADDRESS                => $request->getTechnicalContact()->getEmail(),
-            ServiceRegistry::CONTACTS_0_GIVENNAME                   => $request->getTechnicalContact()->getFirstName(),
-            ServiceRegistry::CONTACTS_0_SURNAME                     => $request->getTechnicalContact()->getLastName(),
-            ServiceRegistry::CONTACTS_0_TELEPHONENUMBER             => $request->getTechnicalContact()->getPhone(),
+            ServiceRegistry::CONTACTS_0_CONTACTTYPE => ServiceRegistry::CONTACT_TYPE_TECHNICAL,
+            ServiceRegistry::CONTACTS_0_EMAILADDRESS => $request->getTechnicalContact()->getEmail(),
+            ServiceRegistry::CONTACTS_0_GIVENNAME => $request->getTechnicalContact()->getFirstName(),
+            ServiceRegistry::CONTACTS_0_SURNAME => $request->getTechnicalContact()->getLastName(),
+            ServiceRegistry::CONTACTS_0_TELEPHONENUMBER => $request->getTechnicalContact()->getPhone(),
 
-            ServiceRegistry::CONTACTS_1_CONTACTTYPE                 => ServiceRegistry::CONTACT_TYPE_SUPPORT,
-            ServiceRegistry::CONTACTS_1_EMAILADDRESS                => $request->getSupportContact()->getEmail(),
-            ServiceRegistry::CONTACTS_1_GIVENNAME                   => $request->getSupportContact()->getFirstName(),
-            ServiceRegistry::CONTACTS_1_SURNAME                     => $request->getSupportContact()->getLastName(),
-            ServiceRegistry::CONTACTS_1_TELEPHONENUMBER             => $request->getSupportContact()->getPhone(),
+            ServiceRegistry::CONTACTS_1_CONTACTTYPE => ServiceRegistry::CONTACT_TYPE_SUPPORT,
+            ServiceRegistry::CONTACTS_1_EMAILADDRESS => $request->getSupportContact()->getEmail(),
+            ServiceRegistry::CONTACTS_1_GIVENNAME => $request->getSupportContact()->getFirstName(),
+            ServiceRegistry::CONTACTS_1_SURNAME => $request->getSupportContact()->getLastName(),
+            ServiceRegistry::CONTACTS_1_TELEPHONENUMBER => $request->getSupportContact()->getPhone(),
 
-            ServiceRegistry::CONTACTS_2_CONTACTTYPE                 => ServiceRegistry::CONTACT_TYPE_ADMINISTRATIVE,
-            ServiceRegistry::CONTACTS_2_EMAILADDRESS                => $request->getAdministrativeContact()->getEmail(),
-            ServiceRegistry::CONTACTS_2_GIVENNAME                   => $request->getAdministrativeContact()->getFirstName(),
-            ServiceRegistry::CONTACTS_2_SURNAME                     => $request->getAdministrativeContact()->getLastName(),
-            ServiceRegistry::CONTACTS_2_TELEPHONENUMBER             => $request->getAdministrativeContact()->getPhone(),
+            ServiceRegistry::CONTACTS_2_CONTACTTYPE => ServiceRegistry::CONTACT_TYPE_ADMINISTRATIVE,
+            ServiceRegistry::CONTACTS_2_EMAILADDRESS => $request->getAdministrativeContact()->getEmail(),
+            ServiceRegistry::CONTACTS_2_GIVENNAME => $request->getAdministrativeContact()->getFirstName(),
+            ServiceRegistry::CONTACTS_2_SURNAME => $request->getAdministrativeContact()->getLastName(),
+            ServiceRegistry::CONTACTS_2_TELEPHONENUMBER => $request->getAdministrativeContact()->getPhone(),
 
-            ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_BINDING     => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-            ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_LOCATION    => $request->getAcsLocation(),
-            ServiceRegistry::CERTDATA                               => $certData,
+            ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_BINDING => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+            ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_LOCATION => $request->getAcsLocation(),
+            ServiceRegistry::CERTDATA => $certData,
         );
     }
 
@@ -143,99 +144,99 @@ class ConnectionRequestTranslator
     protected function getAttributeMap()
     {
         return array(
-            'displayName'        => array(
-                'name'         => array(
+            'displayName' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:displayName',
                     'urn:oid:2.16.840.1.113730.3.1.241'
                 ),
                 'friendlyName' => 'Display name'
             ),
-            'affiliation'        => array(
-                'name'         => array(
+            'affiliation' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:eduPersonAffiliation',
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.1'
                 ),
                 'friendlyName' => 'Affiliation'
             ),
-            'emailAddress'       => array(
-                'name'         => array(
+            'emailAddress' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:mail',
                     'urn:oid:0.9.2342.19200300.100.1.3'
                 ),
                 'friendlyName' => 'Email address'
             ),
-            'commonName'         => array(
-                'name'         => array(
+            'commonName' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:cn',
                     'urn:oid:2.5.4.3'
                 ),
                 'friendlyName' => 'Common name'
             ),
-            'organization'       => array(
-                'name'         => array(
+            'organization' => array(
+                'name' => array(
                     'urn:mace:terena.org:attribute-def:schacHomeOrganization',
                     'urn:oid:1.3.6.1.4.1.25178.1.2.9'
                 ),
                 'friendlyName' => 'Organization'
             ),
-            'organizationType'   => array(
-                'name'         => array(
+            'organizationType' => array(
+                'name' => array(
                     'urn:mace:terena.org:attribute-def:schacHomeOrganizationType ',
                     'urn:oid:1.3.6.1.4.1.25178.1.2.10'
                 ),
                 'friendlyName' => 'Organization Type'
             ),
-            'surName'            => array(
-                'name'         => array(
+            'surName' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:sn',
                     'urn:oid:2.5.4.4'
                 ),
                 'friendlyName' => 'Surname'
             ),
-            'givenName'          => array(
-                'name'         => array(
+            'givenName' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:givenName',
                     'urn:oid:2.5.4.42'
                 ),
                 'friendlyName' => 'Given name'
             ),
-            'entitlement'        => array(
-                'name'         => array(
+            'entitlement' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:eduPersonEntitlement',
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.7'
                 ),
                 'friendlyName' => 'Entitlement'
             ),
-            'uid'                => array(
-                'name'         => array(
+            'uid' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:uid',
                     'urn:oid:0.9.2342.19200300.100.1.1'
                 ),
                 'friendlyName' => 'uid'
             ),
-            'principleName'      => array(
-                'name'         => array(
+            'principleName' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:eduPersonPrincipalName',
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.6'
                 ),
                 'friendlyName' => 'PrincipalName'
             ),
-            'preferredLanguage'  => array(
-                'name'         => array(
+            'preferredLanguage' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:preferredLanguage',
                     'urn:oid:2.16.840.1.113730.3.1.39'
                 ),
                 'friendlyName' => 'preferredLanguage'
             ),
             'organizationalUnit' => array(
-                'name'         => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:eduPersonOrgUnitDN',
                     'urn:oid:1.3.6.1.4.1.5923.1.1.1.4'
                 ),
                 'friendlyName' => 'organizationalUnit'
             ),
-            'personalCode'       => array(
-                'name'         => array(
+            'personalCode' => array(
+                'name' => array(
                     'urn:mace:dir:attribute-def:schacPersonalUniqueCode',
                     'urn:oid:1.3.6.1.4.1.1466.155.121.1.15'
                 ),
@@ -261,7 +262,7 @@ class ConnectionRequestTranslator
                 return $this->getContact2($connection);
             }
         }
-        return NULL;
+        return null;
     }
 
     private function getContact0(Connection $connection)
