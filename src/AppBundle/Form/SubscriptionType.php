@@ -38,7 +38,7 @@ class SubscriptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('contact', new ContactType(), array('by_reference' => false))
+            ->add('contact', new ContactType(false), array('by_reference' => false))
             // Tab Metadata
             ->add('metadataUrl', 'url', array('default_protocol' => 'https'))
             ->add('acsLocation', null, array('read_only' => true)) // @todo: these should be disabled, but then validation is harder..
