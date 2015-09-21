@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9dd876ba95ccd68989fdb09e530ee9ec",
+    "hash": "70843cfc38b5d910258777800bb65fa5",
     "content-hash": "ba150f74928a85d2d96a6490f075eae8",
     "packages": [
         {
@@ -1357,16 +1357,16 @@
         },
         {
             "name": "janus-ssp/client",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/janus-ssp/client.git",
-                "reference": "faf6f21de72329a02b84288cf62bdc70bb4fb18d"
+                "reference": "1d34f413938662568a10bb1f68178d0f1e3dd2ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/janus-ssp/client/zipball/faf6f21de72329a02b84288cf62bdc70bb4fb18d",
-                "reference": "faf6f21de72329a02b84288cf62bdc70bb4fb18d",
+                "url": "https://api.github.com/repos/janus-ssp/client/zipball/1d34f413938662568a10bb1f68178d0f1e3dd2ea",
+                "reference": "1d34f413938662568a10bb1f68178d0f1e3dd2ea",
                 "shasum": ""
             },
             "require": {
@@ -1396,7 +1396,7 @@
                 }
             ],
             "description": "PHP Client for accessing Janus REST API",
-            "time": "2015-09-20 20:29:15"
+            "time": "2015-09-21 12:37:33"
         },
         {
             "name": "jdorn/sql-formatter",
