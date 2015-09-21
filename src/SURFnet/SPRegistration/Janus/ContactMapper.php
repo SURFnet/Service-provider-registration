@@ -41,21 +41,29 @@ final class ContactMapper
      * @param Connection $connection
      * @return Contact
      */
-    public function getContact0(Connection $connection)
+    private function getContact0(Connection $connection)
     {
         $contact = new Contact();
 
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_0_GIVENNAME)) {
-            $contact->setFirstName($connection->getMetadata(ServiceRegistry::CONTACTS_0_GIVENNAME));
+            $contact->setFirstName(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_0_GIVENNAME)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_0_SURNAME)) {
-            $contact->setLastName($connection->getMetadata(ServiceRegistry::CONTACTS_0_SURNAME));
+            $contact->setLastName(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_0_SURNAME)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_0_EMAILADDRESS)) {
-            $contact->setEmail($connection->getMetadata(ServiceRegistry::CONTACTS_0_EMAILADDRESS));
+            $contact->setEmail(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_0_EMAILADDRESS)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_0_TELEPHONENUMBER)) {
-            $contact->setPhone($connection->getMetadata(ServiceRegistry::CONTACTS_0_TELEPHONENUMBER));
+            $contact->setPhone(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_0_TELEPHONENUMBER)
+            );
         }
 
         return $contact;
@@ -65,21 +73,29 @@ final class ContactMapper
      * @param Connection $connection
      * @return Contact
      */
-    public function getContact1(Connection $connection)
+    private function getContact1(Connection $connection)
     {
         $contact = new Contact();
 
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_1_GIVENNAME)) {
-            $contact->setFirstName($connection->getMetadata(ServiceRegistry::CONTACTS_1_GIVENNAME));
+            $contact->setFirstName(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_1_GIVENNAME)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_1_SURNAME)) {
-            $contact->setLastName($connection->getMetadata(ServiceRegistry::CONTACTS_1_SURNAME));
+            $contact->setLastName(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_1_SURNAME)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_1_EMAILADDRESS)) {
-            $contact->setEmail($connection->getMetadata(ServiceRegistry::CONTACTS_1_EMAILADDRESS));
+            $contact->setEmail(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_1_EMAILADDRESS)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_1_TELEPHONENUMBER)) {
-            $contact->setPhone($connection->getMetadata(ServiceRegistry::CONTACTS_1_TELEPHONENUMBER));
+            $contact->setPhone(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_1_TELEPHONENUMBER)
+            );
         }
 
         return $contact;
@@ -89,7 +105,7 @@ final class ContactMapper
      * @param Connection $connection
      * @return Contact
      */
-    public function getContact2(Connection $connection)
+    private function getContact2(Connection $connection)
     {
         $contact = new Contact();
 

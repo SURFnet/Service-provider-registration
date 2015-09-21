@@ -87,11 +87,21 @@ final class ConnectionRequestTranslator
     ) {
         $request->setNameNl($connection->getMetadata(ServiceRegistry::NAME_NL));
         $request->setNameEn($connection->getMetadata(ServiceRegistry::NAME_EN));
-        $request->setDescriptionEn($connection->getMetadata(ServiceRegistry::DESCRIPTION_EN));
-        $request->setDescriptionNl($connection->getMetadata(ServiceRegistry::DESCRIPTION_NL));
-        $request->setApplicationUrl($connection->getMetadata(ServiceRegistry::URL_EN));
-        $request->setEulaUrl($connection->getMetadata(ServiceRegistry::COIN_EULA));
-        $request->setLogoUrl($connection->getMetadata(ServiceRegistry::LOGO_0_URL));
+        $request->setDescriptionEn(
+            $connection->getMetadata(ServiceRegistry::DESCRIPTION_EN)
+        );
+        $request->setDescriptionNl(
+            $connection->getMetadata(ServiceRegistry::DESCRIPTION_NL)
+        );
+        $request->setApplicationUrl(
+            $connection->getMetadata(ServiceRegistry::URL_EN)
+        );
+        $request->setEulaUrl(
+            $connection->getMetadata(ServiceRegistry::COIN_EULA)
+        );
+        $request->setLogoUrl(
+            $connection->getMetadata(ServiceRegistry::LOGO_0_URL)
+        );
         $request->setAdministrativeContact(
             $this->contactMapper->mapToContactOfType(
                 ServiceRegistry::CONTACT_TYPE_ADMINISTRATIVE,
@@ -111,13 +121,20 @@ final class ConnectionRequestTranslator
             )
         );
         $request->setAcsLocation(
-            $connection->getMetadata(ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_LOCATION)
+            $connection->getMetadata(
+                ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_LOCATION
+            )
         );
+
         $certData = $connection->getMetadata('certData');
-        if ($certData) {
-            $request->setCertificate(
-                SAML2_Certificate_X509::createFromCertificateData($certData)->getCertificate()
-            );
+        if (!$certData) {
+            return $request;
         }
+
+        $request->setCertificate(
+            SAML2_Certificate_X509::createFromCertificateData($certData)->getCertificate()
+        );
+
+        return $request;
     }
 }
