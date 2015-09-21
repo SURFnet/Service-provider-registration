@@ -370,6 +370,14 @@ class Subscription
     /**
      * @return bool
      */
+    public function isDraft()
+    {
+        return $this->status === self::STATE_DRAFT;
+    }
+
+    /**
+     * @return bool
+     */
     public function isFinished()
     {
         return $this->status === self::STATE_FINISHED;
