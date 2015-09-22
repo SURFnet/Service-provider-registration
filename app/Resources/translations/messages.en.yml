@@ -124,6 +124,7 @@ form:
     status:
         saved: Saved
         saving: Saving...
+        updated: The form has been updated!
 
     tab:
         attributes: attributes
