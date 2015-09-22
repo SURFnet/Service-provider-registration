@@ -74,7 +74,7 @@ class JanusSyncService
             $subscription
         );
 
-        $this->repository->saveSubscription($subscription);
+        $this->repository->updateSubscription($subscription);
     }
 
     /**
