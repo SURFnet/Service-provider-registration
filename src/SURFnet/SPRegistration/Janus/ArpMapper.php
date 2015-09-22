@@ -35,10 +35,6 @@ final class ArpMapper
             $arp[$attributeMaceId] = array('*');
         }
 
-        if (empty($arp)) {
-            return null;
-        }
-
         return new ArpAttributes($arp);
     }
 
