@@ -3,11 +3,12 @@
 namespace AppBundle\Event;
 
 use AppBundle\Entity\Subscription;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class SubscriptionEvent
  */
-class SubscriptionEvent
+class SubscriptionEvent extends Event
 {
     /**
      * @var int
