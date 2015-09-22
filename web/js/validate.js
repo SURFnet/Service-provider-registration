@@ -183,13 +183,15 @@
         }
 
         // Setup autosave
-        $form.autosave({
-            callbacks: {
-                trigger: ['modify', 'change'],
-                scope: 'all',
-                save: $.debounce(500, save)
-            }
-        });
+        if ($form.hasClass('autosave')) {
+            $form.autosave({
+                callbacks: {
+                    trigger: ['modify', 'change'],
+                    scope: 'all',
+                    save: $.debounce(500, save)
+                }
+            });
+        }
 
         // Setup locking
         setInterval(
