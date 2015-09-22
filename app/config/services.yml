@@ -88,7 +88,7 @@ services:
 
     subscriber.janus_sync:
         class: SURFnet\SPRegistration\Event\SyncSubscriber
-        arguments: [@janus.sync_service]
+        arguments: [@janus.sync_service, @subscription.manager]
         tags:
             - {name:kernel.event_subscriber}
 
@@ -96,7 +96,7 @@ services:
         class: SURFnet\SPRegistration\Service\JanusSyncService
         arguments:
             - @subscription.manager
-            - @janus.connection_description_repository
+            - @janus.connection_descriptor_repository
             - @janus.connection_repository
             - @janus.connection_translator
 
@@ -104,22 +104,26 @@ services:
         class: Guzzle\Http\Client
         arguments:
             - '%janus_url%'
-            - headers:
-                User-Agent: SURFnet Service Provider Registration (https://github.com/SURFnet/Service-provider-registration)
-                Accept: application/json
-                Content-Type: application/json
+            -
+                headers:
+                    User-Agent: SURFnet Service Provider Registration (https://github.com/SURFnet/Service-provider-registration)
+                    Accept: application/json
+                    Content-Type: application/json
+                request.options:
+                    timeout: 10
+                    connect_timeout: 5
 
-    janus.connection_description_assembler:
-        class: Janus\Entity\Assembler\ConnectionDescriptorAssembler
+    janus.connection_descriptor_assembler:
+        class: OpenConext\JanusClient\Entity\Assembler\ConnectionDescriptorAssembler
 
     janus.connection_assembler:
-        class: Janus\Entity\Assembler\ConnectionAssembler
+        class: OpenConext\JanusClient\Entity\Assembler\ConnectionAssembler
 
     janus.connection_disassembler:
-        class: Janus\Entity\Assembler\ConnectionDisassembler
+        class: OpenConext\JanusClient\Entity\Assembler\ConnectionDisassembler
 
     janus.response_status_code_validator:
-        class: Janus\ResponseStatusCodeValidator
+        class: OpenConext\JanusClient\ResponseStatusCodeValidator
         arguments: [@logger]
 
     janus.serializer:
@@ -136,18 +140,18 @@ services:
     janus.encoder:
         class: Symfony\Component\Serializer\Encoder\JsonEncoder
 
-    janus.connection_description_repository:
-        class: Janus\Entity\ConnectionDescriptionRepository
-        argument:
+    janus.connection_descriptor_repository:
+        class: OpenConext\JanusClient\Entity\ConnectionDescriptorRepository
+        arguments:
             - @janus.http_client
             - @logger
-            - @janus.connection_disassembler
+            - @janus.connection_descriptor_assembler
             - @janus.serializer
             - @janus.response_status_code_validator
 
     janus.connection_repository:
-        class: Janus\Entity\ConnectionDescriptionRepository
-        argument:
+        class: OpenConext\JanusClient\Entity\ConnectionRepository
+        arguments:
             - @janus.http_client
             - @janus.connection_assembler
             - @janus.connection_disassembler
