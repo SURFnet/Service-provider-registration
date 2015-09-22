@@ -6,6 +6,15 @@
         <strong>{{ 'form.lock.title'|trans }}</strong> {{ 'form.lock.description'|trans }}
     </div>
 
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+        <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endfor %}
+
     <form id="form" method="post" {{ form_enctype(form) }}
           class="form-horizontal{% if (subscription.isDraft) %} autosave{% endif %}"
           data-save="{{ path('save', {id: subscription.id}) }}"

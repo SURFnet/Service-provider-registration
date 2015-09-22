@@ -167,7 +167,10 @@ class SubscriptionController extends Controller
 
         if ($form->isValid()) {
             if ($subscription->isPublished()) {
-                // @todo: flash message
+                $this->addFlash(
+                    'info',
+                    $this->get('translator')->trans('form.status.updated')
+                );
 
                 return $this->redirect($this->generateUrl('form', array('id' => $id)));
             }
