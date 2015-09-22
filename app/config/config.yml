@@ -84,6 +84,19 @@ swiftmailer:
 monolog:
     channels: ["metadata"]
     handlers:
+        mail:
+            type:         fingers_crossed
+            action_level: error
+            handler:      buffered
+        buffered:
+            type:    buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: no-reply@surfnet.nl
+            to_email:   "%error_mail_address%"
+            subject:    Service Provider Registration Error
+            level:      debug
         metadata:
             type:     stream
             path:     "%kernel.logs_dir%/metadata.log"
