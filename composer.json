@@ -24,6 +24,7 @@
         "knplabs/knp-menu-bundle":              "~2.0",
         "misd/guzzle-bundle":                   "~1.1",
         "norzechowicz/aceeditor-bundle":        "~0.1",
+        "ob/highcharts-bundle":                 "^1.0.1",
         "openid/php-openid":                    "dev-master#ee669c6a9d4d95b58ecd9b6945627276807694fb",
         "pagerfanta/pagerfanta":                "~1.0",
         "twig/extensions":                      "~1.0",

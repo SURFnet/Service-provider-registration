@@ -164,4 +164,21 @@ class SubscriptionManager
 
         return $this->generator->generate($subscription);
     }
+
+    /**
+     * Get a count for the number of subscriptions for a given status.
+     *
+     * @param int $status
+     * @return int
+     */
+    public function countForType($status)
+    {
+        return (int) $this->em->createQueryBuilder()
+            ->select('count(subscription.id)')
+            ->from('AppBundle:Subscription', 'subscription')
+            ->where('subscription.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
