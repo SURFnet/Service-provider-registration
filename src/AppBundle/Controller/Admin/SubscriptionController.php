@@ -175,8 +175,12 @@ class SubscriptionController extends Controller implements SecuredController
         $source = new Entity('AppBundle:Subscription');
         $source->manipulateRow(
             function (Row $row) {
-                if ($row->getField('status') == 1) {
+                if ($row->getField('status') == Subscription::STATE_FINISHED) {
                     $row->setClass('success');
+                }
+
+                if ($row->getField('status') == Subscription::STATE_PUBLISHED) {
+                    $row->setClass('info');
                 }
 
                 return $row;
@@ -202,6 +206,9 @@ class SubscriptionController extends Controller implements SecuredController
                 switch ($status) {
                     case Subscription::STATE_FINISHED:
                         return 'Finished';
+
+                    case Subscription::STATE_PUBLISHED:
+                        return 'Published';
 
                     case Subscription::STATE_DRAFT:
                         return 'Draft';

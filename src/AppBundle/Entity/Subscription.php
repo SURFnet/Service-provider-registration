@@ -26,7 +26,8 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 class Subscription
 {
     const STATE_DRAFT = 0;
-    const STATE_FINISHED = 1;
+    const STATE_PUBLISHED = 1;
+    const STATE_FINISHED = 2;
 
     /**
      * @var string
@@ -48,7 +49,7 @@ class Subscription
     /**
      * @var int
      * @ORM\Column(type="integer")
-     * @GRID\Column(operatorsVisible=false, filter="select", selectFrom="values", values={0="Initial",1="Draft",2="Published"})
+     * @GRID\Column(operatorsVisible=false, filter="select", selectFrom="values", values={0="Draft",1="Published",2="Finished"})
      * @Assert\NotBlank()
      */
     private $status;
@@ -368,6 +369,14 @@ class Subscription
     }
 
     /**
+     *
+     */
+    public function publish()
+    {
+        $this->status = self::STATE_PUBLISHED;
+    }
+
+    /**
      * @return bool
      */
     public function isDraft()
@@ -381,6 +390,14 @@ class Subscription
     public function isFinished()
     {
         return $this->status === self::STATE_FINISHED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->status === self::STATE_PUBLISHED;
     }
 
     /**
