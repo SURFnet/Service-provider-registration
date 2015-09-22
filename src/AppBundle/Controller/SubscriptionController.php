@@ -161,21 +161,20 @@ class SubscriptionController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->get('subscription.manager')->updateSubscription($subscription);
-        }
 
-        if ($form->isValid()) {
             if ($subscription->isPublished()) {
-                $this->addFlash(
-                    'info',
-                    $this->get('translator')->trans('form.status.updated')
-                );
+                // @todo: send mails here? Add flash message where... ?
+//                $this->addFlash(
+//                    'info',
+//                    $this->get('translator')->trans('form.status.updated')
+//                );
 
-                return $this->redirect($this->generateUrl('form', array('id' => $id)));
+                return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
             }
 
-            return $this->redirect($this->generateUrl('overview', array('id' => $id)));
+            return $this->redirect($this->generateUrl('overview_publish', array('id' => $id)));
         }
 
         return $this->render(
@@ -189,13 +188,13 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * @Route("/{id}/overview", name="overview")
+     * @Route("/{id}/overview", name="overview_publish")
      *
      * @param string $id
      *
      * @return Response
      */
-    public function overviewAction($id)
+    public function overviewForPublicationAction($id)
     {
         try {
             $subscription = $this->getSubscription($id);
@@ -208,7 +207,7 @@ class SubscriptionController extends Controller
         }
 
         return $this->render(
-            'subscription/overview.html.twig',
+            'subscription/publish_overview.html.twig',
             array(
                 'subscription' => $subscription
             )
@@ -216,13 +215,13 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * @Route("/{id}/confirm", name="confirm")
+     * @Route("/{id}/confirm", name="confirm_publish")
      *
      * @param string $id
      *
      * @return Response
      */
-    public function confirmAction($id)
+    public function confirmForPublicationAction($id)
     {
         try {
             $subscription = $this->getSubscription($id);
@@ -241,22 +240,49 @@ class SubscriptionController extends Controller
         $this->get('mail.manager')->sendPublishedNotification($subscription);
         $this->get('mail.manager')->sendPublishedConfirmation($subscription);
 
-        return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
+        return $this->redirect($this->generateUrl('thanks_publish', array('id' => $id)));
     }
 
     /**
-     * @Route("/{id}/thanks", name="thanks")
+     * @Route("/{id}/thanks", name="thanks_publish")
      *
      * @param string $id
      *
      * @return Response
      */
-    public function thanksAction($id)
+    public function thanksForPublicationAction($id)
     {
         return $this->render(
-            'subscription/thanks.html.twig',
+            'subscription/publish_thanks.html.twig',
             array(
                 'subscription' => $this->getSubscription($id),
+            )
+        );
+    }
+
+    /**
+     * @Route("/{id}/update/overview", name="overview_update")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function overviewAfterUpdateAction($id)
+    {
+        try {
+            $subscription = $this->getSubscription($id);
+        } catch (\InvalidArgumentException $e) {
+            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+        }
+
+        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
+            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        }
+
+        return $this->render(
+            'subscription/update_overview.html.twig',
+            array(
+                'subscription' => $subscription
             )
         );
     }
