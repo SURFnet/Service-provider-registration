@@ -160,3 +160,8 @@ mail:
         subject: 'SURFnet SP Registration has been Created (%ticketNo%)'
     error:
         subject: 'SURFnet SP Registration Form Export Generation Error'
+    confirmation:
+        published:
+            subject: 'Published confirmation for SURFnet SP Registration (%ticketNo%)'
+        finished:
+            subject: 'Finished confirmation for SURFnet SP Registration (%ticketNo%)'

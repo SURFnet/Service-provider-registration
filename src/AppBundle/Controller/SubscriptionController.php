@@ -239,6 +239,7 @@ class SubscriptionController extends Controller
         $this->get('subscription.manager')->updateSubscription($subscription);
 
         $this->get('mail.manager')->sendPublishedNotification($subscription);
+        $this->get('mail.manager')->sendPublishedConfirmation($subscription);
 
         return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
     }
@@ -311,6 +312,7 @@ class SubscriptionController extends Controller
         $this->get('subscription.manager')->updateSubscription($subscription);
 
         $this->get('mail.manager')->sendFinishedNotification($subscription);
+        $this->get('mail.manager')->sendFinishedConfirmation($subscription);
 
         return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
     }
