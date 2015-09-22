@@ -3,7 +3,9 @@
 namespace SURFnet\SPRegistration\Event;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Event\SubscriptionEvent;
 use AppBundle\Manager\SubscriptionManager;
+use AppBundle\SubscriptionEvents;
 use SURFnet\SPRegistration\Service\JanusSyncService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -17,17 +19,23 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class SyncSubscriber implements EventSubscriberInterface
 {
     /**
-     * @param Subscription $request
+     * @param SubscriptionEvent $e
      */
-    public function sync(GetResponseEvent $e)
+    public function sync(SubscriptionEvent $e)
     {
-        if ($e->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+        $subscription = $e->getSubscription();
+
+        if (!$subscription) {
+            $subscription = $this->subscriptionRepository->getSubscription(
+                $e->getSubscriptionId()
+            );
+        }
+
+        if (!$subscription) {
             return;
         }
-        $request = $this->subscriptionRepository->getSubscription(
-            '2f56edb4-6036-11e5-a860-08002708c2e4'
-        );
-        $this->service->sync($request);
+
+        $this->service->sync($subscription);
     }
 
     /**
@@ -36,10 +44,8 @@ class SyncSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            // @todo use real event names.
-            'pre-load' => 'sync',
-            'post-save' => 'sync',
-            KernelEvents::REQUEST => 'sync',
+            SubscriptionEvents::PRE_READ    => 'sync',
+            SubscriptionEvents::POST_WRITE  => 'sync',
         );
     }
 
