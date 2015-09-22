@@ -114,18 +114,10 @@ class MailManager
      */
     public function sendPublishedNotification(Subscription $subscription)
     {
-        // @todo: implement
-    }
-
-    /**
-     * @param Subscription $subscription
-     */
-    public function sendFinishedNotification(Subscription $subscription)
-    {
         $message = \Swift_Message::newInstance()
             ->setSubject(
                 $this->translator->trans(
-                    'mail.notification.subject',
+                    'mail.notification.published.subject',
                     array(
                         '%ticketNo%' => $subscription->getTicketNo(),
                         '%nameEn%'   => $subscription->getNameEn(),
@@ -137,7 +129,36 @@ class MailManager
             ->setTo($this->receiver)
             ->setBody(
                 $this->renderView(
-                    'admin/mail/notification.html.twig',
+                    'admin/mail/notification.published.html.twig',
+                    array('subscription' => $subscription)
+                ),
+                'text/html'
+            );
+
+        $this->mailer->send($message);
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
+    public function sendFinishedNotification(Subscription $subscription)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject(
+                $this->translator->trans(
+                    'mail.notification.finished.subject',
+                    array(
+                        '%ticketNo%' => $subscription->getTicketNo(),
+                        '%nameEn%'   => $subscription->getNameEn(),
+                        '%nameNl%'   => $subscription->getNameNl(),
+                    )
+                )
+            )
+            ->setFrom($this->sender)
+            ->setTo($this->receiver)
+            ->setBody(
+                $this->renderView(
+                    'admin/mail/notification.finished.html.twig',
                     array('subscription' => $subscription)
                 ),
                 'text/html'
