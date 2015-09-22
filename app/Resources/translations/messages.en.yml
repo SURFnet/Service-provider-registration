@@ -142,3 +142,12 @@ mail:
         subject: 'SURFnet SP Registration has been Created (%ticketNo%)'
     error:
         subject: 'SURFnet SP Registration Form Export Generation Error'
+
+error:
+    general:
+        title: 'An error occurred.'
+        body: 'An unexpected error occurred, the admin has been notified. Please try again later.'
+
+    404:
+        title: 'Page not found'
+        body: 'Oops, we were unable to find the page.'
