@@ -252,7 +252,7 @@ class SubscriptionController extends Controller
         return $this->render(
             'subscription/thanks.html.twig',
             array(
-                'subscription' => $this->getSubscription($id, false),
+                'subscription' => $this->getSubscription($id),
             )
         );
     }

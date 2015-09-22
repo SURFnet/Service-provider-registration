@@ -6,4 +6,8 @@
     <p>
         {{ 'thanks.intro'|trans|raw }}
     </p>
+
+    <a href="{{ path('form', {id: subscription.id}) }}" class="btn btn-primary">
+        {{ 'thanks.button.edit'|trans }}
+    </a>
 {% endblock %}
