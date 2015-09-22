@@ -2,6 +2,10 @@
 
 namespace SURFnet\SPRegistration\ServiceRegistry;
 
+/**
+ * Class Constants
+ * @package SURFnet\SPRegistration\ServiceRegistry
+ */
 final class Constants
 {
     const NAME_EN                               = 'name:en';

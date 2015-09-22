@@ -110,16 +110,24 @@ final class ContactMapper
         $contact = new Contact();
 
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_2_GIVENNAME)) {
-            $contact->setFirstName($connection->getMetadata(ServiceRegistry::CONTACTS_2_GIVENNAME));
+            $contact->setFirstName(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_2_GIVENNAME)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_2_SURNAME)) {
-            $contact->setLastName($connection->getMetadata(ServiceRegistry::CONTACTS_2_SURNAME));
+            $contact->setLastName(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_2_SURNAME)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_2_EMAILADDRESS)) {
-            $contact->setEmail($connection->getMetadata(ServiceRegistry::CONTACTS_2_EMAILADDRESS));
+            $contact->setEmail(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_2_EMAILADDRESS)
+            );
         }
         if ($connection->hasMetadata(ServiceRegistry::CONTACTS_2_TELEPHONENUMBER)) {
-            $contact->setPhone($connection->getMetadata(ServiceRegistry::CONTACTS_2_TELEPHONENUMBER));
+            $contact->setPhone(
+                $connection->getMetadata(ServiceRegistry::CONTACTS_2_TELEPHONENUMBER)
+            );
         }
 
         return $contact;
