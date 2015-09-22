@@ -136,18 +136,6 @@ class GridConfiguration
         );
         $grid->addRowAction($rowAction);
 
-        $rowAction = new RowAction('export', 'export', false, '_blank');
-        $rowAction->manipulateRender(
-            function (RowAction $action, Row $row) {
-                if ($row->getField('status') == Subscription::STATE_DRAFT) {
-                    return null;
-                }
-
-                return $action;
-            }
-        );
-        $grid->addRowAction($rowAction);
-
         $rowAction = new RowAction('finish', 'admin.subscription.finish');
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {

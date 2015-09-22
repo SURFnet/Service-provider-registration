@@ -24,11 +24,6 @@ class CertificateFetcher
      */
     public function fetch($url)
     {
-        // Temp. disabled caching
-        // if (false !== $cert = $this->cache->fetch('cert-'. $url)) {
-        //     return $cert;
-        // }
-
         $context = stream_context_create(
             array(
                 'ssl'  =>

@@ -48,21 +48,18 @@ class SubscriptionManager
      * @param EntityManager            $entityManager
      * @param ValidatorInterface       $validator
      * @param LockManager              $lockManager
-     * @param Generator                $generator
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         EntityManager $entityManager,
         ValidatorInterface $validator,
         LockManager $lockManager,
-        Generator $generator,
         EventDispatcherInterface $dispatcher
     ) {
         $this->em = $entityManager;
         $this->repo = $entityManager->getRepository('AppBundle:Subscription');
         $this->validator = $validator;
         $this->lockManager = $lockManager;
-        $this->generator = $generator;
         $this->dispatcher = $dispatcher;
     }
 
@@ -149,20 +146,6 @@ class SubscriptionManager
     public function isValidSubscription(Subscription $subscription)
     {
         return count($this->validator->validate($subscription)) === 0;
-    }
-
-    /**
-     * @param Subscription $subscription
-     *
-     * @return string
-     */
-    public function generateMetadata(Subscription $subscription)
-    {
-        if (!$subscription->isFinished()) {
-            throw new \InvalidArgumentException('Subscription should be finished before generating the Metadata.');
-        }
-
-        return $this->generator->generate($subscription);
     }
 
     /**

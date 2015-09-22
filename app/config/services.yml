@@ -10,25 +10,6 @@ services:
         class: AppBundle\Metadata\Fetcher
         arguments: [@guzzle.client, @cache, @monolog.logger.metadata]
 
-    parser:
-        class: AppBundle\Metadata\Parser
-        arguments:
-            - @fetcher
-            - @cert.parser
-            - %kernel.root_dir%/Resources/schemas/
-            - @cache
-            - @monolog.logger.metadata
-
-    generator:
-        class: AppBundle\Metadata\Generator
-        arguments: [@fetcher, @cache.metadata, @monolog.logger.metadata]
-
-    validator.metadata:
-        class: AppBundle\Validator\Constraints\ValidMetadataValidator
-        arguments: [@parser]
-        tags:
-            - { name: validator.constraint_validator, alias: metadata }
-
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
         arguments: [@cert.fetcher, @cert.parser]
@@ -41,7 +22,6 @@ services:
             - @doctrine.orm.entity_manager
             - @validator
             - @lock.manager
-            - @generator
             - @event_dispatcher
 
     lock.manager:
