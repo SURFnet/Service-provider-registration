@@ -42,6 +42,7 @@ services:
             - @validator
             - @lock.manager
             - @generator
+            - @event_dispatcher
 
     lock.manager:
         class: AppBundle\Manager\LockManager

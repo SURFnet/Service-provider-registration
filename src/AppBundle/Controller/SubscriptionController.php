@@ -59,6 +59,10 @@ class SubscriptionController extends Controller
     {
         $subscription = $this->getSubscription($id);
 
+        if (!$subscription->isDraft()) {
+            throw new \InvalidArgumentException('(auto)save is only allowed for drafts');
+        }
+
         $form = $this->getForm($subscription);
 
         $form->handleRequest($request);
@@ -231,8 +235,7 @@ class SubscriptionController extends Controller
 
         $this->get('subscription.manager')->updateSubscription($subscription);
 
-        // @todo:
-        // $this->get('mail.manager')->sendFinishedNotification($subscription);
+        $this->get('mail.manager')->sendPublishedNotification($subscription);
 
         return $this->redirect($this->generateUrl('thanks', array('id' => $id)));
     }

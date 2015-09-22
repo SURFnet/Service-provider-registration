@@ -112,6 +112,14 @@ class MailManager
     /**
      * @param Subscription $subscription
      */
+    public function sendPublishedNotification(Subscription $subscription)
+    {
+        // @todo: implement
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
     public function sendFinishedNotification(Subscription $subscription)
     {
         $message = \Swift_Message::newInstance()

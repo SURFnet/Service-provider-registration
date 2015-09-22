@@ -3,12 +3,18 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Event\SubscriptionEvent;
 use AppBundle\Metadata\Generator;
+use AppBundle\SubscriptionEvents;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\ValidatorInterface;
 
+/**
+ * Class SubscriptionManager
+ */
 class SubscriptionManager
 {
     /**
@@ -32,24 +38,32 @@ class SubscriptionManager
     private $lockManager;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * Constructor
      *
-     * @param EntityManager $entityManager
-     * @param ValidatorInterface $validator
-     * @param LockManager $lockManager
-     * @param Generator $generator
+     * @param EntityManager            $entityManager
+     * @param ValidatorInterface       $validator
+     * @param LockManager              $lockManager
+     * @param Generator                $generator
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         EntityManager $entityManager,
         ValidatorInterface $validator,
         LockManager $lockManager,
-        Generator $generator
+        Generator $generator,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->em = $entityManager;
         $this->repo = $entityManager->getRepository('AppBundle:Subscription');
         $this->validator = $validator;
         $this->lockManager = $lockManager;
         $this->generator = $generator;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -61,6 +75,11 @@ class SubscriptionManager
      */
     public function getSubscription($id, $checkStatus = false, $checkLock = false)
     {
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::PRE_READ,
+            new SubscriptionEvent($id)
+        );
+
         $subscription = $this->repo->find($id);
 
         if (empty($subscription)) {
@@ -93,6 +112,11 @@ class SubscriptionManager
     {
         $this->em->persist($subscription);
         $this->em->flush($subscription);
+
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::POST_WRITE,
+            new SubscriptionEvent($subscription->getId(), $subscription)
+        );
     }
 
     /**
@@ -101,6 +125,11 @@ class SubscriptionManager
     public function updateSubscription(Subscription $subscription)
     {
         $this->em->flush($subscription);
+
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::POST_WRITE,
+            new SubscriptionEvent($subscription->getId(), $subscription)
+        );
     }
 
     /**
