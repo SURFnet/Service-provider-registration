@@ -23,7 +23,8 @@ class JanusSyncService
     {
         // Ignore Draft Connection Requests.
         if ($request->isDraft()) {
-            return;
+            // @todo turn me back on.
+            //return;
         }
 
         // Find the entityId in Janus.
