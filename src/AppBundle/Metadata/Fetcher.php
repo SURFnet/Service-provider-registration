@@ -40,13 +40,13 @@ class Fetcher
             $xml = $this->guzzle->get($url, null, array('timeout' => 10, 'verify' => false))->send()->xml();
             $xml = $xml->asXML();
         } catch (CurlException $e) {
-            $this->logger->addInfo('Metadata CURL exception', $e);
+            $this->logger->addInfo('Metadata CURL exception', array('e' => $e));
 
             $curlError = ' (' . $this->getCurlErrorDescription($e->getErrorNo()) . ').';
 
             throw new \InvalidArgumentException('Failed retrieving the metadata' . $curlError);
         } catch (\Exception $e) {
-            $this->logger->addInfo('Metadata exception', $e);
+            $this->logger->addInfo('Metadata exception', array('e' => $e));
             throw new \InvalidArgumentException('Failed retrieving the metadata.');
         }
 
