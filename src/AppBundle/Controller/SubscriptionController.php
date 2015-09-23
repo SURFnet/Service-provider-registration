@@ -312,8 +312,8 @@ class SubscriptionController extends Controller
 
         $this->get('subscription.manager')->updateSubscription($subscription);
 
-        $this->get('mail.manager')->sendFinishedNotification($subscription);
-        $this->get('mail.manager')->sendFinishedConfirmation($subscription);
+        $this->get('mail.manager')->sendPublishedNotification($subscription);
+        $this->get('mail.manager')->sendPublishedConfirmation($subscription);
 
         $this->addFlash(
             'info',
