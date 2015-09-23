@@ -9,11 +9,14 @@ use AppBundle\SubscriptionEvents;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\ValidatorInterface;
 
 /**
  * Class SubscriptionManager
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SubscriptionManager
 {
@@ -152,20 +155,34 @@ class SubscriptionManager
     }
 
     /**
-     * @param Subscription $subscription
-     */
-    public function detach(Subscription $subscription)
-    {
-        $this->em->detach($subscription);
-    }
-
-    /**
-     * @param Subscription $subscription
+     * @param string           $id
+     * @param SessionInterface $session
      *
      * @return Subscription
      */
-    public function merge(Subscription $subscription)
+    public function getSubscriptionFromSession($id, SessionInterface $session)
     {
+        $sessionId = 'subscription-' . $id;
+
+        $subscription = $session->get($sessionId);
+
+        if (!$subscription instanceof Subscription) {
+            throw new \InvalidArgumentException('Subscription not found in session');
+        }
+
         return $this->em->merge($subscription);
+    }
+
+    /**
+     * @param Subscription     $subscription
+     * @param SessionInterface $session
+     */
+    public function storeSubscriptionInSession(Subscription $subscription, SessionInterface $session)
+    {
+        $sessionId = 'subscription-' . $subscription->getId();
+
+        $this->em->detach($subscription);
+
+        $session->set($sessionId, $subscription);
     }
 }

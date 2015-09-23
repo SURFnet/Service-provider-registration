@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * Class FormController
  *
  * @Route("/subscription")
+ *
+ * @todo: some actions are different only based on the template.. refactor this
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  */
 class SubscriptionController extends Controller
 {
@@ -165,7 +168,7 @@ class SubscriptionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($subscription->isPublished()) {
-                $this->storeSubscriptionInSession($subscription, $request->getSession());
+                $this->get('subscription.manager')->storeSubscriptionInSession($subscription, $request->getSession());
 
                 return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
             }
@@ -274,7 +277,7 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
-        $subscription = $this->getSubscriptionFromSession($id, $request->getSession(), false);
+        $subscription = $this->get('subscription.manager')->getSubscriptionFromSession($id, $request->getSession());
 
         if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
@@ -304,7 +307,7 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
-        $subscription = $this->getSubscriptionFromSession($id, $request->getSession());
+        $subscription = $this->get('subscription.manager')->getSubscriptionFromSession($id, $request->getSession());
 
         if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
@@ -437,42 +440,5 @@ class SubscriptionController extends Controller
         $this->get('translator')->setLocale($subscription->getLocale());
 
         return $subscription;
-    }
-
-    /**
-     * @param string           $id
-     * @param SessionInterface $session
-     * @param bool             $clearSession
-     *
-     * @return Subscription
-     */
-    private function getSubscriptionFromSession($id, SessionInterface $session, $clearSession = true)
-    {
-        $sessionId = 'subscription-' . $id;
-
-        $subscription = $session->get($sessionId);
-
-        if ($clearSession) {
-            $session->set($sessionId, null);
-        }
-
-        if (!$subscription instanceof Subscription) {
-            throw $this->createNotFoundException('Subscription not found in session');
-        }
-
-        return $this->get('subscription.manager')->merge($subscription);
-    }
-
-    /**
-     * @param Subscription     $subscription
-     * @param SessionInterface $session
-     */
-    private function storeSubscriptionInSession(Subscription $subscription, SessionInterface $session)
-    {
-        $sessionId = 'subscription-' . $subscription->getId();
-
-        $this->get('subscription.manager')->detach($subscription);
-
-        $session->set($sessionId, $subscription);
     }
 }
