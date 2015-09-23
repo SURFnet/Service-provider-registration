@@ -10,7 +10,7 @@ use Monolog\Logger;
 /**
  * Class Fetcher
  */
-class Fetcher extends MetadataUtil
+class Fetcher
 {
     /**
      * @var Client
@@ -21,14 +21,12 @@ class Fetcher extends MetadataUtil
      * Constructor
      *
      * @param Client $guzzle
-     * @param Cache  $cache
      * @param Logger $logger
      */
-    public function __construct(Client $guzzle, Cache $cache, Logger $logger)
+    public function __construct(Client $guzzle, Logger $logger)
     {
         $this->guzzle = $guzzle;
-
-        parent::__construct($cache, $logger);
+        $this->logger = $logger;
     }
 
     /**
@@ -42,13 +40,13 @@ class Fetcher extends MetadataUtil
             $xml = $this->guzzle->get($url, null, array('timeout' => 10, 'verify' => false))->send()->xml();
             $xml = $xml->asXML();
         } catch (CurlException $e) {
-            $this->log('Metadata CURL exception', $e);
+            $this->logger->addInfo('Metadata CURL exception', $e);
 
             $curlError = ' (' . $this->getCurlErrorDescription($e->getErrorNo()) . ').';
 
             throw new \InvalidArgumentException('Failed retrieving the metadata' . $curlError);
         } catch (\Exception $e) {
-            $this->log('Metadata exception', $e);
+            $this->logger->addInfo('Metadata exception', $e);
             throw new \InvalidArgumentException('Failed retrieving the metadata.');
         }
 
