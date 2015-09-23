@@ -166,6 +166,9 @@ class GridConfiguration
                 if ($row->getField('archived') === true) {
                     return null;
                 }
+                if ($row->getField('status') !== Subscription::STATE_FINISHED) {
+                    return null;
+                }
 
                 return $action;
             }
