@@ -10,6 +10,10 @@
     {% include 'subscription/partials/proplist.html.twig' %}
 
     <a href="{{ path('form', {id: subscription.id}) }}" class="btn btn-default">
-        {{ 'overview.update.button.ok'|trans }}
+        {{ 'overview.update.button.cancel'|trans }}
+    </a>
+
+    <a href="{{ path('confirm_update', {id: subscription.id}) }}" class="btn btn-primary">
+        {{ 'overview.update.button.confirm'|trans }}
     </a>
 {% endblock %}

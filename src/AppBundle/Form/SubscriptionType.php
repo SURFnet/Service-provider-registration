@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -24,11 +25,13 @@ class SubscriptionType extends AbstractType
     private $parser;
 
     /**
-     * @param Parser $parser
+     * @param Parser           $parser
+     * @param SessionInterface $session
      */
-    public function __construct(Parser $parser)
+    public function __construct(Parser $parser, SessionInterface $session)
     {
         $this->parser = $parser;
+        $this->session = $session;
     }
 
     /**
@@ -80,25 +83,28 @@ class SubscriptionType extends AbstractType
             return;
         }
 
+        $metadataUrl = $subscription['metadataUrl'];
+
         /** @var Subscription $orgSubscription */
         $orgSubscription = $event->getForm()->getData();
 
-        $metadataUrl = $subscription['metadataUrl'];
-        $orgMetadataUrl = $orgSubscription->getMetadataUrl();
+        $sessionCacheId = $orgSubscription->getId() . '-metadataUrl';
+
+        $previousMetadataUrl = $this->session->get($sessionCacheId, $orgSubscription->getMetadataUrl());
+        $this->session->set($sessionCacheId, $metadataUrl);
 
         $metadata = new Metadata();
 
         try {
-            if ($metadataUrl != $orgMetadataUrl) {
+            // Only if the submitted url differs from the previously validated url, retrieve the metadata
+            if ($metadataUrl != $previousMetadataUrl) {
                 $metadata = $this->parser->parse($metadataUrl);
-            } else {
-                $metadata = $this->getOriginalMetadata($orgSubscription, $subscription);
+                $event->setData($this->mapMetadataToFormData($subscription, $metadata));
             }
         } catch (\InvalidArgumentException $e) {
             // Exceptions are deliberately ignored because they are caught by the validator
+            $event->setData($this->mapMetadataToFormData($subscription, $metadata));
         }
-
-        $event->setData($this->mapMetadataToFormData($subscription, $metadata));
     }
 
     /**

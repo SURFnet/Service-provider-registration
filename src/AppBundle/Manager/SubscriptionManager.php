@@ -150,4 +150,22 @@ class SubscriptionManager
     {
         return count($this->validator->validate($subscription)) === 0;
     }
+
+    /**
+     * @param Subscription $subscription
+     */
+    public function detach(Subscription $subscription)
+    {
+        $this->em->detach($subscription);
+    }
+
+    /**
+     * @param Subscription $subscription
+     *
+     * @return Subscription
+     */
+    public function merge(Subscription $subscription)
+    {
+        return $this->em->merge($subscription);
+    }
 }
