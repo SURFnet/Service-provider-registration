@@ -4,7 +4,6 @@ namespace AppBundle\Manager;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Event\SubscriptionEvent;
-use AppBundle\Metadata\Generator;
 use AppBundle\SubscriptionEvents;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
