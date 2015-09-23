@@ -15,7 +15,9 @@ use Symfony\Component\Validator\ExecutionContextInterface;
  * Class Subscription
  *
  * @ORM\Entity
- * @GRID\Source(columns="id, ticketNo, contact, created, updated, status")
+ * @GRID\Source(
+ *      columns="id, ticketNo, contact, created, updated, status, archived"
+ * )
  *
  * @todo: spread props over more classes
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -47,9 +49,25 @@ class Subscription
     private $locale = 'en';
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     * @GRID\Column(
+     *      filter="select",
+     *      selectFrom="values",
+     *      values={false="No",true="Yes"}
+     * )
+     */
+    private $archived = false;
+
+    /**
      * @var int
      * @ORM\Column(type="integer")
-     * @GRID\Column(operatorsVisible=false, filter="select", selectFrom="values", values={0="Draft",1="Published",2="Finished"})
+     * @GRID\Column(
+     *      operatorsVisible=false,
+     *      filter="select",
+     *      selectFrom="values",
+     *      values={0="Draft",1="Published",2="Finished"}
+     * )
      * @Assert\NotBlank()
      */
     private $status;
@@ -1089,5 +1107,12 @@ class Subscription
             'technicalContact.email', // @todo: at email path??
             'The technical contact should be different from the administrative contact.'
         );
+    }
+
+    public function archive()
+    {
+        $this->archived = true;
+
+        return $this;
     }
 }

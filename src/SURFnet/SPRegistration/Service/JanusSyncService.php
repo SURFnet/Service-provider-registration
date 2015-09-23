@@ -23,8 +23,7 @@ class JanusSyncService
     {
         // Ignore Draft Connection Requests.
         if ($request->isDraft()) {
-            // @todo turn me back on.
-            //return;
+            return;
         }
 
         // Find the entityId in Janus.
@@ -74,7 +73,7 @@ class JanusSyncService
             $subscription
         );
 
-        $this->repository->updateSubscription($subscription);
+        $this->repository->updateSubscription($subscription, false);
     }
 
     /**

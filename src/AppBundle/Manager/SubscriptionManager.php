@@ -69,12 +69,18 @@ class SubscriptionManager
      *
      * @return Subscription
      */
-    public function getSubscription($id, $checkStatus = false, $checkLock = false)
-    {
-        $this->dispatcher->dispatch(
-            SubscriptionEvents::PRE_READ,
-            new SubscriptionEvent($id)
-        );
+    public function getSubscription(
+        $id,
+        $checkStatus = false,
+        $checkLock = false,
+        $dispatch = true
+    ) {
+        if ($dispatch) {
+            $this->dispatcher->dispatch(
+                SubscriptionEvents::PRE_READ,
+                new SubscriptionEvent($id)
+            );
+        }
 
         $subscription = $this->repo->find($id);
 
@@ -98,7 +104,10 @@ class SubscriptionManager
      */
     public function getDraftSubscriptions()
     {
-        return $this->repo->findBy(array('status' => Subscription::STATE_DRAFT));
+        return $this->repo->findBy(array(
+            'status' => Subscription::STATE_DRAFT,
+            'archived' => false,
+        ));
     }
 
     /**
@@ -117,10 +126,17 @@ class SubscriptionManager
 
     /**
      * @param Subscription $subscription
+     * @param bool $dispatch
      */
-    public function updateSubscription(Subscription $subscription)
-    {
+    public function updateSubscription(
+        Subscription $subscription,
+        $dispatch = true
+    ) {
         $this->em->flush($subscription);
+
+        if (!$dispatch) {
+            return;
+        }
 
         $this->dispatcher->dispatch(
             SubscriptionEvents::POST_WRITE,
@@ -159,7 +175,9 @@ class SubscriptionManager
             ->select('count(subscription.id)')
             ->from('AppBundle:Subscription', 'subscription')
             ->where('subscription.status = :status')
+            ->andWhere('subscription.archived = :archived')
             ->setParameter('status', $status)
+            ->setParameter('archived', false)
             ->getQuery()
             ->getSingleScalarResult();
     }

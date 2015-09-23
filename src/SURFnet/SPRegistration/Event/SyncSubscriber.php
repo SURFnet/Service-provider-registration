@@ -27,7 +27,10 @@ class SyncSubscriber implements EventSubscriberInterface
 
         if (!$subscription) {
             $subscription = $this->subscriptionRepository->getSubscription(
-                $e->getSubscriptionId()
+                $e->getSubscriptionId(),
+                false,
+                false,
+                false
             );
         }
 

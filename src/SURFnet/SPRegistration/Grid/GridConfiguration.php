@@ -46,6 +46,9 @@ class GridConfiguration
         $grid->setRouteUrl($routeUrl);
 
         $grid->setDefaultOrder('created', 'desc');
+        $grid->setDefaultFilters(array(
+            'archived' => false,
+        ));
         $grid->setLimits(array(5 => 5, 10 => 10, 15 => 15, 25 => 25, 50 => 50, 99999 => 'all'));
 
         $grid->setActionsColumnTitle('');
@@ -152,6 +155,18 @@ class GridConfiguration
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
                 if ($row->getField('status') !== Subscription::STATE_FINISHED) {
+                    return null;
+                }
+
+                return $action;
+            }
+        );
+        $grid->addRowAction($rowAction);
+
+        $rowAction = new RowAction('archive', 'admin.subscription.archive');
+        $rowAction->manipulateRender(
+            function (RowAction $action, Row $row) {
+                if ($row->getField('archived') === true) {
                     return null;
                 }
 

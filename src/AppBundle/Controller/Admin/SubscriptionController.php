@@ -169,6 +169,28 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
+     * @Route("/{id}/archive", name="admin.subscription.archive")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function archiveAction($id)
+    {
+        $subscription = $this->get('subscription.manager')->getSubscription($id);
+
+        if (empty($subscription)) {
+            throw $this->createNotFoundException();
+        }
+
+        $subscription->archive();
+
+        $this->get('subscription.manager')->updateSubscription($subscription);
+
+        return $this->redirect($this->generateUrl('admin.subscription.overview'));
+    }
+
+    /**
      * @Route("/janus/{eid}", name="admin.subscription.janus")
      *
      * @return Response
