@@ -14,7 +14,7 @@ final class ArpMapper
 {
     /**
      * @param Subscription $request
-     * @return null|ArpAttributes
+     * @return ArpAttributes
      */
     public function mapRequestToArpAttributes(Subscription $request)
     {
