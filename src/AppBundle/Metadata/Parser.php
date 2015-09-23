@@ -82,7 +82,7 @@ class Parser
         $metadata = new Metadata();
         $metadata->entityId = (string)$responseXml['entityID'];
 
-        $children = $responseXml->children(SAML2_Const::NS_SAML);
+        $children = $responseXml->children(SAML2_Const::NS_MD);
         $descriptor = $children->SPSSODescriptor;
         $contactPersons = $children->ContactPerson;
 
