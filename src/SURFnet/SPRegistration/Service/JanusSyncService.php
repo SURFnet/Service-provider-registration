@@ -44,7 +44,7 @@ class JanusSyncService
     }
 
     /**
-     *
+     * @param Subscription $request
      */
     private function insertInJanus(Subscription $request)
     {
