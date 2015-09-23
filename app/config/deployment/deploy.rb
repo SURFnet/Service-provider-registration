@@ -1,4 +1,4 @@
-set :stages,        %w(production development)
+set :stages,        %w(production staging development)
 set :default_stage, "production"
 set :stage_dir,     "app/config/deployment"
 require 'capistrano/ext/multistage'
