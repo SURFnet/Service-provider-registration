@@ -150,18 +150,4 @@ class SubscriptionManager
     {
         return count($this->validator->validate($subscription)) === 0;
     }
-
-    /**
-     * @param Subscription $subscription
-     *
-     * @return string
-     */
-    public function generateMetadata(Subscription $subscription)
-    {
-        if (!$subscription->isFinished()) {
-            throw new \InvalidArgumentException('Subscription should be finished before generating the Metadata.');
-        }
-
-        return $this->generator->generate($subscription);
-    }
 }
