@@ -49,9 +49,6 @@ class CertificateFetcher
             throw new \InvalidArgumentException('Unable to parse SSL certificate.');
         }
 
-        // Temp. disabled caching
-        // $this->cache->save('cert-' . $url, $cert, 60 * 60 * 24);
-
         return $cert;
     }
 }
