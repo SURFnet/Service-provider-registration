@@ -14,7 +14,7 @@ class AttributesMetadataRepository
     public function findAll()
     {
         return json_decode(
-            file_get_contents($this->rootDir . '/Resources/attributes.json'),
+            file_get_contents($this->rootDir . '/Resources/attributes.json')
         );
     }
 }
