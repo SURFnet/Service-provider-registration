@@ -75,15 +75,12 @@ class SubscriptionManager
     public function getSubscription(
         $id,
         $checkStatus = false,
-        $checkLock = false,
-        $dispatch = true
+        $checkLock = false
     ) {
-        if ($dispatch) {
-            $this->dispatcher->dispatch(
-                SubscriptionEvents::PRE_READ,
-                new SubscriptionEvent($id)
-            );
-        }
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::PRE_READ,
+            new SubscriptionEvent($id)
+        );
 
         $subscription = $this->repo->find($id);
 
@@ -129,17 +126,9 @@ class SubscriptionManager
 
     /**
      * @param Subscription $subscription
-     * @param bool $dispatch
      */
-    public function updateSubscription(
-        Subscription $subscription,
-        $dispatch = true
-    ) {
+    public function updateSubscription(Subscription $subscription) {
         $this->em->flush($subscription);
-
-        if (!$dispatch) {
-            return;
-        }
 
         $this->dispatcher->dispatch(
             SubscriptionEvents::POST_WRITE,

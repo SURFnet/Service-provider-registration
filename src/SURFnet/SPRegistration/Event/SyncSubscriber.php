@@ -18,17 +18,32 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class SyncSubscriber implements EventSubscriberInterface
 {
+    private $syncing = false;
+
     /**
      * @param SubscriptionEvent $e
      */
     public function sync(SubscriptionEvent $e)
     {
-        $subscription = $e->getSubscription();
+        if ($this->syncing) {
+            return;
+        }
+        $this->syncing = true;
 
+        $this->doSync($e->getSubscriptionId(), $e->getSubscription());
+
+        $this->syncing = false;
+    }
+
+    /**
+     * @param string $subscriptionId
+     * @param Subscription|null $subscription
+     */
+    private function doSync($subscriptionId, Subscription $subscription = null)
+    {
         if (!$subscription) {
             $subscription = $this->subscriptionRepository->getSubscription(
-                $e->getSubscriptionId(),
-                false,
+                $subscriptionId,
                 false,
                 false
             );
@@ -55,6 +70,7 @@ class SyncSubscriber implements EventSubscriberInterface
     /**
      * SyncSubscriber constructor.
      * @param JanusSyncService $service
+     * @param SubscriptionManager $subscriptionRepository
      */
     public function __construct(
         JanusSyncService $service,
