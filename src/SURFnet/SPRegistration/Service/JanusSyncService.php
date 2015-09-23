@@ -21,8 +21,8 @@ class JanusSyncService
      */
     public function sync(Subscription $request)
     {
-        // Ignore Draft Connection Requests.
-        if ($request->isDraft()) {
+        // Ignore Requests that are not published.
+        if (!$request->isPublished()) {
             return;
         }
 
