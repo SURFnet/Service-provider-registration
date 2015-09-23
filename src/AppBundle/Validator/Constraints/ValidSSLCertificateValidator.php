@@ -4,6 +4,7 @@ namespace AppBundle\Validator\Constraints;
 use AppBundle\Entity\Subscription;
 use AppBundle\Metadata\CertificateFetcher;
 use AppBundle\Metadata\CertificateParser;
+use InvalidArgumentException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -87,9 +88,13 @@ class ValidSSLCertificateValidator extends ConstraintValidator
 
         try {
             $acsCert = $this->fetcher->fetch($acsLocation);
-        } catch (\InvalidArgumentException $e) {
-            $this->context->addViolation('Unable to retrieve SSL certificate of ACSLocation.');
+        } catch (InvalidArgumentException $e) {
+            $this->context->addViolation('ACSLocation unreachable or invalid cert found.');
 
+            return;
+        }
+
+        if (!$acsCert) {
             return;
         }
 
