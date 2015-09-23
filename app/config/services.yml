@@ -12,7 +12,7 @@ services:
 
     fetcher:
         class: AppBundle\Metadata\Fetcher
-        arguments: [@guzzle.client, @cache, @monolog.logger.metadata]
+        arguments: [@guzzle.client, @monolog.logger.metadata]
 
     parser:
         class: AppBundle\Metadata\Parser
