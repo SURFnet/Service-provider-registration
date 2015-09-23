@@ -19,6 +19,12 @@ services:
             - @cache
             - @monolog.logger.metadata
 
+    validator.metadata:
+        class: AppBundle\Validator\Constraints\ValidMetadataValidator
+        arguments: [@parser]
+        tags:
+            - { name: validator.constraint_validator, alias: metadata }
+
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
         arguments: [@cert.fetcher, @cert.parser]
