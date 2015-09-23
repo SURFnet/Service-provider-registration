@@ -148,113 +148,6 @@ class SubscriptionType extends AbstractType
     }
 
     /**
-     * @param Subscription $subscription
-     * @param array        $formData
-     *
-     * @return Metadata
-     */
-    private function getOriginalMetadata(Subscription $subscription, array $formData)
-    {
-        $metadata = new Metadata();
-        $metadata->acsLocation = $subscription->getAcsLocation();
-        $metadata->entityId = $subscription->getEntityId();
-        $metadata->certificate = $subscription->getCertificate();
-
-        foreach ($this->getProps() as $key => $prop) {
-            $metadata->$key = array_key_exists($prop, $formData) ? $formData[$prop] : $subscription->{'get' . ucfirst(
-                $prop
-            )}();
-        }
-
-        foreach ($this->getContacts() as $contact) {
-            $metadata->$contact = $this->getContactData($subscription, $formData, $contact);
-        }
-
-        foreach ($this->getAttributes() as $attribute) {
-            $metadata->$attribute = $this->getAttributeData($subscription, $formData, $attribute);
-        }
-
-        return $metadata;
-    }
-
-    /**
-     * @param Subscription $subscription
-     * @param array        $formData
-     * @param string       $type
-     *
-     * @return Contact
-     */
-    private function getContactData(Subscription $subscription, array $formData, $type)
-    {
-        /** @var Contact $orgContact */
-        $orgContact = $subscription->{'get' . ucfirst($type)}();
-
-        if ($orgContact instanceof Contact) {
-            $contact = clone $orgContact;
-        } else {
-            $contact = new Contact();
-        }
-
-        if (array_key_exists($type, $formData)) {
-            $formData = $formData[$type];
-
-            if (array_key_exists('firstName', $formData)) {
-                $contact->setFirstName($formData['firstName']);
-            }
-
-            if (array_key_exists('lastName', $formData)) {
-                $contact->setLastName($formData['lastName']);
-            }
-
-            if (array_key_exists('email', $formData)) {
-                $contact->setEmail($formData['email']);
-            }
-
-            if (array_key_exists('phone', $formData)) {
-                $contact->setPhone($formData['phone']);
-            }
-        }
-
-        return $contact;
-    }
-
-    /**
-     * @param Subscription $subscription
-     * @param array        $formData
-     * @param string       $type
-     *
-     * @return Attribute
-     */
-    private function getAttributeData(Subscription $subscription, array $formData, $type)
-    {
-        /** @var Attribute $orgAttribute */
-        $orgAttribute = $subscription->{'get' . ucfirst($type)}();
-
-        // Only use the original values when 'validating' the metadata
-        $onlyMetadataSubmitted = count($formData) === 1;
-
-        if ($orgAttribute instanceof Attribute && $onlyMetadataSubmitted) {
-            $attribute = clone $orgAttribute;
-        } else {
-            $attribute = new Attribute();
-        }
-
-        if (array_key_exists($type, $formData)) {
-            $formData = $formData[$type];
-
-            if (array_key_exists('requested', $formData)) {
-                $attribute->setRequested(true);
-            }
-
-            if (array_key_exists('motivation', $formData)) {
-                $attribute->setMotivation($formData['motivation']);
-            }
-        }
-
-        return $attribute;
-    }
-
-    /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -272,21 +165,6 @@ class SubscriptionType extends AbstractType
     public function getName()
     {
         return 'subscription';
-    }
-
-    /**
-     * @return array
-     */
-    private function getProps()
-    {
-        return array(
-            'logoUrl'          => 'logoUrl',
-            'nameEn'           => 'nameEn',
-            'nameNl'           => 'nameNl',
-            'descriptionEn'    => 'descriptionEn',
-            'descriptionNl'    => 'descriptionNl',
-            'applicationUrlEn' => 'applicationUrl',
-        );
     }
 
     /**
