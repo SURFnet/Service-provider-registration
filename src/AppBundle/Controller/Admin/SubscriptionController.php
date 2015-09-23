@@ -105,26 +105,6 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
-     * @Route("/{id}/delete", name="admin.subscription.delete")
-     *
-     * @param string $id
-     *
-     * @return Response
-     */
-    public function deleteAction($id)
-    {
-        $subscription = $this->get('subscription.manager')->getSubscription($id);
-
-        if (empty($subscription)) {
-            throw $this->createNotFoundException();
-        }
-
-        $this->get('subscription.manager')->deleteSubscription($subscription);
-
-        return $this->redirect($this->generateUrl('admin.subscription.overview'));
-    }
-
-    /**
      * @Route("/{id}/finish", name="admin.subscription.finish")
      *
      * @param string $id

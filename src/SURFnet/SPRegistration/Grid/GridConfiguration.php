@@ -124,9 +124,6 @@ class GridConfiguration
         $rowAction = new RowAction('view', 'admin.subscription.view');
         $grid->addRowAction($rowAction);
 
-        $rowAction = new RowAction('delete', 'admin.subscription.delete', true);
-        $grid->addRowAction($rowAction);
-
         $rowAction = new RowAction('edit', 'form', false, '_blank');
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
