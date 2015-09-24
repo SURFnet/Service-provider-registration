@@ -19,6 +19,8 @@ use XMLSecurityDSig;
  */
 class Parser
 {
+    const NS_LANG = 'http://www.w3.org/XML/1998/namespace';
+
     /**
      * @var Fetcher
      */
@@ -155,7 +157,7 @@ class Parser
         $metadata->logoUrl = (string)$ui->Logo;
 
         foreach ($ui->Description as $description) {
-            $lang = $description->attributes();
+            $lang = $description->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
@@ -170,7 +172,7 @@ class Parser
         }
 
         foreach ($ui->DisplayName as $name) {
-            $lang = $name->attributes();
+            $lang = $name->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
@@ -185,7 +187,7 @@ class Parser
         }
 
         foreach ($ui->InformationURL as $url) {
-            $lang = $url->attributes();
+            $lang = $url->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
