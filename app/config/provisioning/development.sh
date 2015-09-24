@@ -1,6 +1,9 @@
+#!/usr/bin/env bash
 yum -y install php-apc
 yum -y install php-mcrypt
 yum -y install php-mbstring
+yum -y remove php-pecl-memcached
+yum -y install php-pecl-memcache
 
 yum -y install npm
 npm install -g less
@@ -29,7 +32,7 @@ mkdir -p app/data
 
 rm -rf app/cache/prod* app/cache/dev*
 
-setfacl -R -m u:vagrant:rwX app/cache app/logs app/data /dev/shm && sudo setfacl -dR -m u:vagrant:rwX app/cache app/logs app/data /dev/shm
+setfacl -R -m u:vagrant:rwX /dev/shm && sudo setfacl -dR -m u:vagrant:rwX /dev/shm
 
 cp /vagrant/app/config/provisioning/development.parameters.yml /vagrant/app/config/parameters.yml
 

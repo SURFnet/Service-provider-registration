@@ -47,8 +47,8 @@
     <target name="jshint-ci">
         <exec executable="node" failonerror="true" >
             <arg value="bin/jshint"/>
-            <arg value="--config=.jshintrc"/>
-                        <arg value="web/js"/>
+            <arg value="--config=tools/jshint/.jshintrc"/>
+            <arg value="web/js"/>
         </exec>
     </target>
 
@@ -65,7 +65,7 @@
         <exec executable="bin/phpmd" failonerror="true">
             <arg path="src"/>
             <arg value="xml"/>
-            <arg value="phpmd.xml"/>
+            <arg value="tools/phpmd/phpmd.xml"/>
         </exec>
     </target>
 
@@ -73,7 +73,7 @@
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec executable="bin/phpcs" failonerror="true">
             <arg value="--report=full"/>
-            <arg value="--standard=phpcs.xml"/>
+            <arg value="--standard=tools/phpcs/ruleset.xml"/>
             <!-- Don't show warnings-->
             <arg value="--warning-severity=0"/>
             <arg value="--extensions=php"/>

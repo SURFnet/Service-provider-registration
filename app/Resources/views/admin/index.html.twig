@@ -1,0 +1,15 @@
+{% extends "admin/base.html.twig" %}
+
+{% block body %}
+    <div id="per-status-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
+    <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
+    <script src="{{ asset('js/highcharts.theme.light.js') }}"></script>
+    <script type="text/javascript">
+        {{ chart(chart) }}
+    </script>
+{% endblock %}

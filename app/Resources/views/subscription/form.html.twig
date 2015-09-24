@@ -6,7 +6,17 @@
         <strong>{{ 'form.lock.title'|trans }}</strong> {{ 'form.lock.description'|trans }}
     </div>
 
-    <form id="form" method="post" {{ form_enctype(form) }} class="form-horizontal"
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+        <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endfor %}
+
+    <form id="form" method="post" {{ form_enctype(form) }}
+          class="form-horizontal{% if (subscription.isDraft) %} autosave{% endif %}"
           data-save="{{ path('save', {id: subscription.id}) }}"
           data-lock="{{ path('lock', {id: subscription.id}) }}">
         {{ bootstrap_set_style('horizontal') }}
@@ -22,7 +32,11 @@
 
         <div class="tab-content">
             <div class="tab-pane fade in active" id="info">
-                <p>{{ 'form.tab.intro.info'|trans|raw }}</p>
+                {% if subscription.isDraft %}
+                <p>{{ 'form.tab.intro.info_draft'|trans|raw }}</p>
+                {% else %}
+                <p>{{ 'form.tab.intro.info_published'|trans|raw }}</p>
+                {% endif %}
 
                 <div class="row">
                     <div class="col-md-offset-10 col-md-2 text-right">
@@ -135,9 +149,19 @@
 
         <div class="form-group">
             <div class="col-md-6">
+                {% if (subscription.isPublished) %}
+                    <button type="submit" class="btn btn-primary" {% if locked %}disabled="disabled"{% endif %}>
+                        {{ 'form.button.update'|trans }}
+                    </button>
+                    <a href="{{ path('overview_finish', {id: subscription.id}) }}">
+                        {{ 'form.button.finish'|trans }}
+                    </a>
+                {% endif %}
+                {% if (subscription.isDraft) %}
                 <button type="submit" class="btn btn-primary" {% if locked %}disabled="disabled"{% endif %}>
-                    {{ 'form.button.finish'|trans }}
+                    {{ 'form.button.publish'|trans }}
                 </button>
+                {% endif %}
                 &nbsp;&nbsp;
                 <span id="status-progress" class="hidden">
                     <i class="fa fa-cog fa-spin"></i> {{ 'form.status.saving'|trans }}

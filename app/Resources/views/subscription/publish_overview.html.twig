@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h2>{{ 'overview.publish.subtitle'|trans }}</h2>
+
+    <p>
+        {{ 'overview.publish.intro'|trans|raw }}
+    </p>
+
+    {% include 'subscription/partials/proplist.html.twig' %}
+
+    <a href="{{ path('form', {id: subscription.id}) }}" class="btn btn-default">
+        {{ 'overview.publish.button.cancel'|trans }}
+    </a>
+
+    <a href="{{ path('confirm_publish', {id: subscription.id}) }}" class="btn btn-primary">
+        {{ 'overview.publish.button.confirm'|trans }}
+    </a>
+{% endblock %}

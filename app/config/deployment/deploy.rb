@@ -1,4 +1,4 @@
-set :stages,        %w(production development)
+set :stages,        %w(production staging development)
 set :default_stage, "production"
 set :stage_dir,     "app/config/deployment"
 require 'capistrano/ext/multistage'
@@ -48,6 +48,16 @@ namespace :symfony do
 end
 
 after "symfony:doctrine:schema:update", "symfony:update_translations"
+
+# Update templates
+namespace :symfony do
+  desc "Updates templates"
+  task :update_templates, :roles => :app, :except => { :no_release => true } do
+    stream "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} app:templates:sync #{console_options}'"
+  end
+end
+
+after "symfony:update_translations", "symfony:update_templates"
 
 # Clean old releases after deploy
 after "deploy", "deploy:cleanup"
