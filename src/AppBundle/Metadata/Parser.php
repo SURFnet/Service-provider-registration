@@ -6,7 +6,6 @@ use AppBundle\Metadata\Exception\ParserException;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
-use Doctrine\Common\Cache\Cache;
 use Monolog\Logger;
 use SAML2_Const;
 use SAML2_XML_mdui_UIInfo;
@@ -16,6 +15,7 @@ use XMLSecurityDSig;
  * Class Parser
  *
  * @todo: this class could use some refactoring
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Parser
 {

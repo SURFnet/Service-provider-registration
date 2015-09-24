@@ -18,12 +18,16 @@ use SURFnet\SPRegistration\Entity\ConnectionRequestTranslator;
  */
 class JanusSyncService
 {
+    /**
+     * @param Subscription $subscription
+     */
     public function pull(Subscription $subscription)
     {
         // Ignore Requests that are not published.
         if (!$subscription->isPublished()) {
             return;
         }
+
         if (!$subscription->getJanusId()) {
             return;
         }
@@ -53,8 +57,7 @@ class JanusSyncService
 
         if (!$subscription->getJanusId()) {
             $this->insertInJanus($subscription);
-        }
-        else {
+        } else {
             $this->updateInJanus($subscription);
         }
     }

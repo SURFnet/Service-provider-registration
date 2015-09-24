@@ -28,15 +28,15 @@ class ValidMetadataValidatorTest extends \Symfony\Component\Validator\Tests\Cons
 
         $fetcher = new \AppBundle\Metadata\Fetcher(
             $guzzle,
-            new \Doctrine\Common\Cache\ArrayCache(),
             new \Monolog\Logger('test', array(new \Monolog\Handler\NullHandler()))
         );
 
+        $rootDir = __DIR__ . '/../../../../app';
         $parser = new \AppBundle\Metadata\Parser(
             $fetcher,
             new \AppBundle\Metadata\CertificateParser(),
-            __DIR__ . '/../../../../app/Resources/schemas/',
-            new \Doctrine\Common\Cache\ArrayCache(),
+            new \AppBundle\Metadata\AttributesMetadataRepository($rootDir),
+            $rootDir . '/Resources/schemas/',
             new \Monolog\Logger('test', array(new \Monolog\Handler\NullHandler()))
         );
 

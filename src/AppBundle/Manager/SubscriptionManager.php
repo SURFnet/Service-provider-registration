@@ -127,7 +127,8 @@ class SubscriptionManager
     /**
      * @param Subscription $subscription
      */
-    public function updateSubscription(Subscription $subscription) {
+    public function updateSubscription(Subscription $subscription)
+    {
         $this->em->flush($subscription);
 
         $this->dispatcher->dispatch(

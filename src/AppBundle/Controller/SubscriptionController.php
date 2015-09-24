@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  *
  * @todo: some actions are different only based on the template.. refactor this
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class SubscriptionController extends Controller
 {
