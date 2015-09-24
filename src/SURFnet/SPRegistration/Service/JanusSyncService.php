@@ -4,6 +4,7 @@ namespace SURFnet\SPRegistration\Service;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Manager\SubscriptionManager;
+use OpenConext\JanusClient\ConnectionRevision;
 use OpenConext\JanusClient\Entity\ConnectionDescriptor;
 use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 use OpenConext\JanusClient\Entity\ConnectionRepository;
@@ -17,10 +18,33 @@ use SURFnet\SPRegistration\Entity\ConnectionRequestTranslator;
  */
 class JanusSyncService
 {
+    public function pull(Subscription $subscription)
+    {
+        // Ignore Requests that are not published.
+        if (!$subscription->isPublished()) {
+            return;
+        }
+        if (!$subscription->getJanusId()) {
+            return;
+        }
+
+        // Otherwise we update our database (cache) with the data from Janus.
+        $connection = $this->janusConnectionRepository->fetchById(
+            $subscription->getJanusId()
+        );
+
+        $subscription = $this->translator->translateFromConnection(
+            $connection,
+            $subscription
+        );
+
+        $this->repository->updateSubscription($subscription);
+    }
+
     /**
      * @param Subscription $subscription
      */
-    public function sync(Subscription $subscription)
+    public function push(Subscription $subscription)
     {
         // Ignore Requests that are not published.
         if (!$subscription->isPublished()) {
@@ -30,9 +54,9 @@ class JanusSyncService
         if (!$subscription->getJanusId()) {
             $this->insertInJanus($subscription);
         }
-
-        // Otherwise we update our database (cache) with the data from Janus.
-        $this->updatedInDatabase($subscription);
+        else {
+            $this->updateInJanus($subscription);
+        }
     }
 
     /**
@@ -46,7 +70,6 @@ class JanusSyncService
             $entityId
         );
 
-
         if ($descriptor) {
             throw new RuntimeException("Entity $entityId already in Janus");
         }
@@ -59,24 +82,21 @@ class JanusSyncService
         );
 
         $subscription->setJanusId($connection->getId());
+
+        $this->repository->updateSubscription($subscription);
     }
 
     /**
      * @param Subscription $subscription
-     * @param ConnectionDescriptor $descriptor
      */
-    private function updatedInDatabase(Subscription $subscription)
+    private function updateInJanus(Subscription $subscription)
     {
-        $connection = $this->janusConnectionRepository->fetchById(
-            $subscription->getJanusId()
+        $this->janusConnectionRepository->update(
+            new NewConnectionRevision(
+                $this->translator->translateToConnection($subscription),
+                'Updated entity from intakeform id: ' . $subscription->getId()
+            )
         );
-
-        $subscription = $this->translator->translateFromConnection(
-            $connection,
-            $subscription
-        );
-
-        $this->repository->updateSubscription($subscription);
     }
 
     /**

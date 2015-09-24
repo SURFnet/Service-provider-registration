@@ -18,42 +18,60 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class SyncSubscriber implements EventSubscriberInterface
 {
-    private $syncing = false;
+    /**
+     * @param SubscriptionEvent $e
+     */
+    public function pull(SubscriptionEvent $e)
+    {
+        $subscriptionRepository = $this->subscriptionRepository;
+        $service = $this->service;
+        $this->whileNotSyncing(function () use ($subscriptionRepository, $service, $e) {
+            $subscriptionId = $e->getSubscriptionId();
+
+            $subscription = $subscriptionRepository->getSubscription(
+                $subscriptionId,
+                false,
+                false
+            );
+
+            if (!$subscription) {
+                return;
+            }
+
+            $service->pull($subscription);
+        });
+    }
 
     /**
      * @param SubscriptionEvent $e
      */
-    public function sync(SubscriptionEvent $e)
+    public function push(SubscriptionEvent $e)
+    {
+        $service = $this->service;
+        $this->whileNotSyncing(function () use ($service, $e) {
+            $subscription = $e->getSubscription();
+
+            if (!$subscription) {
+                return;
+            }
+
+            $service->push($subscription);
+        });
+    }
+
+    /**
+     * @param $fn
+     */
+    public function whileNotSyncing($fn)
     {
         if ($this->syncing) {
             return;
         }
         $this->syncing = true;
 
-        $this->doSync($e->getSubscriptionId(), $e->getSubscription());
+        $fn();
 
         $this->syncing = false;
-    }
-
-    /**
-     * @param string $subscriptionId
-     * @param Subscription|null $subscription
-     */
-    private function doSync($subscriptionId, Subscription $subscription = null)
-    {
-        if (!$subscription) {
-            $subscription = $this->subscriptionRepository->getSubscription(
-                $subscriptionId,
-                false,
-                false
-            );
-        }
-
-        if (!$subscription) {
-            return;
-        }
-
-        $this->service->sync($subscription);
     }
 
     /**
@@ -62,8 +80,8 @@ class SyncSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            SubscriptionEvents::PRE_READ    => 'sync',
-            SubscriptionEvents::POST_WRITE  => 'sync',
+            SubscriptionEvents::PRE_READ    => 'pull',
+            SubscriptionEvents::POST_WRITE  => 'push',
         );
     }
 
@@ -89,4 +107,9 @@ class SyncSubscriber implements EventSubscriberInterface
      * @var SubscriptionManager
      */
     private $subscriptionRepository;
+
+    /**
+     * @var bool
+     */
+    private $syncing = false;
 }

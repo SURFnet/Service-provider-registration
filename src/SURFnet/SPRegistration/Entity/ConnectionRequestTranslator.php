@@ -103,7 +103,10 @@ final class ConnectionRequestTranslator
             $request->getMetadataUrl(),
             '',
             new ConnectionAccess(true),
-            $this->arpMapper->mapRequestToArpAttributes($request)
+            $this->arpMapper->mapRequestToArpAttributes($request),
+            array(),
+            true,
+            $request->getJanusId()
         );
     }
 
