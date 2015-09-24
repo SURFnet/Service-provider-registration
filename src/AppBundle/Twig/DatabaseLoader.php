@@ -5,6 +5,7 @@ namespace AppBundle\Twig;
 use AppBundle\Entity\Template;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\EntityManager;
+use RuntimeException;
 use Twig_ExistsLoaderInterface;
 use Twig_LoaderInterface;
 
@@ -100,6 +101,10 @@ class DatabaseLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         }
 
         $tpl = $this->em->getRepository('AppBundle:Template')->findOneBy(array('name' => $name));
+
+        if (!$tpl) {
+            throw new RuntimeException("Required template not found: '$name''");
+        }
 
         $this->cache->save($cacheId, $tpl, 60 * 60 * 24);
 
