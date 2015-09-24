@@ -24,11 +24,6 @@ class CertificateFetcher
      */
     public function fetch($url)
     {
-        // Temp. disabled caching
-        // if (false !== $cert = $this->cache->fetch('cert-'. $url)) {
-        //     return $cert;
-        // }
-
         $context = stream_context_create(
             array(
                 'ssl'  =>
@@ -53,9 +48,6 @@ class CertificateFetcher
         if (!openssl_x509_export($cont['options']['ssl']['peer_certificate'], $cert, true)) {
             throw new \InvalidArgumentException('Unable to parse SSL certificate.');
         }
-
-        // Temp. disabled caching
-        // $this->cache->save('cert-' . $url, $cert, 60 * 60 * 24);
 
         return $cert;
     }

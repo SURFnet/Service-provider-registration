@@ -1,4 +1,7 @@
 services:
+    attributes.metadata_repository:
+        class: AppBundle\Metadata\AttributesMetadataRepository
+        arguments: [%kernel.root_dir%]
 
     cert.fetcher:
         class: AppBundle\Metadata\CertificateFetcher
@@ -9,15 +12,16 @@ services:
 
     fetcher:
         class: AppBundle\Metadata\Fetcher
-        arguments: [@guzzle.client, @cache, @monolog.logger.metadata]
+        arguments: [@guzzle.client, @monolog.logger.metadata]
 
     parser:
         class: AppBundle\Metadata\Parser
-        arguments: [@fetcher, @cert.parser, %kernel.root_dir%/Resources/schemas/, @cache, @monolog.logger.metadata]
-
-    generator:
-        class: AppBundle\Metadata\Generator
-        arguments: [@fetcher, @cache.metadata, @monolog.logger.metadata]
+        arguments:
+            - @fetcher
+            - @cert.parser
+            - @attributes.metadata_repository
+            - %kernel.root_dir%/Resources/schemas/
+            - @monolog.logger.metadata
 
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator
@@ -33,7 +37,11 @@ services:
 
     subscription.manager:
         class: AppBundle\Manager\SubscriptionManager
-        arguments: [@doctrine.orm.entity_manager, @validator, @lock.manager, @generator]
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @validator
+            - @lock.manager
+            - @event_dispatcher
 
     lock.manager:
         class: AppBundle\Manager\LockManager
@@ -41,7 +49,12 @@ services:
 
     mail.manager:
         class: AppBundle\Manager\MailManager
-        arguments: [@mailer, @templating, @translator, '%mail_from%', '%mail_receiver%']
+        arguments:
+            - @mailer
+            - @templating
+            - @translator
+            - '%mail_from%'
+            - '%mail_receiver%'
 
     menu_builder:
         class: AppBundle\Menu\MenuBuilder
@@ -72,6 +85,95 @@ services:
         class: AppBundle\EventListener\SimpleSAMLAuthListener
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    subscriber.janus_sync:
+        class: SURFnet\SPRegistration\Event\SyncSubscriber
+        arguments: [@janus.sync_service, @subscription.manager]
+        tags:
+            - {name:kernel.event_subscriber}
+
+    janus.sync_service:
+        class: SURFnet\SPRegistration\Service\JanusSyncService
+        arguments:
+            - @subscription.manager
+            - @janus.connection_descriptor_repository
+            - @janus.connection_repository
+            - @janus.connection_translator
+
+    janus.http_client:
+        class: Guzzle\Http\Client
+        arguments:
+            - '%janus_url%'
+            -
+                headers:
+                    User-Agent: SURFnet Service Provider Registration (https://github.com/SURFnet/Service-provider-registration)
+                    Accept: application/json
+                    Content-Type: application/json
+                request.options:
+                    timeout: 10
+                    connect_timeout: 5
+
+    janus.connection_descriptor_assembler:
+        class: OpenConext\JanusClient\Entity\Assembler\ConnectionDescriptorAssembler
+
+    janus.connection_assembler:
+        class: OpenConext\JanusClient\Entity\Assembler\ConnectionAssembler
+
+    janus.connection_disassembler:
+        class: OpenConext\JanusClient\Entity\Assembler\ConnectionDisassembler
+
+    janus.response_status_code_validator:
+        class: OpenConext\JanusClient\ResponseStatusCodeValidator
+        arguments: [@logger]
+
+    janus.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            -
+                - @janus.normalizer
+            -
+                - @janus.encoder
+
+    janus.normalizer:
+        class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
+
+    janus.encoder:
+        class: Symfony\Component\Serializer\Encoder\JsonEncoder
+
+    janus.connection_descriptor_repository:
+        class: OpenConext\JanusClient\Entity\ConnectionDescriptorRepository
+        arguments:
+            - @janus.http_client
+            - @logger
+            - @janus.connection_descriptor_assembler
+            - @janus.serializer
+            - @janus.response_status_code_validator
+
+    janus.connection_repository:
+        class: OpenConext\JanusClient\Entity\ConnectionRepository
+        arguments:
+            - @janus.http_client
+            - @janus.connection_assembler
+            - @janus.connection_disassembler
+            - @janus.serializer
+            - @janus.response_status_code_validator
+
+    janus.connection_translator:
+        class: SURFnet\SPRegistration\Entity\ConnectionRequestTranslator
+        arguments:
+            - @janus.arp_mapper
+            - @janus.contact_mapper
+            - @janus.metadata_mapper
+
+    janus.arp_mapper:
+        class: SURFnet\SPRegistration\Janus\ArpMapper
+        arguments: [@attributes.metadata_repository]
+
+    janus.contact_mapper:
+        class: SURFnet\SPRegistration\Janus\ContactMapper
+
+    janus.metadata_mapper:
+        class: SURFnet\SPRegistration\Janus\MetadataMapper
 
     form.transformer.html_purifier:
         class: Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer

@@ -12,6 +12,19 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ContactType extends AbstractType
 {
     /**
+     * @var bool
+     */
+    private $includeEmail = true;
+
+    /**
+     * @param bool $includeEmail
+     */
+    public function __construct($includeEmail = true)
+    {
+        $this->includeEmail = $includeEmail;
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -19,9 +32,13 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('firstName')
-            ->add('lastName')
-            ->add('email')
-            ->add('phone');
+            ->add('lastName');
+
+        if ($this->includeEmail) {
+            $builder->add('email');
+        }
+
+        $builder->add('phone');
     }
 
     /**

@@ -10,7 +10,7 @@ use Monolog\Logger;
 /**
  * Class Fetcher
  */
-class Fetcher extends MetadataUtil
+class Fetcher
 {
     /**
      * @var Client
@@ -21,14 +21,12 @@ class Fetcher extends MetadataUtil
      * Constructor
      *
      * @param Client $guzzle
-     * @param Cache  $cache
      * @param Logger $logger
      */
-    public function __construct(Client $guzzle, Cache $cache, Logger $logger)
+    public function __construct(Client $guzzle, Logger $logger)
     {
         $this->guzzle = $guzzle;
-
-        parent::__construct($cache, $logger);
+        $this->logger = $logger;
     }
 
     /**
@@ -38,29 +36,19 @@ class Fetcher extends MetadataUtil
      */
     public function fetch($url)
     {
-        // Temp. disabled caching
-        // $cacheId = 'xml-' . $url;
-
-        // if (false !== $xml = $this->cache->fetch($cacheId)) {
-        //     return $xml;
-        // }
-
         try {
             $xml = $this->guzzle->get($url, null, array('timeout' => 10, 'verify' => false))->send()->xml();
             $xml = $xml->asXML();
         } catch (CurlException $e) {
-            $this->log('Metadata CURL exception', $e);
+            $this->logger->addInfo('Metadata CURL exception', array('e' => $e));
 
             $curlError = ' (' . $this->getCurlErrorDescription($e->getErrorNo()) . ').';
 
             throw new \InvalidArgumentException('Failed retrieving the metadata' . $curlError);
         } catch (\Exception $e) {
-            $this->log('Metadata exception', $e);
+            $this->logger->addInfo('Metadata exception', array('e' => $e));
             throw new \InvalidArgumentException('Failed retrieving the metadata.');
         }
-
-        // Temp. disabled caching
-        // $this->cache->save($cacheId, $xml, 60 * 60 * 24);
 
         return $xml;
     }

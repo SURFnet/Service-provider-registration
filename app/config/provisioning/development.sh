@@ -1,6 +1,9 @@
+#!/usr/bin/env bash
 yum -y install php-apc
 yum -y install php-mcrypt
 yum -y install php-mbstring
+yum -y remove php-pecl-memcached
+yum -y install php-pecl-memcache
 
 yum -y install npm
 npm install -g less

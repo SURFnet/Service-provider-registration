@@ -4,12 +4,8 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Form\Admin\SubscriptionType;
-use AppBundle\Model\Contact;
-use APY\DataGridBundle\Grid\Action\RowAction;
-use APY\DataGridBundle\Grid\Grid;
-use APY\DataGridBundle\Grid\Row;
-use APY\DataGridBundle\Grid\Source\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use SURFnet\SPRegistration\Grid\GridConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +34,12 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function gridAction()
     {
-        return $this->buildGrid()->getGridResponse('admin/subscription/grid.html.twig');
+        $configuration = new GridConfiguration();
+        $grid = $configuration->configureGrid(
+            $this->get('grid'),
+            $this->generateUrl('admin.subscription.grid')
+        );
+        return $grid->getGridResponse('admin/subscription/grid.html.twig');
     }
 
     /**
@@ -102,26 +103,6 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
-     * @Route("/{id}/delete", name="admin.subscription.delete")
-     *
-     * @param string $id
-     *
-     * @return Response
-     */
-    public function deleteAction($id)
-    {
-        $subscription = $this->get('subscription.manager')->getSubscription($id);
-
-        if (empty($subscription)) {
-            throw $this->createNotFoundException();
-        }
-
-        $this->get('subscription.manager')->deleteSubscription($subscription);
-
-        return $this->redirect($this->generateUrl('admin.subscription.overview'));
-    }
-
-    /**
      * @Route("/{id}/finish", name="admin.subscription.finish")
      *
      * @param string $id
@@ -144,13 +125,13 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
-     * @Route("/{id}/draft", name="admin.subscription.draft")
+     * @Route("/{id}/archive", name="admin.subscription.archive")
      *
      * @param string $id
      *
      * @return Response
      */
-    public function draftAction($id)
+    public function archiveAction($id)
     {
         $subscription = $this->get('subscription.manager')->getSubscription($id);
 
@@ -158,7 +139,7 @@ class SubscriptionController extends Controller implements SecuredController
             throw $this->createNotFoundException();
         }
 
-        $subscription->draft();
+        $subscription->archive();
 
         $this->get('subscription.manager')->updateSubscription($subscription);
 
@@ -166,120 +147,21 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
-     * @return Grid
+     * @Route("/janus/{eid}", name="admin.subscription.janus")
+     *
+     * @return Response
      */
-    private function buildGrid()
+    public function redirectToJanusAction($eid)
     {
-        $grid = $this->get('grid');
+        $url = $this->container->getParameter('janus_url');
+        $urlParts = parse_url($url);
 
-        $source = new Entity('AppBundle:Subscription');
-        $source->manipulateRow(
-            function (Row $row) {
-                if ($row->getField('status') == 1) {
-                    $row->setClass('success');
-                }
+        $newUrl = $urlParts['scheme'];
+        $newUrl .= '://';
+        $newUrl .= $urlParts['host'];
+        $newUrl .= '/simplesaml/module.php/janus/editentity.php?eid=' . $eid;
 
-                return $row;
-            }
-        );
-        $grid->setSource($source);
 
-        $grid->getColumn('contact')->manipulateRenderCell(
-            function (Contact $contact) {
-                $name = trim($contact->getFirstName() . ' ' . $contact->getLastName());
-
-                $email = $contact->getEmail();
-                if (!empty($email)) {
-                    return $name . ' (' . $email . ')';
-                }
-
-                return $name;
-            }
-        );
-
-        $grid->getColumn('status')->manipulateRenderCell(
-            function ($status) {
-                switch ($status) {
-                    case Subscription::STATE_FINISHED:
-                        return 'Finished';
-
-                    case Subscription::STATE_DRAFT:
-                        return 'Draft';
-
-                    default:
-                        return 'Unknown';
-                }
-            }
-        );
-
-        $this->addRowActions($grid);
-
-        $grid->setId('adminGrid');
-        $grid->setRouteUrl($this->generateUrl('admin.subscription.grid'));
-
-        $grid->setDefaultOrder('created', 'desc');
-        $grid->setLimits(array(5 => 5, 10 => 10, 15 => 15, 25 => 25, 50 => 50, 99999 => 'all'));
-
-        $grid->setActionsColumnTitle('');
-        $grid->setPersistence(true);
-
-        return $grid;
-    }
-
-    private function addRowActions(Grid $grid)
-    {
-        $rowAction = new RowAction('view', 'admin.subscription.view');
-        $grid->addRowAction($rowAction);
-
-        $rowAction = new RowAction('delete', 'admin.subscription.delete', true);
-        $grid->addRowAction($rowAction);
-
-        $rowAction = new RowAction('edit', 'form', false, '_blank');
-        $rowAction->manipulateRender(
-            function (RowAction $action, Row $row) {
-                if ($row->getField('status') == Subscription::STATE_FINISHED) {
-                    return null;
-                }
-
-                return $action;
-            }
-        );
-        $grid->addRowAction($rowAction);
-
-        $rowAction = new RowAction('export', 'export', false, '_blank');
-        $rowAction->manipulateRender(
-            function (RowAction $action, Row $row) {
-                if ($row->getField('status') == Subscription::STATE_DRAFT) {
-                    return null;
-                }
-
-                return $action;
-            }
-        );
-        $grid->addRowAction($rowAction);
-
-        $rowAction = new RowAction('finish', 'admin.subscription.finish');
-        $rowAction->manipulateRender(
-            function (RowAction $action, Row $row) {
-                if ($row->getField('status') !== Subscription::STATE_DRAFT) {
-                    return null;
-                }
-
-                return $action;
-            }
-        );
-        $grid->addRowAction($rowAction);
-
-        $rowAction = new RowAction('draft', 'admin.subscription.draft');
-        $rowAction->manipulateRender(
-            function (RowAction $action, Row $row) {
-                if ($row->getField('status') !== Subscription::STATE_FINISHED) {
-                    return null;
-                }
-
-                return $action;
-            }
-        );
-        $grid->addRowAction($rowAction);
+        return $this->redirect($newUrl);
     }
 }

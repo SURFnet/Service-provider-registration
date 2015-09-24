@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -24,11 +25,13 @@ class SubscriptionType extends AbstractType
     private $parser;
 
     /**
-     * @param Parser $parser
+     * @param Parser           $parser
+     * @param SessionInterface $session
      */
-    public function __construct(Parser $parser)
+    public function __construct(Parser $parser, SessionInterface $session)
     {
         $this->parser = $parser;
+        $this->session = $session;
     }
 
     /**
@@ -38,7 +41,7 @@ class SubscriptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('contact', new ContactType(), array('by_reference' => false))
+            ->add('contact', new ContactType(false), array('by_reference' => false))
             // Tab Metadata
             ->add('metadataUrl', 'url', array('default_protocol' => 'https'))
             ->add('acsLocation', null, array('read_only' => true)) // @todo: these should be disabled, but then validation is harder..
@@ -80,25 +83,28 @@ class SubscriptionType extends AbstractType
             return;
         }
 
+        $metadataUrl = $subscription['metadataUrl'];
+
         /** @var Subscription $orgSubscription */
         $orgSubscription = $event->getForm()->getData();
 
-        $metadataUrl = $subscription['metadataUrl'];
-        $orgMetadataUrl = $orgSubscription->getMetadataUrl();
+        $sessionCacheId = $orgSubscription->getId() . '-metadataUrl';
+
+        $previousMetadataUrl = $this->session->get($sessionCacheId, $orgSubscription->getMetadataUrl());
+        $this->session->set($sessionCacheId, $metadataUrl);
 
         $metadata = new Metadata();
 
         try {
-            if ($metadataUrl != $orgMetadataUrl) {
+            // Only if the submitted url differs from the previously validated url, retrieve the metadata
+            if ($metadataUrl != $previousMetadataUrl) {
                 $metadata = $this->parser->parse($metadataUrl);
-            } else {
-                $metadata = $this->getOriginalMetadata($orgSubscription, $subscription);
+                $event->setData($this->mapMetadataToFormData($subscription, $metadata));
             }
         } catch (\InvalidArgumentException $e) {
             // Exceptions are deliberately ignored because they are caught by the validator
+            $event->setData($this->mapMetadataToFormData($subscription, $metadata));
         }
-
-        $event->setData($this->mapMetadataToFormData($subscription, $metadata));
     }
 
     /**
@@ -142,113 +148,6 @@ class SubscriptionType extends AbstractType
     }
 
     /**
-     * @param Subscription $subscription
-     * @param array        $formData
-     *
-     * @return Metadata
-     */
-    private function getOriginalMetadata(Subscription $subscription, array $formData)
-    {
-        $metadata = new Metadata();
-        $metadata->acsLocation = $subscription->getAcsLocation();
-        $metadata->entityId = $subscription->getEntityId();
-        $metadata->certificate = $subscription->getCertificate();
-
-        foreach ($this->getProps() as $key => $prop) {
-            $metadata->$key = array_key_exists($prop, $formData) ? $formData[$prop] : $subscription->{'get' . ucfirst(
-                $prop
-            )}();
-        }
-
-        foreach ($this->getContacts() as $contact) {
-            $metadata->$contact = $this->getContactData($subscription, $formData, $contact);
-        }
-
-        foreach ($this->getAttributes() as $attribute) {
-            $metadata->$attribute = $this->getAttributeData($subscription, $formData, $attribute);
-        }
-
-        return $metadata;
-    }
-
-    /**
-     * @param Subscription $subscription
-     * @param array        $formData
-     * @param string       $type
-     *
-     * @return Contact
-     */
-    private function getContactData(Subscription $subscription, array $formData, $type)
-    {
-        /** @var Contact $orgContact */
-        $orgContact = $subscription->{'get' . ucfirst($type)}();
-
-        if ($orgContact instanceof Contact) {
-            $contact = clone $orgContact;
-        } else {
-            $contact = new Contact();
-        }
-
-        if (array_key_exists($type, $formData)) {
-            $formData = $formData[$type];
-
-            if (array_key_exists('firstName', $formData)) {
-                $contact->setFirstName($formData['firstName']);
-            }
-
-            if (array_key_exists('lastName', $formData)) {
-                $contact->setLastName($formData['lastName']);
-            }
-
-            if (array_key_exists('email', $formData)) {
-                $contact->setEmail($formData['email']);
-            }
-
-            if (array_key_exists('phone', $formData)) {
-                $contact->setPhone($formData['phone']);
-            }
-        }
-
-        return $contact;
-    }
-
-    /**
-     * @param Subscription $subscription
-     * @param array        $formData
-     * @param string       $type
-     *
-     * @return Attribute
-     */
-    private function getAttributeData(Subscription $subscription, array $formData, $type)
-    {
-        /** @var Attribute $orgAttribute */
-        $orgAttribute = $subscription->{'get' . ucfirst($type)}();
-
-        // Only use the original values when 'validating' the metadata
-        $onlyMetadataSubmitted = count($formData) === 1;
-
-        if ($orgAttribute instanceof Attribute && $onlyMetadataSubmitted) {
-            $attribute = clone $orgAttribute;
-        } else {
-            $attribute = new Attribute();
-        }
-
-        if (array_key_exists($type, $formData)) {
-            $formData = $formData[$type];
-
-            if (array_key_exists('requested', $formData)) {
-                $attribute->setRequested(true);
-            }
-
-            if (array_key_exists('motivation', $formData)) {
-                $attribute->setMotivation($formData['motivation']);
-            }
-        }
-
-        return $attribute;
-    }
-
-    /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -266,21 +165,6 @@ class SubscriptionType extends AbstractType
     public function getName()
     {
         return 'subscription';
-    }
-
-    /**
-     * @return array
-     */
-    private function getProps()
-    {
-        return array(
-            'logoUrl'          => 'logoUrl',
-            'nameEn'           => 'nameEn',
-            'nameNl'           => 'nameNl',
-            'descriptionEn'    => 'descriptionEn',
-            'descriptionNl'    => 'descriptionNl',
-            'applicationUrlEn' => 'applicationUrl',
-        );
     }
 
     /**

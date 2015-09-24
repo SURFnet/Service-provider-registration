@@ -6,16 +6,21 @@ use AppBundle\Metadata\Exception\ParserException;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
-use Doctrine\Common\Cache\Cache;
 use Monolog\Logger;
+use SAML2_Const;
+use SAML2_XML_mdui_UIInfo;
+use XMLSecurityDSig;
 
 /**
  * Class Parser
  *
  * @todo: this class could use some refactoring
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Parser extends MetadataUtil
+class Parser
 {
+    const NS_LANG = 'http://www.w3.org/XML/1998/namespace';
+
     /**
      * @var Fetcher
      */
@@ -27,9 +32,19 @@ class Parser extends MetadataUtil
     private $certParser;
 
     /**
+     * @var AttributesMetadataRepository
+     */
+    private $attributesMetadataRepository;
+
+    /**
      * @var string
      */
     private $schemaLocation;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * Constructor
@@ -37,22 +52,20 @@ class Parser extends MetadataUtil
      * @param Fetcher           $fetcher
      * @param CertificateParser $certParser
      * @param string            $schemaLocation
-     * @param string            $schemaLocation
-     * @param Cache             $cache
      * @param Logger            $logger
      */
     public function __construct(
         Fetcher $fetcher,
         CertificateParser $certParser,
+        AttributesMetadataRepository $attributesMetadataRepository,
         $schemaLocation,
-        Cache $cache,
         Logger $logger
     ) {
         $this->fetcher = $fetcher;
         $this->certParser = $certParser;
+        $this->attributesMetadataRepository = $attributesMetadataRepository;
         $this->schemaLocation = $schemaLocation;
-
-        parent::__construct($cache, $logger);
+        $this->logger = $logger;
     }
 
     /**
@@ -62,26 +75,8 @@ class Parser extends MetadataUtil
      */
     public function parse($metadataUrl)
     {
-        // Temp. disabled caching
-        // if (false !== $metadata = $this->cache->fetch('metadata-' . $metadataUrl)) {
-        //     return $metadata;
-        // }
+        $responseXml = $this->fetcher->fetch($metadataUrl);
 
-        $metadata = $this->parseXml($this->fetcher->fetch($metadataUrl));
-
-        // Temp. disabled caching
-        // $this->cache->save('metadata-' . $metadataUrl, $metadata, 60 * 60 * 24);
-
-        return $metadata;
-    }
-
-    /**
-     * @param string $responseXml
-     *
-     * @return Metadata
-     */
-    public function parseXml($responseXml)
-    {
         $this->validate($responseXml);
 
         $responseXml = simplexml_load_string($responseXml);
@@ -89,7 +84,7 @@ class Parser extends MetadataUtil
         $metadata = new Metadata();
         $metadata->entityId = (string)$responseXml['entityID'];
 
-        $children = $responseXml->children(self::NS_SAML);
+        $children = $responseXml->children(SAML2_Const::NS_MD);
         $descriptor = $children->SPSSODescriptor;
         $contactPersons = $children->ContactPerson;
 
@@ -125,7 +120,7 @@ class Parser extends MetadataUtil
         foreach ($descriptor->AssertionConsumerService as $acs) {
             $acs = $acs->attributes();
 
-            if ((string)$acs['Binding'] === self::ATTR_ACS_POST_BINDING) {
+            if ((string)$acs['Binding'] === SAML2_Const::BINDING_HTTP_POST) {
                 $metadata->acsLocation = (string)$acs['Location'];
             }
 
@@ -143,7 +138,7 @@ class Parser extends MetadataUtil
      */
     private function parseCertificate($descriptor, Metadata $metadata)
     {
-        foreach ($descriptor->KeyDescriptor->children(self::NS_SIG) as $keyInfo) {
+        foreach ($descriptor->KeyDescriptor->children(XMLSecurityDSig::XMLDSIGNS) as $keyInfo) {
             $metadata->certificate = $this->certParser->parse((string)$keyInfo->X509Data->X509Certificate);
             break;
         }
@@ -157,12 +152,12 @@ class Parser extends MetadataUtil
      */
     private function parseUi($descriptor, Metadata $metadata)
     {
-        $ui = $descriptor->Extensions->children(self::NS_UI)->UIInfo;
+        $ui = $descriptor->Extensions->children(SAML2_XML_mdui_UIInfo::NS)->UIInfo;
 
         $metadata->logoUrl = (string)$ui->Logo;
 
         foreach ($ui->Description as $description) {
-            $lang = $description->attributes(self::NS_LANG);
+            $lang = $description->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
@@ -177,7 +172,7 @@ class Parser extends MetadataUtil
         }
 
         foreach ($ui->DisplayName as $name) {
-            $lang = $name->attributes(self::NS_LANG);
+            $lang = $name->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
@@ -192,7 +187,7 @@ class Parser extends MetadataUtil
         }
 
         foreach ($ui->InformationURL as $url) {
-            $lang = $url->attributes(self::NS_LANG);
+            $lang = $url->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
@@ -251,9 +246,9 @@ class Parser extends MetadataUtil
 
             $attributes = $attribute->attributes();
 
-            foreach ($this->getAttributeMap() as $property => $names) {
-                if (in_array($attributes['Name'], $names['name'])) {
-                    $metadata->{$property . 'Attribute'} = $attr;
+            foreach ($this->attributesMetadataRepository->findAll() as $attributeMetadata) {
+                if (in_array($attributes['Name'], $attributeMetadata->urns)) {
+                    $metadata->{$attributeMetadata->id . 'Attribute'} = $attr;
                 }
             }
         }
@@ -269,11 +264,11 @@ class Parser extends MetadataUtil
         $doc = new \DOMDocument();
         $doc->loadXml($xml);
 
-        if (!$doc->schemaValidate($this->schemaLocation . self::XSD_SAML_METADATA)) {
+        if (!$doc->schemaValidate($this->schemaLocation . 'surf.xsd')) {
             $errors = libxml_get_errors();
             libxml_clear_errors();
 
-            $this->log('Metadata XML validation errors:', $errors);
+            $this->logger->addInfo('Metadata XML validation errors:', $errors);
 
             $ex = new ParserException('The metadata XML is invalid considering the associated XSD');
             $ex->setParserErrors($errors);

@@ -3,12 +3,20 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\Subscription;
-use AppBundle\Metadata\Generator;
+use AppBundle\Event\SubscriptionEvent;
+use AppBundle\SubscriptionEvents;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\ValidatorInterface;
 
+/**
+ * Class SubscriptionManager
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubscriptionManager
 {
     /**
@@ -32,24 +40,29 @@ class SubscriptionManager
     private $lockManager;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * Constructor
      *
-     * @param EntityManager $entityManager
-     * @param ValidatorInterface $validator
-     * @param LockManager $lockManager
-     * @param Generator $generator
+     * @param EntityManager            $entityManager
+     * @param ValidatorInterface       $validator
+     * @param LockManager              $lockManager
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         EntityManager $entityManager,
         ValidatorInterface $validator,
         LockManager $lockManager,
-        Generator $generator
+        EventDispatcherInterface $dispatcher
     ) {
         $this->em = $entityManager;
         $this->repo = $entityManager->getRepository('AppBundle:Subscription');
         $this->validator = $validator;
         $this->lockManager = $lockManager;
-        $this->generator = $generator;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -59,8 +72,16 @@ class SubscriptionManager
      *
      * @return Subscription
      */
-    public function getSubscription($id, $checkStatus = false, $checkLock = false)
-    {
+    public function getSubscription(
+        $id,
+        $checkStatus = false,
+        $checkLock = false
+    ) {
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::PRE_READ,
+            new SubscriptionEvent($id)
+        );
+
         $subscription = $this->repo->find($id);
 
         if (empty($subscription)) {
@@ -83,7 +104,10 @@ class SubscriptionManager
      */
     public function getDraftSubscriptions()
     {
-        return $this->repo->findBy(array('status' => Subscription::STATE_DRAFT));
+        return $this->repo->findBy(array(
+            'status' => Subscription::STATE_DRAFT,
+            'archived' => false,
+        ));
     }
 
     /**
@@ -93,6 +117,11 @@ class SubscriptionManager
     {
         $this->em->persist($subscription);
         $this->em->flush($subscription);
+
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::POST_WRITE,
+            new SubscriptionEvent($subscription->getId(), $subscription)
+        );
     }
 
     /**
@@ -101,6 +130,11 @@ class SubscriptionManager
     public function updateSubscription(Subscription $subscription)
     {
         $this->em->flush($subscription);
+
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::POST_WRITE,
+            new SubscriptionEvent($subscription->getId(), $subscription)
+        );
     }
 
     /**
@@ -123,16 +157,53 @@ class SubscriptionManager
     }
 
     /**
-     * @param Subscription $subscription
+     * Get a count for the number of subscriptions for a given status.
      *
-     * @return string
+     * @param int $status
+     * @return int
      */
-    public function generateMetadata(Subscription $subscription)
+    public function countForType($status)
     {
-        if (!$subscription->isFinished()) {
-            throw new \InvalidArgumentException('Subscription should be finished before generating the Metadata.');
+        return (int) $this->em->createQueryBuilder()
+            ->select('count(subscription.id)')
+            ->from('AppBundle:Subscription', 'subscription')
+            ->where('subscription.status = :status')
+            ->andWhere('subscription.archived = :archived')
+            ->setParameter('status', $status)
+            ->setParameter('archived', false)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @param string           $id
+     * @param SessionInterface $session
+     *
+     * @return Subscription
+     */
+    public function getSubscriptionFromSession($id, SessionInterface $session)
+    {
+        $sessionId = 'subscription-' . $id;
+
+        $subscription = $session->get($sessionId);
+
+        if (!$subscription instanceof Subscription) {
+            throw new \InvalidArgumentException('Subscription not found in session');
         }
 
-        return $this->generator->generate($subscription);
+        return $this->em->merge($subscription);
+    }
+
+    /**
+     * @param Subscription     $subscription
+     * @param SessionInterface $session
+     */
+    public function storeSubscriptionInSession(Subscription $subscription, SessionInterface $session)
+    {
+        $sessionId = 'subscription-' . $subscription->getId();
+
+        $this->em->detach($subscription);
+
+        $session->set($sessionId, $subscription);
     }
 }
