@@ -102,7 +102,7 @@ final class ConnectionRequestTranslator
             $this->metadataMapper->mapRequestToMetadata($request),
             $request->getMetadataUrl(),
             '',
-            new ConnectionAccess(),
+            new ConnectionAccess(true),
             $this->arpMapper->mapRequestToArpAttributes($request)
         );
     }
