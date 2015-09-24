@@ -103,7 +103,7 @@ class DatabaseLoader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
         $tpl = $this->em->getRepository('AppBundle:Template')->findOneBy(array('name' => $name));
 
         if (!$tpl) {
-            throw new RuntimeException("Required template not found: '$name''");
+            return null;
         }
 
         $this->cache->save($cacheId, $tpl, 60 * 60 * 24);
