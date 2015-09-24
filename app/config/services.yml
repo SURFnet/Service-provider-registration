@@ -1,4 +1,8 @@
 services:
+    attributes.metadata_repository:
+        class: AppBundle\Metadata\AttributesMetadataRepository
+        arguments: [%kernel.root_dir%]
+
     cert.fetcher:
         class: AppBundle\Metadata\CertificateFetcher
         arguments: [@cache]
@@ -8,15 +12,15 @@ services:
 
     fetcher:
         class: AppBundle\Metadata\Fetcher
-        arguments: [@guzzle.client, @cache, @monolog.logger.metadata]
+        arguments: [@guzzle.client, @monolog.logger.metadata]
 
     parser:
         class: AppBundle\Metadata\Parser
         arguments:
             - @fetcher
             - @cert.parser
+            - @attributes.metadata_repository
             - %kernel.root_dir%/Resources/schemas/
-            - @cache
             - @monolog.logger.metadata
 
     validator.metadata:
@@ -163,6 +167,7 @@ services:
 
     janus.arp_mapper:
         class: SURFnet\SPRegistration\Janus\ArpMapper
+        arguments: [@attributes.metadata_repository]
 
     janus.contact_mapper:
         class: SURFnet\SPRegistration\Janus\ContactMapper

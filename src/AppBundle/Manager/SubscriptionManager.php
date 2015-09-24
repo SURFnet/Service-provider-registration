@@ -8,11 +8,14 @@ use AppBundle\SubscriptionEvents;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Validator\Validator;
 use Symfony\Component\Validator\ValidatorInterface;
 
 /**
  * Class SubscriptionManager
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SubscriptionManager
 {
@@ -72,15 +75,12 @@ class SubscriptionManager
     public function getSubscription(
         $id,
         $checkStatus = false,
-        $checkLock = false,
-        $dispatch = true
+        $checkLock = false
     ) {
-        if ($dispatch) {
-            $this->dispatcher->dispatch(
-                SubscriptionEvents::PRE_READ,
-                new SubscriptionEvent($id)
-            );
-        }
+        $this->dispatcher->dispatch(
+            SubscriptionEvents::PRE_READ,
+            new SubscriptionEvent($id)
+        );
 
         $subscription = $this->repo->find($id);
 
@@ -126,17 +126,9 @@ class SubscriptionManager
 
     /**
      * @param Subscription $subscription
-     * @param bool $dispatch
      */
-    public function updateSubscription(
-        Subscription $subscription,
-        $dispatch = true
-    ) {
+    public function updateSubscription(Subscription $subscription) {
         $this->em->flush($subscription);
-
-        if (!$dispatch) {
-            return;
-        }
 
         $this->dispatcher->dispatch(
             SubscriptionEvents::POST_WRITE,
@@ -180,5 +172,37 @@ class SubscriptionManager
             ->setParameter('archived', false)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * @param string           $id
+     * @param SessionInterface $session
+     *
+     * @return Subscription
+     */
+    public function getSubscriptionFromSession($id, SessionInterface $session)
+    {
+        $sessionId = 'subscription-' . $id;
+
+        $subscription = $session->get($sessionId);
+
+        if (!$subscription instanceof Subscription) {
+            throw new \InvalidArgumentException('Subscription not found in session');
+        }
+
+        return $this->em->merge($subscription);
+    }
+
+    /**
+     * @param Subscription     $subscription
+     * @param SessionInterface $session
+     */
+    public function storeSubscriptionInSession(Subscription $subscription, SessionInterface $session)
+    {
+        $sessionId = 'subscription-' . $subscription->getId();
+
+        $this->em->detach($subscription);
+
+        $session->set($sessionId, $subscription);
     }
 }

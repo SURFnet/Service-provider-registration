@@ -6,10 +6,15 @@ use AppBundle\Entity\Template;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * Class LoadData
+ */
 class LoadData implements FixtureInterface
 {
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function load(ObjectManager $manager)
     {

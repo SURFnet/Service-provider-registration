@@ -32,6 +32,7 @@ class IndexController extends Controller implements SecuredController
                 'data' => array(
                     $repository->countForType(Subscription::STATE_DRAFT)
                 ),
+                'color' => 'white',
                 'type'  => 'column',
             ),
             array(
@@ -39,6 +40,7 @@ class IndexController extends Controller implements SecuredController
                 'data' => array(
                     $repository->countForType(Subscription::STATE_PUBLISHED)
                 ),
+                'color' => '#d9edf7',
                 'type'  => 'column',
             ),
             array(
@@ -46,18 +48,14 @@ class IndexController extends Controller implements SecuredController
                 'data' => array(
                     $repository->countForType(Subscription::STATE_FINISHED)
                 ),
+                'color' => '#dff0d8',
                 'type'  => 'column',
             ),
         );
 
         $ob = new Highchart();
         $ob->chart->renderTo('per-status-chart');  // The #id of the div where to render the chart
-        $ob->chart->options3d(array(
-            'enabled' => true,
-            'alpha' => 15,
-            'beta' => 15,
-            'viewDistance' => 25,
-        ));
+        $ob->chart->backgroundColor('#f8f8f8');
         $ob->title->text('Registrations per status');
         $ob->xAxis->title(array('text'  => "Status"));
         $ob->yAxis->allowDecimals(false);

@@ -139,7 +139,7 @@ class GridConfiguration
         $rowAction = new RowAction('finish', 'admin.subscription.finish');
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
-                if ($row->getField('status') !== Subscription::STATE_DRAFT) {
+                if ($row->getField('status') !== Subscription::STATE_PUBLISHED) {
                     return null;
                 }
 
