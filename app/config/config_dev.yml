@@ -29,4 +29,4 @@ assetic:
         uglifycss: ~
 
 swiftmailer:
-    delivery_address: tjeerd@ibuildings.nl
+    delivery_address: "%error_mail_address%"
