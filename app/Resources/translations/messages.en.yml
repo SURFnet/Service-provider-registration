@@ -5,6 +5,7 @@ name: Name
 contact: Contact
 created: Created
 status: Status
+archived: Archived
 ticketNo: Ticket No.
 updated: Updated
 key: Key
