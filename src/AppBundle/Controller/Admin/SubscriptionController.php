@@ -34,9 +34,7 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function gridAction()
     {
-        $configuration = new GridConfiguration(
-            $this->get('janus.connection_descriptor_repository')
-        );
+        $configuration = new GridConfiguration();
         $grid = $configuration->configureGrid(
             $this->get('grid'),
             $this->generateUrl('admin.subscription.grid')
