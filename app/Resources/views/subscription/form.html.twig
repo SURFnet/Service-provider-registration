@@ -153,7 +153,7 @@
                     <button type="submit" class="btn btn-primary" {% if locked %}disabled="disabled"{% endif %}>
                         {{ 'form.button.update'|trans }}
                     </button>
-                    <a href="{{ path('overview_finish', {id: subscription.id}) }}" class="btn btn-success">
+                    <a href="{{ path('overview_finish', {id: subscription.id}) }}">
                         {{ 'form.button.finish'|trans }}
                     </a>
                 {% endif %}
