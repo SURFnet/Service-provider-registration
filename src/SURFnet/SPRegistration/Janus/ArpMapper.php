@@ -46,7 +46,7 @@ final class ArpMapper
                 continue;
             }
 
-            $attributeMaceId = $attributeMetadata['urns'][0];
+            $attributeMaceId = $attributeMetadata->urns[0];
             $arp[$attributeMaceId] = array('*');
         }
 
