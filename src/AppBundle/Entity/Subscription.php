@@ -99,6 +99,12 @@ class Subscription
     private $ticketNo;
 
     /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $janusId;
+
+    /**
      * @var Contact
      * @ORM\Column(type="object", nullable=true)
      * @GRID\Column(type="text", operatorsVisible=false)
@@ -474,6 +480,25 @@ class Subscription
     public function setTicketNo($ticketNo)
     {
         $this->ticketNo = $ticketNo;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJanusId()
+    {
+        return $this->janusId;
+    }
+
+    /**
+     * @param string $id
+     * @return $this
+     */
+    public function setJanusId($id)
+    {
+        $this->janusId = $id;
 
         return $this;
     }
