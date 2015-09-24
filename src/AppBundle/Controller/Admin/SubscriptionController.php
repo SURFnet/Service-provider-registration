@@ -127,28 +127,6 @@ class SubscriptionController extends Controller implements SecuredController
     }
 
     /**
-     * @Route("/{id}/draft", name="admin.subscription.draft")
-     *
-     * @param string $id
-     *
-     * @return Response
-     */
-    public function draftAction($id)
-    {
-        $subscription = $this->get('subscription.manager')->getSubscription($id);
-
-        if (empty($subscription)) {
-            throw $this->createNotFoundException();
-        }
-
-        $subscription->draft();
-
-        $this->get('subscription.manager')->updateSubscription($subscription);
-
-        return $this->redirect($this->generateUrl('admin.subscription.overview'));
-    }
-
-    /**
      * @Route("/{id}/archive", name="admin.subscription.archive")
      *
      * @param string $id
