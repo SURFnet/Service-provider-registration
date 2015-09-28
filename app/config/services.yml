@@ -29,6 +29,12 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: metadata }
 
+    validator.entity_id:
+        class: AppBundle\Validator\Constraints\ValidEntityIdValidator
+        arguments: [@janus.connection_descriptor_repository]
+        tags:
+            - { name: validator.constraint_validator, alias: entity_id }
+
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
         arguments: [@cert.fetcher, @cert.parser]

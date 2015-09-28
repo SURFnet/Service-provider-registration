@@ -2,6 +2,7 @@
 namespace AppBundle\Validator\Constraints;
 
 use AppBundle\Entity\Subscription;
+use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
 use Symfony\Component\Validator\Constraint;
@@ -12,6 +13,19 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class ValidEntityIdValidator extends ConstraintValidator
 {
+    /**
+     * @var ConnectionDescriptorRepository
+     */
+    private $janus;
+
+    /**
+     * @param ConnectionDescriptorRepository $janus
+     */
+    public function __construct(ConnectionDescriptorRepository $janus)
+    {
+        $this->janus = $janus;
+    }
+
     /**
      * @param string     $value
      * @param Constraint $constraint
@@ -59,6 +73,12 @@ class ValidEntityIdValidator extends ConstraintValidator
                     '%edomain%' => $entityIdUrl->host->registerableDomain
                 )
             );
+
+            return;
+        }
+
+        if ($this->janus->findByName($value)) {
+            $this->context->addViolation('Entity has already been registered.');
 
             return;
         }
