@@ -62,7 +62,7 @@ class SubscriptionType extends AbstractType
 
         // Tab Attributes
         foreach ($this->getAttributes() as $attribute) {
-            $builder->add($attribute, new AttributeType(), array('by_reference' => false));
+            $builder->add($attribute, new AttributeType(), array('by_reference' => false, 'required' => false));
         }
 
         // Tab Comments
