@@ -16,6 +16,9 @@ use APY\DataGridBundle\Grid\Source\Entity;
 class GridConfiguration
 {
     /**
+     * @param Grid   $grid
+     * @param string $routeUrl
+     *
      * @return Grid
      */
     public function configureGrid(Grid $grid, $routeUrl)

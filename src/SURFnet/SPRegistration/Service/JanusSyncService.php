@@ -4,8 +4,6 @@ namespace SURFnet\SPRegistration\Service;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Manager\SubscriptionManager;
-use OpenConext\JanusClient\ConnectionRevision;
-use OpenConext\JanusClient\Entity\ConnectionDescriptor;
 use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 use OpenConext\JanusClient\Entity\ConnectionRepository;
 use OpenConext\JanusClient\NewConnectionRevision;

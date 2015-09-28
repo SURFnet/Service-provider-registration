@@ -20,6 +20,8 @@ final class ArpMapper
 
     /**
      * ArpMapper constructor.
+     *
+     * @param AttributesMetadataRepository $attributesMetadataRepository
      */
     public function __construct($attributesMetadataRepository)
     {

@@ -2,15 +2,11 @@
 
 namespace SURFnet\SPRegistration\Event;
 
-use AppBundle\Entity\Subscription;
 use AppBundle\Event\SubscriptionEvent;
 use AppBundle\Manager\SubscriptionManager;
 use AppBundle\SubscriptionEvents;
 use SURFnet\SPRegistration\Service\JanusSyncService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class SyncSubscriber
