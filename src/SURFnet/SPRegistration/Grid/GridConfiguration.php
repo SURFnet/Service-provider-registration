@@ -126,7 +126,7 @@ class GridConfiguration
         );
         $grid->addRowAction($rowAction);
 
-        $rowAction = new RowAction('finish', 'admin.subscription.finish');
+        $rowAction = new RowAction('finish', 'admin.subscription.finish', true);
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
                 if ($row->getField('status') !== Subscription::STATE_PUBLISHED) {
