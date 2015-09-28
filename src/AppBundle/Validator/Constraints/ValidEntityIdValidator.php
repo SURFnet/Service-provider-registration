@@ -77,7 +77,15 @@ class ValidEntityIdValidator extends ConstraintValidator
             return;
         }
 
-        if ($this->janus->findByName($value)) {
+        try {
+            $entity = $this->janus->findByName($value);
+        } catch (\Exception $e) {
+            $this->context->addViolation('Failed checking registry.');
+
+            return;
+        }
+
+        if (empty($entity)) {
             $this->context->addViolation('Entity has already been registered.');
 
             return;
