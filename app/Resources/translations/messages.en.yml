@@ -132,7 +132,7 @@ form:
         saved: Saved
         saving: Saving...
         updated: The form has been updated!
-
+        validating: Validating...
     tab:
         attributes: attributes
         comments: comments
