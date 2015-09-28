@@ -149,6 +149,8 @@ class SubscriptionController extends Controller implements SecuredController
     /**
      * @Route("/janus/{eid}", name="admin.subscription.janus")
      *
+     * @param string $eid
+     *
      * @return Response
      */
     public function redirectToJanusAction($eid)

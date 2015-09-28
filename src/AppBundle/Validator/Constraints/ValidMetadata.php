@@ -13,6 +13,9 @@ class ValidMetadata extends Constraint
 
     public $parseMessage = 'Invalid metadata: %errors%';
 
+    /**
+     * @return string
+     */
     public function validatedBy()
     {
         return 'metadata';

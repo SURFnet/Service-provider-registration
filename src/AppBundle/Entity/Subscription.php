@@ -1134,6 +1134,9 @@ class Subscription
         );
     }
 
+    /**
+     * @return Subscription
+     */
     public function archive()
     {
         $this->archived = true;

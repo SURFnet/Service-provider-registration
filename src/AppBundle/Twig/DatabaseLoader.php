@@ -5,7 +5,6 @@ namespace AppBundle\Twig;
 use AppBundle\Entity\Template;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\EntityManager;
-use RuntimeException;
 use Twig_ExistsLoaderInterface;
 use Twig_LoaderInterface;
 
