@@ -11,6 +11,7 @@ use APY\DataGridBundle\Grid\Source\Entity;
 
 /**
  * Class GridConfiguration
+ *
  * @package SURFnet\SPRegistration
  */
 class GridConfiguration
@@ -33,9 +34,11 @@ class GridConfiguration
         $grid->setRouteUrl($routeUrl);
 
         $grid->setDefaultOrder('created', 'desc');
-        $grid->setDefaultFilters(array(
-            'archived' => false,
-        ));
+        $grid->setDefaultFilters(
+            array(
+                'archived' => false,
+            )
+        );
         $grid->setLimits(array(5 => 5, 10 => 10, 15 => 15, 25 => 25, 50 => 50, 99999 => 'all'));
 
         $grid->setActionsColumnTitle('');
@@ -171,9 +174,11 @@ class GridConfiguration
                     return null;
                 }
 
-                return $action->addRouteParameters(array(
-                    'eid' => $subscription->getJanusId(),
-                ));
+                return $action->addRouteParameters(
+                    array(
+                        'eid' => $subscription->getJanusId(),
+                    )
+                );
             }
         );
         $grid->addRowAction($rowAction);

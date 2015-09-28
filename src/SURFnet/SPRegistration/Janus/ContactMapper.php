@@ -8,13 +8,15 @@ use SURFnet\SPRegistration\ServiceRegistry\Constants as ServiceRegistry;
 
 /**
  * Class ContactMapper
+ *
  * @package SURFnet\SPRegistration\Janus
  */
 final class ContactMapper
 {
     /**
-     * @param $contactType
+     * @param string     $contactType
      * @param Connection $connection
+     *
      * @return Contact|null
      */
     public function mapToContactOfType($contactType, Connection $connection)
@@ -34,11 +36,13 @@ final class ContactMapper
                 return $this->getContact2($connection);
             }
         }
+
         return null;
     }
 
     /**
      * @param Connection $connection
+     *
      * @return Contact
      */
     private function getContact0(Connection $connection)
@@ -71,6 +75,7 @@ final class ContactMapper
 
     /**
      * @param Connection $connection
+     *
      * @return Contact
      */
     private function getContact1(Connection $connection)
@@ -103,6 +108,7 @@ final class ContactMapper
 
     /**
      * @param Connection $connection
+     *
      * @return Contact
      */
     private function getContact2(Connection $connection)

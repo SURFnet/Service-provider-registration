@@ -9,6 +9,7 @@ use OpenConext\JanusClient\ArpAttributes;
 
 /**
  * Class ArpMapper
+ *
  * @package SURFnet\SPRegistration\Janus
  */
 final class ArpMapper
@@ -30,6 +31,7 @@ final class ArpMapper
 
     /**
      * @param Subscription $request
+     *
      * @return ArpAttributes
      */
     public function mapRequestToArpAttributes(Subscription $request)

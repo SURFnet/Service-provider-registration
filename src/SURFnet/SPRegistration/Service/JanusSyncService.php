@@ -12,6 +12,7 @@ use SURFnet\SPRegistration\Entity\ConnectionRequestTranslator;
 
 /**
  * Class JanusSyncService
+ *
  * @package SURFnet\SPRegistration\Service
  */
 class JanusSyncService
@@ -102,10 +103,11 @@ class JanusSyncService
 
     /**
      * JanusSyncService constructor.
-     * @param SubscriptionManager $repository
+     *
+     * @param SubscriptionManager            $repository
      * @param ConnectionDescriptorRepository $janusConnectionDescriptorRepository
-     * @param ConnectionRepository $janusConnectionRepository
-     * @param ConnectionRequestTranslator $translator
+     * @param ConnectionRepository           $janusConnectionRepository
+     * @param ConnectionRequestTranslator    $translator
      */
     public function __construct(
         SubscriptionManager $repository,
