@@ -56,4 +56,16 @@ class Attribute
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        if (!$this->requested) {
+            return '-';
+        }
+
+        return $this->motivation;
+    }
 }

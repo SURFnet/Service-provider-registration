@@ -1,157 +1,259 @@
 <dl class="dl-horizontal">
     <dt>{{ 'ticketNo'|humanize|trans }}</dt>
-    <dd>{{ subscription.ticketNo }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.ticketNo != subscription.ticketNo %}
+        <del>{{ orgSubscription.ticketNo }}</del>
+        {% endif %}
+        {{ subscription.ticketNo }}
+    </dd>
 
     <dt>{{ 'contact'|humanize|trans }}</dt>
-    <dd>{{ subscription.contact.firstName }} {{ subscription.contact.lastName }}
-        ({{ subscription.contact.email }} / {{ subscription.contact.phone }})
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.contact != subscription.contact %}
+            <del>{{ orgSubscription.contact }}</del>
+        {% endif %}
+        {{ subscription.contact }}
     </dd>
 
     <dt>{{ 'metadataUrl'|humanize|trans }}</dt>
-    <dd>{{ subscription.metadataUrl }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.metadataUrl != subscription.metadataUrl %}
+            <del>{{ orgSubscription.metadataUrl }}</del>
+        {% endif %}
+        {{ subscription.metadataUrl }}
+    </dd>
 
     <dt>{{ 'logoUrl'|humanize|trans }}</dt>
-    <dd>{{ subscription.logoUrl }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.logoUrl != subscription.logoUrl %}
+            <del>{{ orgSubscription.logoUrl }}</del>
+        {% endif %}
+        {{ subscription.logoUrl }}
+    </dd>
 
     <dt>{{ 'nameEn'|humanize|trans }}</dt>
-    <dd>{{ subscription.nameEn }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.nameEn != subscription.nameEn %}
+            <del>{{ orgSubscription.nameEn }}</del>
+        {% endif %}
+        {{ subscription.nameEn }}
+    </dd>
 
     <dt>{{ 'descriptionEn'|humanize|trans }}</dt>
-    <dd>{{ subscription.descriptionEn }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.descriptionEn != subscription.descriptionEn %}
+            <del>{{ orgSubscription.descriptionEn }}</del>
+        {% endif %}
+        {{ subscription.descriptionEn }}
+    </dd>
 
     <dt>{{ 'nameNl'|humanize|trans }}</dt>
-    <dd>{{ subscription.nameNl }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.nameNl != subscription.nameNl %}
+            <del>{{ orgSubscription.nameNl }}</del>
+        {% endif %}
+        {{ subscription.nameNl }}
+    </dd>
 
     <dt>{{ 'descriptionNl'|humanize|trans }}</dt>
-    <dd>{{ subscription.descriptionNl }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.descriptionNl != subscription.descriptionNl %}
+            <del>{{ orgSubscription.descriptionNl }}</del>
+        {% endif %}
+        {{ subscription.descriptionNl }}
+    </dd>
 
     <dt>{{ 'applicationUrl'|humanize|trans }}</dt>
-    <dd>{{ subscription.applicationUrl }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.applicationUrl != subscription.applicationUrl %}
+            <del>{{ orgSubscription.applicationUrl }}</del>
+        {% endif %}
+        {{ subscription.applicationUrl }}
+    </dd>
 
     <dt>{{ 'eulaUrl'|humanize|trans }}</dt>
-    <dd>{{ subscription.eulaUrl }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.eulaUrl != subscription.eulaUrl %}
+            <del>{{ orgSubscription.eulaUrl }}</del>
+        {% endif %}
+        {{ subscription.eulaUrl }}
+    </dd>
 
     <dt>{{ 'administrativeContact'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.administrativeContact != subscription.administrativeContact %}
+            <del>{{ orgSubscription.administrativeContact }}</del>
+        {% endif %}
         {% if subscription.administrativeContact %}
-            {{ subscription.administrativeContact.firstName }} {{ subscription.administrativeContact.lastName }}
-            ({{ subscription.administrativeContact.email }} / {{ subscription.administrativeContact.phone }})
+            {{ subscription.administrativeContact }}
         {% endif %}
     </dd>
 
     <dt>{{ 'technicalContact'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.technicalContact != subscription.technicalContact %}
+            <del>{{ orgSubscription.technicalContact }}</del>
+        {% endif %}
         {% if subscription.technicalContact %}
-            {{ subscription.technicalContact.firstName }} {{ subscription.technicalContact.lastName }}
-            ({{ subscription.technicalContact.email }} / {{ subscription.technicalContact.phone }})
+            {{ subscription.technicalContact }}
         {% endif %}
     </dd>
 
     <dt>{{ 'supportContact'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.supportContact != subscription.supportContact %}
+            <del>{{ orgSubscription.supportContact }}</del>
+        {% endif %}
         {% if subscription.supportContact %}
-            {{ subscription.supportContact.firstName }} {{ subscription.supportContact.lastName }}
-            ({{ subscription.supportContact.email }} / {{ subscription.supportContact.phone }})
+            {{ subscription.supportContact }}
         {% endif %}
     </dd>
 
     <dt>{{ 'givenNameAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.givenNameAttribute != subscription.givenNameAttribute %}
+            <del>{{ orgSubscription.givenNameAttribute }}</del>
+        {% endif %}
         {% if subscription.givenNameAttribute %}
-            {{ subscription.givenNameAttribute.requested }} - {{ subscription.givenNameAttribute.motivation }}
+            {{ subscription.givenNameAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'surNameAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.surNameAttribute != subscription.surNameAttribute %}
+            <del>{{ orgSubscription.surNameAttribute }}</del>
+        {% endif %}
         {% if subscription.surNameAttribute %}
-            {{ subscription.surNameAttribute.requested }} - {{ subscription.surNameAttribute.motivation }}
+            {{ subscription.surNameAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'commonNameAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.surNameAttribute != subscription.surNameAttribute %}
+            <del>{{ orgSubscription.surNameAttribute }}</del>
+        {% endif %}
         {% if subscription.commonNameAttribute %}
-            {{ subscription.commonNameAttribute.requested }} - {{ subscription.commonNameAttribute.motivation }}
+            {{ subscription.commonNameAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'displayNameAttribute'|humanize|trans }}</dt>
-    <dd>{% if subscription.displayNameAttribute %}
-            {{ subscription.displayNameAttribute.requested }} - {{ subscription.displayNameAttribute.motivation }}
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.displayNameAttribute != subscription.displayNameAttribute %}
+            <del>{{ orgSubscription.displayNameAttribute }}</del>
+        {% endif %}
+        {% if subscription.displayNameAttribute %}
+            {{ subscription.displayNameAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'emailAddressAttribute'|humanize|trans }}</dt>
     <dd>
-        {% if subscription.givenNameAttribute %}
-            {{ subscription.emailAddressAttribute.requested }} - {{ subscription.emailAddressAttribute.motivation }}
+        {% if orgSubscription is defined and orgSubscription.emailAddressAttribute != subscription.emailAddressAttribute %}
+            <del>{{ orgSubscription.emailAddressAttribute }}</del>
+        {% endif %}
+        {% if subscription.emailAddressAttribute %}
+            {{ subscription.emailAddressAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'organizationAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.organizationAttribute != subscription.organizationAttribute %}
+            <del>{{ orgSubscription.organizationAttribute }}</del>
+        {% endif %}
         {% if subscription.organizationAttribute %}
-            {{ subscription.organizationAttribute.requested }} - {{ subscription.organizationAttribute.motivation }}
+            {{ subscription.organizationAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'organizationTypeAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.organizationTypeAttribute != subscription.organizationTypeAttribute %}
+            <del>{{ orgSubscription.organizationTypeAttribute }}</del>
+        {% endif %}
         {% if subscription.organizationTypeAttribute %}
-            {{ subscription.organizationTypeAttribute.requested }} - {{ subscription.organizationTypeAttribute.motivation }}
+            {{ subscription.organizationTypeAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'affiliationAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.affiliationAttribute != subscription.affiliationAttribute %}
+            <del>{{ orgSubscription.affiliationAttribute }}</del>
+        {% endif %}
         {% if subscription.affiliationAttribute %}
-            {{ subscription.affiliationAttribute.requested }} - {{ subscription.affiliationAttribute.motivation }}
+            {{ subscription.affiliationAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'entitlementAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.entitlementAttribute != subscription.entitlementAttribute %}
+            <del>{{ orgSubscription.entitlementAttribute }}</del>
+        {% endif %}
         {% if subscription.entitlementAttribute %}
-            {{ subscription.entitlementAttribute.requested }} - {{ subscription.entitlementAttribute.motivation }}
+            {{ subscription.entitlementAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'principleNameAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.principleNameAttribute != subscription.principleNameAttribute %}
+            <del>{{ orgSubscription.principleNameAttribute }}</del>
+        {% endif %}
         {% if subscription.principleNameAttribute %}
-            {{ subscription.principleNameAttribute.requested }} - {{ subscription.principleNameAttribute.motivation }}
+            {{ subscription.principleNameAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'uidAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.uidAttribute != subscription.uidAttribute %}
+            <del>{{ orgSubscription.uidAttribute }}</del>
+        {% endif %}
         {% if subscription.uidAttribute %}
-            {{ subscription.uidAttribute.requested }} - {{ subscription.uidAttribute.motivation }}
+            {{ subscription.uidAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'preferredLanguageAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.preferredLanguageAttribute != subscription.preferredLanguageAttribute %}
+            <del>{{ orgSubscription.preferredLanguageAttribute }}</del>
+        {% endif %}
         {% if subscription.preferredLanguageAttribute %}
-            {{ subscription.preferredLanguageAttribute.requested }} - {{ subscription.preferredLanguageAttribute.motivation }}
+            {{ subscription.preferredLanguageAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'organizationalUnitAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.organizationalUnitAttribute != subscription.organizationalUnitAttribute %}
+            <del>{{ orgSubscription.organizationalUnitAttribute }}</del>
+        {% endif %}
         {% if subscription.organizationalUnitAttribute %}
-            {{ subscription.organizationalUnitAttribute.requested }} - {{ subscription.organizationalUnitAttribute.motivation }}
+            {{ subscription.organizationalUnitAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'personalCodeAttribute'|humanize|trans }}</dt>
     <dd>
+        {% if orgSubscription is defined and orgSubscription.personalCodeAttribute != subscription.personalCodeAttribute %}
+            <del>{{ orgSubscription.personalCodeAttribute }}</del>
+        {% endif %}
         {% if subscription.personalCodeAttribute %}
-            {{ subscription.personalCodeAttribute.requested }} - {{ subscription.personalCodeAttribute.motivation }}
+            {{ subscription.personalCodeAttribute }}
         {% endif %}
     </dd>
 
     <dt>{{ 'comments'|humanize|trans }}</dt>
-    <dd>{{ subscription.comments }}</dd>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.comments != subscription.comments %}
+            <del>{{ orgSubscription.comments }}</del>
+        {% endif %}
+        {{ subscription.comments }}
+    </dd>
 </dl>

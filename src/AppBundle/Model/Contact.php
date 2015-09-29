@@ -112,4 +112,20 @@ class Contact
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $result = $this->firstName . ' ' . $this->lastName .' (' . $this->email;
+
+        if (!empty($this->phone)) {
+            $result .= ' / ' . $this->phone;
+        }
+
+        $result .= ')';
+
+        return $result;
+    }
 }
