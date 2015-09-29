@@ -132,6 +132,13 @@ class Subscription
     private $acsLocation;
 
     /**
+     * @var int
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\NotBlank()
+     */
+    private $acsIndex = 0;
+
+        /**
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
@@ -559,6 +566,26 @@ class Subscription
     public function setAcsLocation($acsLocation)
     {
         $this->acsLocation = $acsLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAcsIndex()
+    {
+        return $this->acsIndex;
+    }
+
+    /**
+     * @param int $acsIndex
+     *
+     * @return $this
+     */
+    public function setAcsIndex($acsIndex)
+    {
+        $this->acsIndex = $acsIndex;
 
         return $this;
     }

@@ -49,6 +49,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\AppBundle\Model\Metadata', $metadata);
 
         $this->assertEquals($metadata->acsLocation, 'https://domain.org/saml/sp/saml2-post/default-sp');
+        $this->assertEquals($metadata->acsIndex, 0);
         $this->assertEquals($metadata->entityId, 'https://domain.org/saml/metadata');
 
         $this->assertEquals($metadata->logoUrl, 'LOGO');

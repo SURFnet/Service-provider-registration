@@ -52,6 +52,7 @@ class MetadataMapper
             ServiceRegistry::LOGO_0_HEIGHT                       => $height,
             ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_BINDING  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
             ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_LOCATION => $request->getAcsLocation(),
+            ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_INDEX    => $request->getAcsIndex(),
             ServiceRegistry::CERTDATA                            => $certData,
         );
 

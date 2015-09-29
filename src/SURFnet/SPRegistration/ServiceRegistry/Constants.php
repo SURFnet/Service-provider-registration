@@ -39,6 +39,7 @@ final class Constants
     const CONTACTS_2_TELEPHONENUMBER = 'contacts:2:telephoneNumber';
     const ASSERTIONCONSUMERSERVICE_0_BINDING = 'AssertionConsumerService:0:Binding';
     const ASSERTIONCONSUMERSERVICE_0_LOCATION = 'AssertionConsumerService:0:Location';
+    const ASSERTIONCONSUMERSERVICE_0_INDEX = 'AssertionConsumerService:0:Index';
     const CERTDATA = 'certData';
     const COIN_EULA = 'coin:eula';
 }

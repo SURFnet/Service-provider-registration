@@ -22,6 +22,7 @@ Email: Email
 Phone: Phone
 Metadata url: Metadata URL
 Acs location: ACS location
+Acs index: ACS index
 Entity id: Entity ID
 Certificate: Certificate
 Logo url: Logo URL
@@ -87,6 +88,7 @@ form:
 
     help:
         acsLocation: form.help.acsLocation   # FIXME
+        acsIndex: form.help.acsIndex   # FIXME
         administrativeContact: form.help.administrativeContact   # FIXME
         affiliationAttribute: form.help.affiliationAttribute   # FIXME
         applicationUrl: form.help.applicationUrl   # FIXME
@@ -155,6 +157,7 @@ form:
 
     placeholder:
         acsLocation: 'Information is automatically subtracted from the Metadata URL'
+        acsIndex: 'Information is automatically subtracted from the Metadata URL'
         entityId: 'Information is automatically subtracted from the Metadata URL'
         certificate: 'Information is automatically subtracted from the Metadata URL'
         attribute: 'The service will use this attribute to....'

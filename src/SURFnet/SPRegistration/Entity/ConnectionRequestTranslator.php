@@ -70,6 +70,11 @@ final class ConnectionRequestTranslator
                 ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_LOCATION
             )
         );
+        $request->setAcsIndex(
+            $connection->getMetadata(
+                ServiceRegistry::ASSERTIONCONSUMERSERVICE_0_INDEX
+            )
+        );
 
         $certData = $connection->getMetadata('certData');
         if (!$certData) {

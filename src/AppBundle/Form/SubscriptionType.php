@@ -45,6 +45,7 @@ class SubscriptionType extends AbstractType
             // Tab Metadata
             ->add('metadataUrl', 'url', array('default_protocol' => 'https'))
             ->add('acsLocation', null, array('read_only' => true)) // @todo: these should be disabled, but then validation is harder..
+            ->add('acsIndex', null, array('read_only' => true))
             ->add('entityId', null, array('read_only' => true))
             ->add('certificate', null, array('read_only' => true))
             ->add('logoUrl')
@@ -116,6 +117,7 @@ class SubscriptionType extends AbstractType
     private function mapMetadataToFormData(array $formData, Metadata $metadata)
     {
         $formData['acsLocation'] = $metadata->acsLocation;
+        $formData['acsIndex'] = $metadata->acsIndex;
         $formData['entityId'] = $metadata->entityId;
         $formData['certificate'] = $metadata->certificate;
 

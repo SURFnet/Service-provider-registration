@@ -123,6 +123,7 @@ class Parser
 
             if ((string)$acs['Binding'] === SAML2_Const::BINDING_HTTP_POST) {
                 $metadata->acsLocation = (string)$acs['Location'];
+                $metadata->acsIndex = (int)$acs['index'];
             }
 
             if ((int)$acs['index'] > 9) {

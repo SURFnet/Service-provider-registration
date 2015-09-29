@@ -25,6 +25,18 @@
 
     <div class="row">
         <div class="col-xs-11">
+            {{ form_row(form.acsIndex, {attr: {'class': 'disabled', 'placeholder': 'form.placeholder.acsIndex'|trans}}) }}
+        </div>
+
+        <div class="col-xs-1">
+            <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.acsIndex'|trans|escape('html_attr') }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-11">
             {{ form_row(form.entityId, {attr: {'class': 'disabled', 'placeholder': 'form.placeholder.entityId'|trans}}) }}
         </div>
 

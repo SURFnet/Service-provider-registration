@@ -15,6 +15,11 @@ class Metadata
 {
     public $acsLocation;
 
+    /**
+     * @var int
+     */
+    public $acsIndex;
+
     public $entityId;
 
     public $certificate;
