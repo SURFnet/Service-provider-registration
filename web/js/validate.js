@@ -99,7 +99,7 @@
                 return field.$element.closest('.form-group');
             },
             errorsWrapper: '<ul class="help-block"></ul>'
-        }).subscribe('parsley:form:validate', function (form) {
+        }).subscribe('parsley:form:validate', function () {
             $('#status-validating').removeClass('hidden');
         }).subscribe('parsley:form:validated', function (form) {
             if (true !== form.validationResult) {
