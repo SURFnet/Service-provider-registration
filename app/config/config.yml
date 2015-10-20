@@ -95,7 +95,7 @@ monolog:
             type:       swift_mailer
             from_email: no-reply@surfnet.nl
             to_email:   "%error_mail_address%"
-            subject:    Service Provider Registration Error
+            subject:    "%error_mail_subject%"
             level:      debug
         metadata:
             type:     stream
