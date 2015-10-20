@@ -1,16 +1,7 @@
-server 'info2.surfnet.nl', :app, :web, :primary => true
-#set :ssh_options, { verbose: :debug }
+server 'imogen.surfnet.nl', :app, :web, :primary => true
 
-set :deploy_to,   "/www/support/spform-staging/"
+set :webserver_user, "www-data"
+set :deploy_to,   "/srv/spform-staging/"
 
 default_run_options[:pty] = true
 
-before "deploy:create_symlink" do
-	custom.set_permissions
-end
-
-namespace :custom do
-	task :set_permissions, :roles => :app, :except => { :no_release => true } do
-		sudo "/usr/local/sbin/fix-www-permissions.sh /www/support/"
-	end
-end
