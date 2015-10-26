@@ -1,5 +1,7 @@
 server 'info2.surfnet.nl', :app, :web, :primary => true
 
+set :deploy_to,   "/www/support/spform/"
+
 default_run_options[:pty] = true
 
 before "deploy:create_symlink" do

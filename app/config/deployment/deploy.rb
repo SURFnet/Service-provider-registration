@@ -1,10 +1,9 @@
 set :stages,        %w(production staging development)
-set :default_stage, "production"
+set :default_stage, "development"
 set :stage_dir,     "app/config/deployment"
 require 'capistrano/ext/multistage'
 
 set :application, "SURFnet Service Provider Registration"
-set :deploy_to,   "/www/support/spform/"
 set :app_path,    "app"
 
 set :repository, "git@github.com:SURFnet/Service-provider-registration.git"

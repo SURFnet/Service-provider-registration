@@ -8,6 +8,7 @@
     },
     "require": {
         "php": ">=5.3.3",
+        "ext-memcache": "*",
 
         "apy/datagrid-bundle":                  "dev-master",
         "braincrafted/bootstrap-bundle":        "~2.0",

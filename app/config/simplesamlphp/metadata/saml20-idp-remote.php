@@ -159,3 +159,12 @@ MrsTf1urM8MnfcxG/82oHIwfMh/sXPCZpo+DTLkhQxctJ3M=
                 ),
         ),
 );
+
+$metadata['https://engine.connect.surfconext.nl/authentication/idp/metadata'] = array(
+    'name' => array(
+        'en' => 'SURFconext Connect',
+        'nl' => 'SURFconext Aansluitomgeving',
+    ),
+    'SingleSignOnService'  => 'https://engine.connect.surfconext.nl/authentication/idp/single-sign-on',
+    'certFingerprint'      => array('25:72:85:66:C9:94:22:98:36:84:11:E1:88:C7:AC:40:98:F9:E7:82'),
+);
