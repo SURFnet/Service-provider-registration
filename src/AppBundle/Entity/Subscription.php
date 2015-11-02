@@ -118,7 +118,12 @@ class Subscription
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Url(protocols={"https"}, message = "url.notSecure")
+     * @Assert\Url(
+     *      protocols={"https"},
+     *      message = "url.notSecure",
+     *      groups={"finalize"}
+     * )
+     * @Assert\Url(message = "url.invalid")
      * @AppAssert\ValidMetadata()
      */
     private $metadataUrl;
@@ -127,7 +132,12 @@ class Subscription
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Url(protocols={"https"})
+     * @Assert\Url(protocols={"https,http"})
+     * @Assert\Url(
+     *      protocols={"https"},
+     *      message = "url.notSecure",
+     *      groups={"finalize"}
+     * )
      */
     private $acsLocation;
 
