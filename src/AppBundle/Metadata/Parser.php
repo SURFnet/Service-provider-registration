@@ -6,7 +6,6 @@ use AppBundle\Metadata\Exception\ParserException;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
-use Doctrine\Common\Cache\Cache;
 use Monolog\Logger;
 use SAML2_Const;
 use SAML2_XML_mdui_UIInfo;
@@ -16,9 +15,12 @@ use XMLSecurityDSig;
  * Class Parser
  *
  * @todo: this class could use some refactoring
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Parser
 {
+    const NS_LANG = 'http://www.w3.org/XML/1998/namespace';
+
     /**
      * @var Fetcher
      */
@@ -47,10 +49,11 @@ class Parser
     /**
      * Constructor
      *
-     * @param Fetcher           $fetcher
-     * @param CertificateParser $certParser
-     * @param string            $schemaLocation
-     * @param Logger            $logger
+     * @param Fetcher                      $fetcher
+     * @param CertificateParser            $certParser
+     * @param AttributesMetadataRepository $attributesMetadataRepository
+     * @param string                       $schemaLocation
+     * @param Logger                       $logger
      */
     public function __construct(
         Fetcher $fetcher,
@@ -155,7 +158,7 @@ class Parser
         $metadata->logoUrl = (string)$ui->Logo;
 
         foreach ($ui->Description as $description) {
-            $lang = $description->attributes();
+            $lang = $description->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
@@ -170,7 +173,7 @@ class Parser
         }
 
         foreach ($ui->DisplayName as $name) {
-            $lang = $name->attributes();
+            $lang = $name->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {
@@ -185,7 +188,7 @@ class Parser
         }
 
         foreach ($ui->InformationURL as $url) {
-            $lang = $url->attributes();
+            $lang = $url->attributes(static::NS_LANG);
             $lang = $lang['lang'];
 
             switch ($lang) {

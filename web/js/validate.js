@@ -99,6 +99,8 @@
                 return field.$element.closest('.form-group');
             },
             errorsWrapper: '<ul class="help-block"></ul>'
+        }).subscribe('parsley:form:validate', function () {
+            $('#status-validating').removeClass('hidden');
         }).subscribe('parsley:form:validated', function (form) {
             if (true !== form.validationResult) {
                 var tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
@@ -158,6 +160,10 @@
             }, 32)
             .addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
             .addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
+
+		$(document).ajaxComplete(function() {
+			$('#status-validating').addClass('hidden');
+		});
 
         function save(options, formData) {
             /*jshint validthis:true */

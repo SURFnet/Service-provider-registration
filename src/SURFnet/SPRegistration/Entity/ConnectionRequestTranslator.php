@@ -21,10 +21,9 @@ final class ConnectionRequestTranslator
     /**
      * Update a Connection Request with a Janus Connection.
      *
-     * @param Connection $connection
-     *   Janus connection.
+     * @param Connection   $connection
      * @param Subscription $request
-     *   Connection Request to update.
+     *
      * @return Subscription
      */
     public function translateFromConnection(
@@ -88,10 +87,8 @@ final class ConnectionRequestTranslator
      * Translate a Connection Request to an actual Janus Connection.
      *
      * @param Subscription $request
-     *   Connection request.
      *
      * @return Connection
-     *   Janus Connection based on request.
      */
     public function translateToConnection(Subscription $request)
     {
@@ -102,15 +99,19 @@ final class ConnectionRequestTranslator
             $this->metadataMapper->mapRequestToMetadata($request),
             $request->getMetadataUrl(),
             '',
-            new ConnectionAccess(),
-            $this->arpMapper->mapRequestToArpAttributes($request)
+            new ConnectionAccess(true),
+            $this->arpMapper->mapRequestToArpAttributes($request),
+            array(),
+            true,
+            $request->getJanusId()
         );
     }
 
     /**
      * ConnectionRequestTranslator constructor.
-     * @param ArpMapper $arpMapper
-     * @param ContactMapper $contactMapper
+     *
+     * @param ArpMapper      $arpMapper
+     * @param ContactMapper  $contactMapper
      * @param MetadataMapper $metadataMapper
      */
     public function __construct(
@@ -127,7 +128,6 @@ final class ConnectionRequestTranslator
      * @var ArpMapper
      */
     private $arpMapper;
-
 
     /**
      * @var ContactMapper

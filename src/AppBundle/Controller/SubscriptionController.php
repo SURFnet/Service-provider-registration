@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  *
  * @todo: some actions are different only based on the template.. refactor this
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class SubscriptionController extends Controller
 {
@@ -272,7 +273,7 @@ class SubscriptionController extends Controller
     public function overviewForUpdateAction($id, Request $request)
     {
         try {
-            $this->getSubscription($id);
+            $orgSubscription = clone $this->getSubscription($id);
         } catch (\InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
@@ -286,7 +287,8 @@ class SubscriptionController extends Controller
         return $this->render(
             'subscription/update_overview.html.twig',
             array(
-                'subscription' => $subscription,
+                'subscription'    => $subscription,
+                'orgSubscription' => $orgSubscription,
             )
         );
     }

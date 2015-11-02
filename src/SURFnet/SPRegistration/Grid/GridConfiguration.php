@@ -8,30 +8,18 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
-use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 
 /**
  * Class GridConfiguration
+ *
  * @package SURFnet\SPRegistration
  */
 class GridConfiguration
 {
     /**
-     * @var ConnectionDescriptorRepository
-     */
-    private $janusDescriptorRepository;
-
-    /**
-     * GridConfiguration constructor.
-     * @param ConnectionDescriptorRepository $janusDescriptorRepository
-     */
-    public function __construct(
-        ConnectionDescriptorRepository $janusDescriptorRepository
-    ) {
-        $this->janusDescriptorRepository = $janusDescriptorRepository;
-    }
-
-    /**
+     * @param Grid   $grid
+     * @param string $routeUrl
+     *
      * @return Grid
      */
     public function configureGrid(Grid $grid, $routeUrl)
@@ -46,9 +34,11 @@ class GridConfiguration
         $grid->setRouteUrl($routeUrl);
 
         $grid->setDefaultOrder('created', 'desc');
-        $grid->setDefaultFilters(array(
-            'archived' => false,
-        ));
+        $grid->setDefaultFilters(
+            array(
+                'archived' => false,
+            )
+        );
         $grid->setLimits(array(5 => 5, 10 => 10, 15 => 15, 25 => 25, 50 => 50, 99999 => 'all'));
 
         $grid->setActionsColumnTitle('');
@@ -136,22 +126,10 @@ class GridConfiguration
         );
         $grid->addRowAction($rowAction);
 
-        $rowAction = new RowAction('finish', 'admin.subscription.finish');
+        $rowAction = new RowAction('finish', 'admin.subscription.finish', true);
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
                 if ($row->getField('status') !== Subscription::STATE_PUBLISHED) {
-                    return null;
-                }
-
-                return $action;
-            }
-        );
-        $grid->addRowAction($rowAction);
-
-        $rowAction = new RowAction('draft', 'admin.subscription.draft');
-        $rowAction->manipulateRender(
-            function (RowAction $action, Row $row) {
-                if ($row->getField('status') !== Subscription::STATE_FINISHED) {
                     return null;
                 }
 
@@ -183,33 +161,24 @@ class GridConfiguration
      */
     private function addLinkToJanus(Grid $grid)
     {
-        $descriptorRepository = $this->janusDescriptorRepository;
         $rowAction = new RowAction('janus', 'admin.subscription.janus');
         $rowAction->manipulateRender(
-            function (RowAction $action, Row $row) use ($descriptorRepository) {
+            function (RowAction $action, Row $row) {
                 $subscription = $row->getEntity();
 
                 if (!$subscription instanceof Subscription) {
                     return null;
                 }
 
-                $entityId = $subscription->getEntityId();
-
-                if (empty($entityId)) {
+                if (!$subscription->getJanusId()) {
                     return null;
                 }
 
-                $connectionDescriptor = $descriptorRepository->findByName(
-                    $entityId
+                return $action->addRouteParameters(
+                    array(
+                        'eid' => $subscription->getJanusId(),
+                    )
                 );
-
-                if (!$connectionDescriptor) {
-                    return null;
-                }
-
-                return $action->addRouteParameters(array(
-                    'eid' => $connectionDescriptor->getId(),
-                ));
             }
         );
         $grid->addRowAction($rowAction);

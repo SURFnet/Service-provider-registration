@@ -1,4 +1,5 @@
 <?php
+use AppBundle\Metadata\AttributesMetadataRepository;
 
 /**
  * Class ParserTest
@@ -28,15 +29,15 @@ class ParserTest extends PHPUnit_Framework_TestCase
 
         $fetcher = new \AppBundle\Metadata\Fetcher(
             $guzzle,
-            new \Doctrine\Common\Cache\ArrayCache(),
             new \Monolog\Logger('test', array(new \Monolog\Handler\NullHandler()))
         );
 
+        $rootDir = __DIR__ . '/../../../../app';
         $this->parser = new \AppBundle\Metadata\Parser(
             $fetcher,
             new \AppBundle\Metadata\CertificateParser(),
-            __DIR__ . '/../../../../app/Resources/schemas/',
-            new \Doctrine\Common\Cache\ArrayCache(),
+            new AttributesMetadataRepository($rootDir),
+            $rootDir . '/Resources/schemas/',
             new \Monolog\Logger('test', array(new \Monolog\Handler\NullHandler()))
         );
     }

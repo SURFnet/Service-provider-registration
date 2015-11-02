@@ -5,8 +5,8 @@ name: Name
 contact: Contact
 created: Created
 status: Status
+archived: Archived
 ticketNo: Ticket No.
-email: Email
 updated: Updated
 key: Key
 domain: Domain
@@ -132,7 +132,7 @@ form:
         saved: Saved
         saving: Saving...
         updated: The form has been updated!
-
+        validating: Validating...
     tab:
         attributes: attributes
         comments: comments
@@ -153,6 +153,11 @@ form:
 
     title: SURFnet SP Registration
 
+    placeholder:
+        acsLocation: 'Information is automatically subtracted from the Metadata URL'
+        entityId: 'Information is automatically subtracted from the Metadata URL'
+        certificate: 'Information is automatically subtracted from the Metadata URL'
+        attribute: 'The service will use this attribute to....'
 mail:
     invitation:
         subject: 'Invitation for SURFnet SP Registration (%ticketNo%)'

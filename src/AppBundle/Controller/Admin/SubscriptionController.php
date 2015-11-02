@@ -34,9 +34,7 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function gridAction()
     {
-        $configuration = new GridConfiguration(
-            $this->get('janus.connection_descriptor_repository')
-        );
+        $configuration = new GridConfiguration();
         $grid = $configuration->configureGrid(
             $this->get('grid'),
             $this->generateUrl('admin.subscription.grid')
@@ -123,27 +121,7 @@ class SubscriptionController extends Controller implements SecuredController
 
         $this->get('subscription.manager')->updateSubscription($subscription);
 
-        return $this->redirect($this->generateUrl('admin.subscription.overview'));
-    }
-
-    /**
-     * @Route("/{id}/draft", name="admin.subscription.draft")
-     *
-     * @param string $id
-     *
-     * @return Response
-     */
-    public function draftAction($id)
-    {
-        $subscription = $this->get('subscription.manager')->getSubscription($id);
-
-        if (empty($subscription)) {
-            throw $this->createNotFoundException();
-        }
-
-        $subscription->draft();
-
-        $this->get('subscription.manager')->updateSubscription($subscription);
+        $this->get('mail.manager')->sendFinishedNotification($subscription);
 
         return $this->redirect($this->generateUrl('admin.subscription.overview'));
     }
@@ -172,6 +150,8 @@ class SubscriptionController extends Controller implements SecuredController
 
     /**
      * @Route("/janus/{eid}", name="admin.subscription.janus")
+     *
+     * @param string $eid
      *
      * @return Response
      */

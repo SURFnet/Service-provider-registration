@@ -100,7 +100,7 @@ class Subscription
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $janusId;
 
@@ -1144,6 +1144,9 @@ class Subscription
         );
     }
 
+    /**
+     * @return Subscription
+     */
     public function archive()
     {
         $this->archived = true;
