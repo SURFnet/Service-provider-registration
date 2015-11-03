@@ -133,7 +133,7 @@ class Subscription
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Url(protocols={"https,http"})
+     * @Assert\Url(protocols={"https","http"})
      * @Assert\Url(
      *      protocols={"https"},
      *      message = "url.notSecure",
