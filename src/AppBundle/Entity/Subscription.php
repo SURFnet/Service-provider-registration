@@ -8,6 +8,7 @@ use AppBundle\Validator\Constraints as AppAssert;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use RuntimeException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
@@ -387,30 +388,6 @@ class Subscription
     }
 
     /**
-     *
-     */
-    public function finish()
-    {
-        $this->status = self::STATE_FINISHED;
-    }
-
-    /**
-     *
-     */
-    public function draft()
-    {
-        $this->status = self::STATE_DRAFT;
-    }
-
-    /**
-     *
-     */
-    public function publish()
-    {
-        $this->status = self::STATE_PUBLISHED;
-    }
-
-    /**
      * @return bool
      */
     public function isDraft()
@@ -419,11 +396,17 @@ class Subscription
     }
 
     /**
-     * @return bool
+     *
      */
-    public function isFinished()
+    public function publish()
     {
-        return $this->status === self::STATE_FINISHED;
+        if (!$this->isDraft()) {
+            throw new RuntimeException(
+                "Invalid transition from {$this->status} to published"
+            );
+        }
+
+        $this->status = self::STATE_PUBLISHED;
     }
 
     /**
@@ -432,6 +415,28 @@ class Subscription
     public function isPublished()
     {
         return $this->status === self::STATE_PUBLISHED;
+    }
+
+    /**
+     *
+     */
+    public function finish()
+    {
+        if (!$this->isPublished()) {
+            throw new RuntimeException(
+                "Invalid transition from {$this->status} to finished"
+            );
+        }
+
+        $this->status = self::STATE_FINISHED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return $this->status === self::STATE_FINISHED;
     }
 
     /**
