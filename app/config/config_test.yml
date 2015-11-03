@@ -17,5 +17,7 @@ swiftmailer:
 
 doctrine_cache:
     providers:
-        my_memcached_cache:
-            namespace: test
+        memcache:
+            servers: %memcached_servers%
+        namespace: cache_test
+        alias: cache

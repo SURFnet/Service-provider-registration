@@ -110,11 +110,6 @@ norzechowicz_ace_editor:
 
 doctrine_cache:
     providers:
-        my_memcached_cache:
-            memcached:
-                servers: %memcached_servers%
-            namespace: prod
-            alias: cache
         metadata:
             file_system:
                 directory: %kernel.root_dir%/data/metadata/

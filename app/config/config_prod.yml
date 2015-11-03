@@ -11,6 +11,15 @@ doctrine:
         result_cache_driver: {type: service, id: cache}
         query_cache_driver: {type: service, id: cache}
 
+
+doctrine_cache:
+    providers:
+        my_memcached_cache:
+            memcache:
+                servers: %memcached_servers%
+            namespace: cache_prod
+            alias: cache
+
 monolog:
     handlers:
         main:
