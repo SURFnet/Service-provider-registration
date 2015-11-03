@@ -37,5 +37,6 @@ window.ParsleyConfig.i18n.nl = $.extend(window.ParsleyConfig.i18n.nl || {}, {
 });
 
 // If file is loaded after Parsley main file, auto-load locale
-if ('undefined' !== typeof window.ParsleyValidator)
-  window.ParsleyValidator.addCatalog('nl', window.ParsleyConfig.i18n.nl, true);
+if ('undefined' !== typeof window.Parsley) {
+    window.Parsley.addCatalog('nl', window.ParsleyConfig.i18n.nl, true);
+}
