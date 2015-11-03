@@ -85,7 +85,7 @@ class ValidEntityIdValidator extends ConstraintValidator
             return;
         }
 
-        if (empty($entity)) {
+        if ($entity) {
             $this->context->addViolation('Entity has already been registered.');
 
             return;
