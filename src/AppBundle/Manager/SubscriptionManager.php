@@ -149,11 +149,12 @@ class SubscriptionManager
     /**
      * @param Subscription $subscription
      *
+     * @param null|array $groups
      * @return bool
      */
-    public function isValidSubscription(Subscription $subscription)
+    public function isValidSubscription(Subscription $subscription, $groups = null)
     {
-        return count($this->validator->validate($subscription)) === 0;
+        return count($this->validator->validate($subscription, $groups)) === 0;
     }
 
     /**
