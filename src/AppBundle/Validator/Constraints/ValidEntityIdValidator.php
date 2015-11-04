@@ -40,6 +40,10 @@ class ValidEntityIdValidator extends ConstraintValidator
             $subscription = $root->getData();
         }
 
+        if (!$subscription->isDraft()) {
+            return;
+        }
+
         $metadataUrl = $subscription->getMetadataUrl();
 
         if (empty($metadataUrl) || empty($value)) {

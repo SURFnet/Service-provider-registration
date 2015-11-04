@@ -66,6 +66,6 @@ class Attribute
             return '-';
         }
 
-        return $this->motivation;
+        return (string) $this->motivation;
     }
 }

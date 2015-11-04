@@ -150,27 +150,38 @@
         <div class="form-group">
             <div class="col-md-6">
                 {% if (subscription.isPublished) %}
-                    <button type="submit" class="btn btn-primary" {% if locked %}disabled="disabled"{% endif %}>
+                    <button id="subscription_updatebtn"
+                            class="btn btn-primary"
+                            type="submit"
+                           {% if locked %}disabled="disabled"{% endif %}>
                         {{ 'form.button.update'|trans }}
                     </button>
-                    <a href="{{ path('overview_finish', {id: subscription.id}) }}">
+                    <button id="subscription_finishbtn"
+                            class="btn btn-success"
+                            type="submit"
+                           {% if locked %}disabled="disabled"{% endif %}>
                         {{ 'form.button.finish'|trans }}
-                    </a>
+                    </button>
                 {% endif %}
                 {% if (subscription.isDraft) %}
-                <button type="submit" class="btn btn-primary" {% if locked %}disabled="disabled"{% endif %}>
+                <button type="submit"
+                        class="btn btn-primary"
+                        {% if locked %}disabled="disabled"{% endif %}>
                     {{ 'form.button.publish'|trans }}
                 </button>
                 {% endif %}
                 &nbsp;&nbsp;
                 <span id="status-progress" class="hidden">
-                    <i class="fa fa-cog fa-spin"></i> {{ 'form.status.saving'|trans }}
+                    <i class="fa fa-cog fa-spin"></i>
+                    {{ 'form.status.saving'|trans }}
                 </span>
                 <span id="status-done" class="hidden">
-                    <i class="fa fa-check"></i> {{ 'form.status.saved'|trans }}
+                    <i class="fa fa-check"></i>
+                    {{ 'form.status.saved'|trans }}
                 </span>
                 <span id="status-validating" class="hidden">
-                    <i class="fa fa-cog fa-spin"></i> {{ 'form.status.validating'|trans }}
+                    <i class="fa fa-cog fa-spin"></i>
+                    {{ 'form.status.validating'|trans }}
                 </span>
             </div>
         </div>

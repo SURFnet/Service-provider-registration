@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Form\SubscriptionType;
+use AppBundle\Form\SubscriptionTypeFactory;
+use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,15 +35,17 @@ class SubscriptionController extends Controller
      *
      * @return Response
      */
-    public function formAction($id, Request $request)
+    public function getAction($id, Request $request)
     {
         try {
             $subscription = $this->getSubscription($id, true, false);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
-        $form = $this->getForm($subscription, $request->getSession());
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscription.form.factory');
+        $form = $formFactory->buildForm($subscription, $request);
 
         return $this->render(
             'subscription/form.html.twig',
@@ -66,10 +70,12 @@ class SubscriptionController extends Controller
         $subscription = $this->getSubscription($id);
 
         if (!$subscription->isDraft()) {
-            throw new \InvalidArgumentException('(auto)save is only allowed for drafts');
+            throw new InvalidArgumentException('(auto)save is only allowed for drafts');
         }
 
-        $form = $this->getForm($subscription, $request->getSession());
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscriptionTypeFactory');
+        $form = $formFactory->buildForm($subscription, $request);
 
         $form->handleRequest($request);
 
@@ -95,7 +101,9 @@ class SubscriptionController extends Controller
     {
         $subscription = $this->getSubscription($id);
 
-        $form = $this->getForm($subscription, $request->getSession(), false);
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscription.form.factory');
+        $form = $formFactory->buildForm($subscription, $request);
 
         $form->submit($request->get($form->getName()), false);
 
@@ -155,38 +163,45 @@ class SubscriptionController extends Controller
      *
      * @return Response
      */
-    public function storeAction($id, Request $request)
+    public function postAction($id, Request $request)
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
-        $form = $this->getForm($subscription, $request->getSession());
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscription.form.factory');
+        $form = $formFactory->buildForm($subscription, $request, false);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($subscription->isPublished()) {
-                $this->get('subscription.manager')->storeSubscriptionInSession($subscription, $request->getSession());
-
-                return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
-            }
-
-            $this->get('subscription.manager')->updateSubscription($subscription);
-
-            return $this->redirect($this->generateUrl('overview_publish', array('id' => $id)));
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->render(
+                'subscription/form.html.twig',
+                array(
+                    'subscription' => $subscription,
+                    'form' => $form->createView(),
+                    'locked' => !$this->get('lock.manager')->lock($id),
+                )
+            );
         }
 
-        return $this->render(
-            'subscription/form.html.twig',
-            array(
-                'subscription' => $subscription,
-                'form'         => $form->createView(),
-                'locked'       => !$this->get('lock.manager')->lock($id),
-            )
-        );
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+
+        if ($subscription->isPublished()) {
+            $subscriptionManager->storeSubscriptionInSession($subscription, $request->getSession());
+
+            return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
+        }
+
+        $subscriptionManager->updateSubscription($subscription);
+
+        return $this->redirect($this->generateUrl('overview_publish', array('id' => $id)));
+
+
     }
 
     /**
@@ -200,7 +215,7 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
@@ -227,7 +242,7 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
@@ -274,7 +289,7 @@ class SubscriptionController extends Controller
     {
         try {
             $orgSubscription = clone $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
@@ -305,7 +320,7 @@ class SubscriptionController extends Controller
     {
         try {
             $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
@@ -339,12 +354,24 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
-        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
-            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+        $isValid = $subscriptionManager->isValidSubscription(
+            $subscription,
+            array('Default', 'finalize')
+        );
+
+        if (!$isValid) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'form',
+                    array('id' => $id, 'finish'=> '1')
+                )
+            );
         }
 
         return $this->render(
@@ -366,7 +393,7 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
@@ -399,27 +426,6 @@ class SubscriptionController extends Controller
                 'subscription' => $this->getSubscription($id, false),
             )
         );
-    }
-
-    /**
-     * @param Subscription     $subscription
-     * @param SessionInterface $session
-     * @param bool             $useCsrf
-     *
-     * @return Form
-     */
-    private function getForm(Subscription $subscription, SessionInterface $session, $useCsrf = true)
-    {
-        $form = $this->createForm(
-            new SubscriptionType($this->get('parser'), $session),
-            $subscription,
-            array(
-                'disabled'        => !$this->get('lock.manager')->lock($subscription->getId()),
-                'csrf_protection' => $useCsrf,
-            )
-        );
-
-        return $form;
     }
 
     /**
