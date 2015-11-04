@@ -191,6 +191,10 @@ services:
         tags:
             - { name: form.type, alias: purified_textarea }
 
+    subscription.form.factory:
+        class: AppBundle\Form\SubscriptionTypeFactory
+        arguments: [@form.factory, @lock.manager, @parser]
+
     validator.mapping.cache.cache:
         class: Symfony\Component\Validator\Mapping\Cache\DoctrineCache
         arguments: [@cache]
