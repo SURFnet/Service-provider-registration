@@ -52,7 +52,7 @@
         ParsleyUI.manageFailingFieldTrigger(field);
     }
 
-    function setupNextAndPrev(form, $) {
+    function setupNextAndPrev(form) {
         form.find('.btn-next').on('click', function () {
             $('.nav-tabs .active').next().find('a').tab('show');
             return false;
@@ -63,7 +63,7 @@
             return false;
         });
     }
-    function setupHelpPopovers(links, inputs, $) {
+    function setupHelpPopovers(links, inputs) {
         links.popover({
             container: 'body',
             trigger: 'click',
@@ -117,12 +117,12 @@
 
         $.each(json.errors, function (key, val) {
             if ($.isArray(val)) {
-                var field = $('#subscription_' + key).parsley();
-                updateErrors(field, val);
+                var errorField = $('#subscription_' + key).parsley();
+                updateErrors(errorField, val);
             } else {
                 $.each(val, function (key2, val2) {
-                    var field = $('#subscription_' + key + '_' + key2).parsley();
-                    updateErrors(field, val2);
+                    var errorFieldNested = $('#subscription_' + key + '_' + key2).parsley();
+                    updateErrors(errorFieldNested, val2);
                 });
             }
         });
@@ -209,7 +209,7 @@
         return false;
     }
 
-    function setupAutoSave(form) {
+    function setupAutoSaving(form) {
         if (!form.hasClass('autosave')) {
             return;
         }
@@ -255,9 +255,11 @@
     function preventFormOnEnterSubmit(form) {
         form.find('input, select').on('keypress', function (event) {
             //noinspection MagicNumberJS
-            if (event.which === 13) {
-                event.preventDefault();
+            if (event.which !== 13) {
+                return;
             }
+
+            event.preventDefault();
         });
     }
 
@@ -267,7 +269,7 @@
      * @todo double, help text
      */
     function setupValidation(form) {
-        var formParsley = form.parsley({
+        form.parsley({
             trigger: 'input',
             errorClass: 'has-error',
             successClass: 'has-success',
@@ -276,35 +278,44 @@
             },
             errorsWrapper: '<ul class="help-block"></ul>'
         });
-        formParsley.on('parsley:field:init', function (field) {
+        Parsley.on('field:init', function (field) {
             field.$element.closest('.form-group').addClass('has-feedback');
         });
-        formParsley.on('parsley:form:validate', function () {
+        Parsley.on('form:validate', function () {
             $('#status-validating').removeClass('hidden');
-        }).on('parsley:form:validated', function (form) {
+        });
+        Parsley.on('form:validated', function (form) {
             if (form.validationResult !== true) {
                 var tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
                 $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
             }
-        }).on('parsley:field:validate', function (field) {
+        });
+        Parsley.on('field:validate', function (field) {
             field.reset();
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
-        }).on('parsley:field:success', function (field) {
+        });
+        Parsley.on('field:success', function (field) {
             field.$element.next('i').remove();
             if (field.validationResult === true) {
                 field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
             }
-        }).on('parsley:field:error', function (field) {
+        });
+        Parsley.on('field:error', function (field) {
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
         });
     }
 
     function preventMetadataUrlCaching() {
-        $('#subscription_metadataUrl').parsley().on('parsley:field:validate', function (field) {
+        var metadataUrlParsley = $('#subscription_metadataUrl').parsley();
+        metadataUrlParsley.on('parsley:field:validate', function (field) {
             field.$element.attr('data-parsley-remote-options', '{ "type": "POST", "ts": ' + Date.now() + ' }');
             field.actualizeOptions();
+        });
+        metadataUrlParsley.on('field:ajaxoptions', function (field, options) {
+            var name = 'subscription[requestedState]';
+            options.data[name] = $('input[name="' + name + '"]').val();
         });
     }
 
@@ -326,7 +337,13 @@
 
     function hideSpinnerOnAjaxComplete() {
         $(document).ajaxComplete(function () {
-            $('#status-validating').addClass('hidden');
+            $('#status-validating,.fa-spin').addClass('hidden');
+        });
+    }
+
+    function setupFillRequestedState() {
+        $('input[type=submit]').on('click', function () {
+            $('#subscription_requestedState').val($(this).val());
         });
     }
 
@@ -336,22 +353,20 @@
             links = form.find('.popover-link');
 
         preventFormOnEnterSubmit(form);
-
-        setupValidation(form);
-
-        // Show external error messages
-        showExternalErrorMessages(form);
-
         preventMetadataUrlCaching();
-        setupUniqueContacts();
-
         hideSpinnerOnAjaxComplete();
 
-        setupAutoSave(form);
-        setupLocking(form, inputs);
-        setupNextAndPrev(form, $);
+        setupValidation(form);
+        setupFillRequestedState(form);
+        showExternalErrorMessages(form);
+        setupUniqueContacts();
+
+        setupNextAndPrev(form);
         setupActiveTabHistory();
-        setupHelpPopovers(links, inputs, $);
+        setupHelpPopovers(links, inputs);
         setupAttributeCheckboxes();
+
+        setupAutoSaving(form);
+        setupLocking(form, inputs);
     });
 }(window.jQuery, window.Parsley, window.ParsleyUI, window.document));
