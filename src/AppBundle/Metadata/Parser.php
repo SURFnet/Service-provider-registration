@@ -244,6 +244,7 @@ class Parser
 
             $attr = new Attribute();
             $attr->setRequested(true);
+            $attr->setMotivation('');
 
             $attributes = $attribute->attributes();
 
