@@ -53,7 +53,9 @@ class SubscriptionType extends AbstractType
             ->add('nameNl')
             ->add('descriptionNl')
             ->add('applicationUrl')
-            ->add('eulaUrl');
+            ->add('eulaUrl')
+            ->add('requestedState', 'hidden', array("mapped" => false))
+        ;
 
         // Tab Contact
         foreach ($this->getContacts() as $contact) {
