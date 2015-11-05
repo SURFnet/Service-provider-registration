@@ -89,10 +89,10 @@ class ValidEntityIdValidator extends ConstraintValidator
             return;
         }
 
-        if ($entity) {
-            $this->context->addViolation('Entity has already been registered.');
-
+        if (!$entity) {
             return;
         }
+
+        $this->context->addViolation('Entity has already been registered.');
     }
 }
