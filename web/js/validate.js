@@ -227,18 +227,22 @@
 
     // A custom validator to check whether the adm. and tech. contact are not the same
     function setupUniqueContacts() {
-        Parsley.addValidator(
-            'contactunique',
-            function () {
-                var email1 = $('#subscription_administrativeContact_email').val(),
-                    email2 = $('#subscription_technicalContact_email').val();
+        var validatorPriority = 32,
+            validator = Parsley.addValidator(
+                'contactunique',
+                function () {
+                    var adminEl = $('#subscription_administrativeContact_email'),
+                        techEl = $('#subscription_technicalContact_email');
 
-                //noinspection JSLint
-                return email1 !== email2;
-            },
-            32)
-            .addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
-            .addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
+                    adminEl.nextAll('ul.help-block').remove();
+                    techEl.nextAll('ul.help-block').remove();
+
+                    return adminEl.val().trim() !== techEl.val().trim();
+                },
+                validatorPriority
+            );
+        validator.addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
+        validator.addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
     }
 
     function preventFormOnEnterSubmit(form) {

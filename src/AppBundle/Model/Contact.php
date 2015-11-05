@@ -3,6 +3,7 @@
 namespace AppBundle\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\Validator\Constraints as AppAssert;
 
 /**
  * Class Contact
@@ -25,6 +26,7 @@ class Contact
      * @var string
      * @Assert\NotBlank(groups={"Default", "creation"})
      * @Assert\Email(groups={"Default", "creation"})
+     * @AppAssert\ContactNotEquals()
      */
     private $email;
 
