@@ -3,6 +3,7 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\Subscription;
+use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -58,26 +59,32 @@ class MailManager
     {
         $contact = $subscription->getContact();
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject(
-                $this->translator->trans(
-                    'mail.invitation.subject',
-                    array(
-                        '%ticketNo%' => $subscription->getTicketNo()
-                    ),
-                    null,
-                    $subscription->getLocale()
-                )
-            )
-            ->setFrom($this->sender)
-            ->setTo(array($contact->getEmail() => $contact->getFirstName() . ' ' . $contact->getLastName()))
-            ->setBody(
-                $this->renderView(
-                    'invitation.' . $subscription->getLocale() . '.html.twig',
-                    array('subscription' => $subscription)
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.invitation.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo()
                 ),
-                'text/html'
-            );
+                null,
+                $subscription->getLocale()
+            )
+        );
+        $message->setFrom($this->sender);
+        $message->setTo(
+            array(
+                $contact->getEmail() => $contact->getFirstName()
+                                        . ' '
+                                        . $contact->getLastName()
+            )
+        );
+        $message->setBody(
+            $this->renderView(
+                'invitation.' . $subscription->getLocale() . '.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
 
         $this->mailer->send($message);
     }
@@ -87,24 +94,24 @@ class MailManager
      */
     public function sendCreatedNotification(Subscription $subscription)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject(
-                $this->translator->trans(
-                    'mail.creation.subject',
-                    array(
-                        '%ticketNo%' => $subscription->getTicketNo()
-                    )
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.creation.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo()
                 )
             )
-            ->setFrom($this->sender)
-            ->setTo($this->receiver)
-            ->setBody(
-                $this->renderView(
-                    'admin/mail/creation.html.twig',
-                    array('subscription' => $subscription)
-                ),
-                'text/html'
-            );
+        );
+        $message->setFrom($this->sender);
+        $message->setTo($this->receiver);
+        $message->setBody(
+            $this->renderView(
+                'admin/mail/creation.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
 
         $this->mailer->send($message);
     }
@@ -114,26 +121,26 @@ class MailManager
      */
     public function sendPublishedNotification(Subscription $subscription)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject(
-                $this->translator->trans(
-                    'mail.notification.published.subject',
-                    array(
-                        '%ticketNo%' => $subscription->getTicketNo(),
-                        '%nameEn%'   => $subscription->getNameEn(),
-                        '%nameNl%'   => $subscription->getNameNl(),
-                    )
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.notification.published.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo(),
+                    '%nameEn%'   => $subscription->getNameEn(),
+                    '%nameNl%'   => $subscription->getNameNl(),
                 )
             )
-            ->setFrom($this->sender)
-            ->setTo($this->receiver)
-            ->setBody(
-                $this->renderView(
-                    'admin/mail/notification.published.html.twig',
-                    array('subscription' => $subscription)
-                ),
-                'text/html'
-            );
+        );
+        $message->setFrom($this->sender);
+        $message->setTo($this->receiver);
+        $message->setBody(
+            $this->renderView(
+                'admin/mail/notification.published.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
 
         $this->mailer->send($message);
     }
@@ -145,26 +152,32 @@ class MailManager
     {
         $contact = $subscription->getContact();
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject(
-                $this->translator->trans(
-                    'mail.confirmation.published.subject',
-                    array(
-                        '%ticketNo%' => $subscription->getTicketNo()
-                    ),
-                    null,
-                    $subscription->getLocale()
-                )
-            )
-            ->setFrom($this->sender)
-            ->setTo(array($contact->getEmail() => $contact->getFirstName() . ' ' . $contact->getLastName()))
-            ->setBody(
-                $this->renderView(
-                    'confirmation.published.' . $subscription->getLocale() . '.html.twig',
-                    array('subscription' => $subscription)
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.confirmation.published.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo()
                 ),
-                'text/html'
-            );
+                null,
+                $subscription->getLocale()
+            )
+        );
+        $message->setFrom($this->sender);
+        $message->setTo(
+            array(
+                $contact->getEmail() => $contact->getFirstName()
+                                        . ' '
+                                        . $contact->getLastName()
+            )
+        );
+        $message->setBody(
+            $this->renderView(
+                'confirmation.published.' . $subscription->getLocale() . '.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
 
         $this->mailer->send($message);
     }
@@ -174,26 +187,26 @@ class MailManager
      */
     public function sendFinishedNotification(Subscription $subscription)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject(
-                $this->translator->trans(
-                    'mail.notification.finished.subject',
-                    array(
-                        '%ticketNo%' => $subscription->getTicketNo(),
-                        '%nameEn%'   => $subscription->getNameEn(),
-                        '%nameNl%'   => $subscription->getNameNl(),
-                    )
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.notification.finished.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo(),
+                    '%nameEn%'   => $subscription->getNameEn(),
+                    '%nameNl%'   => $subscription->getNameNl(),
                 )
             )
-            ->setFrom($this->sender)
-            ->setTo($this->receiver)
-            ->setBody(
-                $this->renderView(
-                    'admin/mail/notification.finished.html.twig',
-                    array('subscription' => $subscription)
-                ),
-                'text/html'
-            );
+        );
+        $message->setFrom($this->sender);
+        $message->setTo($this->receiver);
+        $message->setBody(
+            $this->renderView(
+                'admin/mail/notification.finished.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
 
         $this->mailer->send($message);
     }
@@ -205,26 +218,26 @@ class MailManager
     {
         $contact = $subscription->getContact();
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject(
-                $this->translator->trans(
-                    'mail.confirmation.finished.subject',
-                    array(
-                        '%ticketNo%' => $subscription->getTicketNo()
-                    ),
-                    null,
-                    $subscription->getLocale()
-                )
-            )
-            ->setFrom($this->sender)
-            ->setTo(array($contact->getEmail() => $contact->getFirstName() . ' ' . $contact->getLastName()))
-            ->setBody(
-                $this->renderView(
-                    'confirmation.finished.' . $subscription->getLocale() . '.html.twig',
-                    array('subscription' => $subscription)
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.confirmation.finished.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo()
                 ),
-                'text/html'
-            );
+                null,
+                $subscription->getLocale()
+            )
+        );
+        $message->setFrom($this->sender);
+        $message->setTo(array($contact->getEmail() => $contact->getFirstName() . ' ' . $contact->getLastName()));
+        $message->setBody(
+            $this->renderView(
+                'confirmation.finished.' . $subscription->getLocale() . '.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
 
         $this->mailer->send($message);
     }
@@ -234,19 +247,33 @@ class MailManager
      */
     public function sendReport(array $subscriptions)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject($this->translator->trans('mail.report.subject'))
-            ->setFrom($this->sender)
-            ->setTo($this->receiver)
-            ->setBody(
-                $this->renderView(
-                    'admin/mail/report.html.twig',
-                    array('subscriptions' => $subscriptions)
-                ),
-                'text/html'
-            );
+        $message = $this->createNewMessage();
+        $message->setSubject($this->translator->trans('mail.report.subject'));
+        $message->setFrom($this->sender);
+        $message->setTo($this->receiver);
+        $message->setBody(
+            $this->renderView(
+                'admin/mail/report.html.twig',
+                array('subscriptions' => $subscriptions)
+            ),
+            'text/html'
+        );
 
         $this->mailer->send($message);
+    }
+
+    /**
+     * @return Swift_Message
+     */
+    private function createNewMessage()
+    {
+        $message = Swift_Message::newInstance();
+
+        $headers = $message->getHeaders();
+        $headers->addTextHeader('Auto-Submitted', 'auto-generated');
+        $headers->addTextHeader('Return-Path', '<>');
+
+        return $message;
     }
 
     /**

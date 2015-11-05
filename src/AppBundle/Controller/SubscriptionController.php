@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Subscription;
 use AppBundle\Form\SubscriptionType;
 use AppBundle\Form\SubscriptionTypeFactory;
+use AppBundle\Manager\MailManager;
 use AppBundle\Manager\SubscriptionManager;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -405,16 +406,21 @@ class SubscriptionController extends Controller
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
-        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+
+        if (!$subscriptionManager->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
         }
 
         $subscription->finish();
 
-        $this->get('subscription.manager')->updateSubscription($subscription);
+        $subscriptionManager->updateSubscription($subscription);
 
-        $this->get('mail.manager')->sendFinishedNotification($subscription);
-        $this->get('mail.manager')->sendFinishedConfirmation($subscription);
+        /** @var MailManager $mailManager */
+        $mailManager = $this->get('mail.manager');
+        $mailManager->sendFinishedNotification($subscription);
+        $mailManager->sendFinishedConfirmation($subscription);
 
         return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
     }
