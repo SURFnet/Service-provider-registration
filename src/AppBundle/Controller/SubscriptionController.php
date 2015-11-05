@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
         }
 
         /** @var SubscriptionTypeFactory $formFactory */
-        $formFactory = $this->get('subscriptionTypeFactory');
+        $formFactory = $this->get('subscription.form.factory');
         $form = $formFactory->buildForm($subscription, $request);
 
         $form->handleRequest($request);
