@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Subscription;
 use AppBundle\Form\SubscriptionType;
 use AppBundle\Form\SubscriptionTypeFactory;
+use AppBundle\Manager\SubscriptionManager;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -103,7 +104,7 @@ class SubscriptionController extends Controller
 
         /** @var SubscriptionTypeFactory $formFactory */
         $formFactory = $this->get('subscription.form.factory');
-        $form = $formFactory->buildForm($subscription, $request);
+        $form = $formFactory->buildForm($subscription, $request, false);
 
         $form->submit($request->get($form->getName()), false);
 
@@ -173,7 +174,7 @@ class SubscriptionController extends Controller
 
         /** @var SubscriptionTypeFactory $formFactory */
         $formFactory = $this->get('subscription.form.factory');
-        $form = $formFactory->buildForm($subscription, $request, false);
+        $form = $formFactory->buildForm($subscription, $request);
 
         $form->handleRequest($request);
 
@@ -191,17 +192,24 @@ class SubscriptionController extends Controller
         /** @var SubscriptionManager $subscriptionManager */
         $subscriptionManager = $this->get('subscription.manager');
 
+        // If we're moving from published to finished, simply redirect.
+        $requestedState = $request->get('subscription[requestedState]', null, true);
+        if ($subscription->isPublished() && $requestedState === Subscription::STATE_FINISHED) {
+            return $this->redirect($this->generateUrl('overview_finish', array('id' => $id)));
+        }
+
+        // Otherwise if already published remember the changes in the session and redirect.
         if ($subscription->isPublished()) {
             $subscriptionManager->storeSubscriptionInSession($subscription, $request->getSession());
 
             return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
         }
 
+        // If in draft an explicit save is always an intent to publish,
+        // save and redirect to publish overview.
         $subscriptionManager->updateSubscription($subscription);
 
         return $this->redirect($this->generateUrl('overview_publish', array('id' => $id)));
-
-
     }
 
     /**

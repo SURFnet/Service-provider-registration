@@ -61,8 +61,8 @@ class SubscriptionTypeFactory
         );
 
         $requestedState = $request->get('subscription[requestedState]', null, true);
-        if ($requestedState === 'Finish') {
-            $formOptions['validation_groups'] = array('Default', 'finalize');
+        if ($requestedState === 'finished') {
+            $formOptions['validation_groups'] = array('Default', 'finished');
         }
 
         return $this->formFactory->create($form, $subscription, $formOptions);

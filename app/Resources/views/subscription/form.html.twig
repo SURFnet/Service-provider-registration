@@ -152,12 +152,14 @@
                 {% if (subscription.isPublished) %}
                     <button id="subscription_updatebtn"
                             class="btn btn-primary"
+                            data-requestedState="published"
                             type="submit"
                            {% if locked %}disabled="disabled"{% endif %}>
                         {{ 'form.button.update'|trans }}
                     </button>
                     <button id="subscription_finishbtn"
                             class="btn btn-success"
+                            data-requestedState="finished"
                             type="submit"
                            {% if locked %}disabled="disabled"{% endif %}>
                         {{ 'form.button.finish'|trans }}
@@ -166,6 +168,7 @@
                 {% if (subscription.isDraft) %}
                 <button type="submit"
                         class="btn btn-primary"
+                        data-requestedState="published"
                         {% if locked %}disabled="disabled"{% endif %}>
                     {{ 'form.button.publish'|trans }}
                 </button>

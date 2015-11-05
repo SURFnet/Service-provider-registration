@@ -122,7 +122,7 @@ class Subscription
      * @Assert\Url(
      *      protocols={"https"},
      *      message = "url.notSecure",
-     *      groups={"finalize"}
+     *      groups={"finished"}
      * )
      * @Assert\Url(message = "url.invalid")
      * @AppAssert\ValidMetadata()
@@ -137,7 +137,7 @@ class Subscription
      * @Assert\Url(
      *      protocols={"https"},
      *      message = "url.notSecure",
-     *      groups={"finalize"}
+     *      groups={"finished"}
      * )
      */
     private $acsLocation;

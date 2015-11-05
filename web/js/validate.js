@@ -269,15 +269,6 @@
      * @todo double, help text
      */
     function setupValidation(form) {
-        form.parsley({
-            trigger: 'input',
-            errorClass: 'has-error',
-            successClass: 'has-success',
-            classHandler: function (field) {
-                return field.$element.closest('.form-group');
-            },
-            errorsWrapper: '<ul class="help-block"></ul>'
-        });
         Parsley.on('field:init', function (field) {
             field.$element.closest('.form-group').addClass('has-feedback');
         });
@@ -304,6 +295,16 @@
         Parsley.on('field:error', function (field) {
             field.$element.next('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
+        });
+
+        form.parsley({
+            trigger: 'input',
+            errorClass: 'has-error',
+            successClass: 'has-success',
+            classHandler: function (field) {
+                return field.$element.closest('.form-group');
+            },
+            errorsWrapper: '<ul class="help-block"></ul>'
         });
     }
 
@@ -342,8 +343,10 @@
     }
 
     function setupFillRequestedState() {
-        $('input[type=submit]').on('click', function () {
-            $('#subscription_requestedState').val($(this).val());
+        $('button[type=submit]').on('click', function () {
+            $('#subscription_requestedState').val(
+                $(this).attr('data-requestedState')
+            );
         });
     }
 
@@ -352,14 +355,14 @@
             inputs = form.find('input, select, textarea'),
             links = form.find('.popover-link');
 
-        preventFormOnEnterSubmit(form);
-        preventMetadataUrlCaching();
-        hideSpinnerOnAjaxComplete();
-
         setupValidation(form);
         setupFillRequestedState(form);
         showExternalErrorMessages(form);
         setupUniqueContacts();
+
+        preventFormOnEnterSubmit(form);
+        preventMetadataUrlCaching();
+        hideSpinnerOnAjaxComplete();
 
         setupNextAndPrev(form);
         setupActiveTabHistory();
