@@ -230,22 +230,11 @@
         Parsley.addValidator(
             'contactunique',
             function () {
-                //noinspection JSLint
-                var fname1 = $('#subscription_administrativeContact_firstName').val(),
-                    fname2 = $('#subscription_technicalContact_firstName').val(),
-                    lname1 = $('#subscription_administrativeContact_lastName').val(),
-                    lname2 = $('#subscription_technicalContact_lastName').val(),
-                    email1 = $('#subscription_administrativeContact_email').val(),
+                var email1 = $('#subscription_administrativeContact_email').val(),
                     email2 = $('#subscription_technicalContact_email').val();
 
                 //noinspection JSLint
-                if (!fname1 || !fname2 || !lname1 || !lname2 || !email1 || !email2) {
-                    //noinspection JSLint
-                    return true;
-                }
-
-                //noinspection JSLint
-                return !(fname1 === fname2 && lname1 === lname2 && email1 === email2);
+                return email1 !== email2;
             },
             32)
             .addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
