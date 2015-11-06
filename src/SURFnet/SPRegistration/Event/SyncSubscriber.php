@@ -49,7 +49,7 @@ class SyncSubscriber implements EventSubscriberInterface
         $service = $this->service;
         $this->whileNotSyncing(
             function () use ($service, $e) {
-                $subscription = $e->getSubscription();
+                $subscription = $e->getNewSubscription();
 
                 if (!$subscription) {
                     return;

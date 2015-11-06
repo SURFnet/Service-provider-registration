@@ -62,7 +62,7 @@ class SubscriptionController extends Controller implements SecuredController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('subscription.manager')->saveSubscription($subscription);
+            $this->get('subscription.manager')->saveNewSubscription($subscription);
 
             $this->get('mail.manager')->sendInvitation($subscription);
             $this->get('mail.manager')->sendCreatedNotification($subscription);

@@ -440,6 +440,14 @@ class Subscription
     }
 
     /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getCreated()

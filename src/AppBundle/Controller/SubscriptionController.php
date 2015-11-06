@@ -69,21 +69,29 @@ class SubscriptionController extends Controller
      */
     public function saveAction($id, Request $request)
     {
-        $subscription = $this->getSubscription($id);
+        $originalSubscription = $this->getSubscription($id);
+        $newSubscription = clone $originalSubscription;
 
-        if (!$subscription->isDraft()) {
+        if (!$newSubscription->isDraft()) {
             throw new InvalidArgumentException('(auto)save is only allowed for drafts');
         }
 
         /** @var SubscriptionTypeFactory $formFactory */
         $formFactory = $this->get('subscription.form.factory');
-        $form = $formFactory->buildForm($subscription, $request);
+        $form = $formFactory->buildForm($newSubscription, $request);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            $this->get('subscription.manager')->updateSubscription($subscription);
+        if (!$form->isSubmitted()) {
+            return new Response();
         }
+
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+        $subscriptionManager->updateSubscription(
+            $originalSubscription,
+            $newSubscription
+        );
 
         return new Response();
     }

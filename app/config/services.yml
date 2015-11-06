@@ -98,6 +98,19 @@ services:
         tags:
             - {name:kernel.event_subscriber}
 
+    subscriber.status_log:
+        class: SURFnet\SPRegistration\Event\StatusLogSubscriber
+        arguments: [@subscription_status_change.repository]
+        tags:
+            - {name:kernel.event_subscriber}
+
+    subscription_status_change.repository:
+        class: AppBundle\Entity\SubscriptionStatusChangeRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - AppBundle\Entity\SubscriptionStatusChange
+
     janus.sync_service:
         class: SURFnet\SPRegistration\Service\JanusSyncService
         arguments:
