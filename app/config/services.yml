@@ -211,3 +211,44 @@ services:
     validator.mapping.cache.cache:
         class: Symfony\Component\Validator\Mapping\Cache\DoctrineCache
         arguments: [@cache]
+
+    ssllabs.grade_comparator:
+        class: SURFnet\SslLabs\Service\GradeComparatorService
+
+    ssllabs.analyze_service:
+        class: SURFnet\SslLabs\Service\SynchronousAnalyzeService
+        arguments: [@ssllabs.client]
+
+    ssllabs.client:
+        class: SURFnet\SslLabs\Client
+        arguments: [@ssllabs.http_client, @ssllabs.serializer]
+
+    ssllabs.http_client:
+        class: Guzzle\Http\Client
+        arguments:
+            - 'https://api.ssllabs.com/api/v2/'
+            -
+                headers:
+                    User-Agent: SURFnet Service Provider Registration (https://github.com/SURFnet/Service-provider-registration)
+                    Accept: application/json
+                    Content-Type: application/json
+
+    ssllabs.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            -
+                - @ssllabs.normalizer
+            -
+                - @ssllabs.encoder
+
+    ssllabs.normalizer:
+        class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
+
+    ssllabs.encoder:
+        class: Symfony\Component\Serializer\Encoder\JsonEncoder
+
+    validator.ssllabs:
+        class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
+        arguments: [@ssllabs.analyze_service, @ssllabs.grade_comparator, 'A']
+        tags:
+            - { name: validator.constraint_validator, alias: ssllabs }
