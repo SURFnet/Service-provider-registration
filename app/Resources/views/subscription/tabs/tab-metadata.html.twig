@@ -52,6 +52,11 @@
             {{ form_row(form.logoUrl, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
         </div>
 
+        <img id="subscription_logoUrl_preview"
+             src="{{ form.vars.value.logoUrl }}"
+             alt="logo"
+             style="width: 4rem; height: 3rem;" />
+
         <div class="col-xs-1">
             <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.logoUrl'|trans|escape('html_attr') }}">
                 {{ icon('question-circle') }}

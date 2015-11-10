@@ -206,7 +206,8 @@ services:
 
     subscription.form.factory:
         class: AppBundle\Form\SubscriptionTypeFactory
-        arguments: [@form.factory, @lock.manager, @parser]
+        arguments: [@form.factory, @lock.manager, @parser, @image_resize_service]
+        scope: request
 
     validator.mapping.cache.cache:
         class: Symfony\Component\Validator\Mapping\Cache\DoctrineCache
@@ -252,3 +253,8 @@ services:
         arguments: [@ssllabs.analyze_service, @ssllabs.grade_comparator, 'A']
         tags:
             - { name: validator.constraint_validator, alias: ssllabs }
+
+    image_resize_service:
+        class: SURFnet\SPRegistration\Service\TransparantImageResizeService
+        arguments: ['%kernel.root_dir%/../web/img/logos/', @router]
+        scope: request

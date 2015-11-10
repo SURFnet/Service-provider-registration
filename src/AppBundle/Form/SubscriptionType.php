@@ -7,6 +7,8 @@ use AppBundle\Metadata\Parser;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
+use SURFnet\SPRegistration\ImageDimensions;
+use SURFnet\SPRegistration\Service\TransparantImageResizeService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -25,13 +27,27 @@ class SubscriptionType extends AbstractType
     private $parser;
 
     /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * @var TransparantImageResizeService
+     */
+    private $transparantImageResizeService;
+
+    /**
      * @param Parser           $parser
      * @param SessionInterface $session
      */
-    public function __construct(Parser $parser, SessionInterface $session)
-    {
+    public function __construct(
+        Parser $parser,
+        SessionInterface $session,
+        TransparantImageResizeService $resizeService
+    ) {
         $this->parser = $parser;
         $this->session = $session;
+        $this->transparantImageResizeService = $resizeService;
     }
 
     /**
@@ -71,6 +87,11 @@ class SubscriptionType extends AbstractType
         $builder->add('comments');
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
+
+        $builder->get('logoUrl')->addEventListener(
+            FormEvents::SUBMIT,
+            array($this, 'onLogoUrlSubmit')
+        );
     }
 
     /**
@@ -101,12 +122,24 @@ class SubscriptionType extends AbstractType
             // Only if the submitted url differs from the previously validated url, retrieve the metadata
             if ($metadataUrl != $previousMetadataUrl) {
                 $metadata = $this->parser->parse($metadataUrl);
-                $event->setData($this->mapMetadataToFormData($subscription, $metadata));
             }
         } catch (\InvalidArgumentException $e) {
             // Exceptions are deliberately ignored because they are caught by the validator
-            $event->setData($this->mapMetadataToFormData($subscription, $metadata));
         }
+
+        $formData = $this->mapMetadataToFormData($subscription, $metadata);
+
+        $event->setData($formData);
+    }
+
+    public function onLogoUrlSubmit(FormEvent $event)
+    {
+        $event->setData(
+            $this->transparantImageResizeService->requireDimensions(
+                $event->getData(),
+                new ImageDimensions(500, 300)
+            )
+        );
     }
 
     /**

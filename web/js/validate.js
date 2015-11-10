@@ -347,6 +347,21 @@
         });
     }
 
+    function autoUpdateLogo() {
+        setInterval(function() {
+            var logoUrlEl = $('#subscription_logoUrl'),
+                previewEl = $('#subscription_logoUrl_preview');
+
+            if (logoUrlEl.val().trim() === '') {
+                previewEl.hide();
+            }
+            else {
+                previewEl.attr("src", logoUrlEl.val());
+                previewEl.show();
+            }
+        }, 500);
+    }
+
     $(function () {
         var form = $('#form'),
             inputs = form.find('input, select, textarea'),
@@ -368,5 +383,7 @@
 
         setupAutoSaving(form);
         setupLocking(form, inputs);
+
+        autoUpdateLogo();
     });
 }(window.jQuery, window.Parsley, window.ParsleyUI, window.document));

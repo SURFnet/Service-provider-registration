@@ -7,6 +7,7 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Subscription;
 use AppBundle\Manager\LockManager;
 use AppBundle\Metadata\Parser;
+use SURFnet\SPRegistration\Service\TransparantImageResizeService;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -30,6 +31,11 @@ class SubscriptionTypeFactory
     private $metadataParser;
 
     /**
+     * @var TransparantImageResizeService
+     */
+    private $transparantImageResizeService;
+
+    /**
      * SubscriptionTypeFactory constructor.
      * @param FormFactory $formFactory
      * @param LockManager $lockManager
@@ -38,11 +44,13 @@ class SubscriptionTypeFactory
     public function __construct(
         FormFactory $formFactory,
         LockManager $lockManager,
-        Parser $metadataParser
+        Parser $metadataParser,
+        TransparantImageResizeService $transparantImageResizeService
     ) {
         $this->formFactory = $formFactory;
         $this->lockManager = $lockManager;
         $this->metadataParser = $metadataParser;
+        $this->transparantImageResizeService = $transparantImageResizeService;
     }
 
     public function buildForm(
@@ -52,7 +60,8 @@ class SubscriptionTypeFactory
     ) {
         $form = new SubscriptionType(
             $this->metadataParser,
-            $request->getSession()
+            $request->getSession(),
+            $this->transparantImageResizeService
         );
 
         $formOptions = array(
