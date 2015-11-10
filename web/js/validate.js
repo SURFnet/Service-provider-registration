@@ -31,13 +31,17 @@
         clearErrors(dataField);
 
         if (field.$element.attr('id') !== dataField.$element.attr('id')) {
-            if (dataField.$element.attr('type') === 'checkbox') {
-                dataField.$element.prop('checked', val);
-                dataField.$element.trigger('change');
-            } else {
-                dataField.$element.val(val);
-            }
+            return;
         }
+
+        if (dataField.$element.attr('type') === 'checkbox') {
+            dataField.$element.prop('checked', val);
+            dataField.$element.trigger('change');
+            return;
+        }
+
+        dataField.$element.val(val);
+        dataField.$element.trigger('change');
     }
 
     function updateErrors(field, errors) {
