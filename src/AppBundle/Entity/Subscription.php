@@ -126,6 +126,7 @@ class Subscription
      * )
      * @Assert\Url(message = "url.invalid")
      * @AppAssert\ValidMetadata()
+     * @AppAssert\ValidSSLLabsAnalyze()
      */
     private $metadataUrl;
 
@@ -139,6 +140,7 @@ class Subscription
      *      message = "url.notSecure",
      *      groups={"finished"}
      * )
+     * @AppAssert\ValidSSLLabsAnalyze()
      */
     private $acsLocation;
 
