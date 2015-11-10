@@ -22,6 +22,26 @@
         {% endif %}
         {{ subscription.metadataUrl }}
     </dd>
+    {% if metadataUrlSubject is not empty %}
+    <dt>Certificate Subject</dt>
+    <dd>
+        {{ metadataUrlSubject }}
+    </dd>
+    {% endif %}
+
+    <dt>{{ 'acsLocation'|humanize|trans }}</dt>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.acsLocation != subscription.acsLocation %}
+            <del>{{ orgSubscription.acsLocation }}</del>
+        {% endif %}
+        {{ subscription.acsLocation }}
+    </dd>
+    {% if acsLocationSubject is not empty %}
+        <dt>Certificate Subject</dt>
+        <dd>
+            {{ acsLocationSubject }}
+        </dd>
+    {% endif %}
 
     <dt>{{ 'logoUrl'|humanize|trans }}</dt>
     <dd>

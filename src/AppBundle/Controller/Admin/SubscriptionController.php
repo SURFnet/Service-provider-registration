@@ -98,6 +98,12 @@ class SubscriptionController extends Controller implements SecuredController
             'admin/subscription/view.html.twig',
             array(
                 'subscription' => $subscription,
+                'metadataUrlSubject' => $this->getCertSubject(
+                    $subscription->getMetadataUrl()
+                ),
+                'acsLocationSubject' => $this->getCertSubject(
+                    $subscription->getAcsLocation()
+                ),
             )
         );
     }
@@ -167,5 +173,32 @@ class SubscriptionController extends Controller implements SecuredController
 
 
         return $this->redirect($newUrl);
+    }
+
+    private function getCertSubject($url)
+    {
+        if (!$url) {
+            return '';
+        }
+
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        if ($scheme !== 'https') {
+            return '';
+        }
+        $hostname = parse_url($url, PHP_URL_HOST);
+
+        $hostDto = $this->get('ssllabs.analyze_service')->analyze(
+            $hostname,
+            true
+        );
+
+        foreach ($hostDto->endpoints as $endpoint) {
+            if (!isset($endpoint->details['cert']['subject'])) {
+                continue;
+            }
+            return $endpoint->details['cert']['subject'];
+        }
+
+        return '';
     }
 }
