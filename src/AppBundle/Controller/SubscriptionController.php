@@ -69,8 +69,9 @@ class SubscriptionController extends Controller
      */
     public function saveAction($id, Request $request)
     {
-        $originalSubscription = $this->getSubscription($id);
-        $newSubscription = clone $originalSubscription;
+        $subscription = $this->getSubscription($id);
+        $originalSubscription = clone $subscription;
+        $newSubscription = $subscription;
 
         if (!$newSubscription->isDraft()) {
             throw new InvalidArgumentException('(auto)save is only allowed for drafts');
