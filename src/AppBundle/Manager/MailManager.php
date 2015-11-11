@@ -185,6 +185,72 @@ class MailManager
     /**
      * @param Subscription $subscription
      */
+    public function sendUpdatedNotification(Subscription $subscription)
+    {
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.notification.updated.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo(),
+                    '%nameEn%'   => $subscription->getNameEn(),
+                    '%nameNl%'   => $subscription->getNameNl(),
+                )
+            )
+        );
+        $message->setFrom($this->sender);
+        $message->setTo($this->receiver);
+        $message->setBody(
+            $this->renderView(
+                'admin/mail/notification.updated.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
+
+        $this->mailer->send($message);
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
+    public function sendUpdatedConfirmation(Subscription $subscription)
+    {
+        $contact = $subscription->getContact();
+
+        $message = $this->createNewMessage();
+        $message->setSubject(
+            $this->translator->trans(
+                'mail.confirmation.updated.subject',
+                array(
+                    '%ticketNo%' => $subscription->getTicketNo()
+                ),
+                null,
+                $subscription->getLocale()
+            )
+        );
+        $message->setFrom($this->sender);
+        $message->setTo(
+            array(
+                $contact->getEmail() => $contact->getFirstName()
+                    . ' '
+                    . $contact->getLastName()
+            )
+        );
+        $message->setBody(
+            $this->renderView(
+                'confirmation.updated.' . $subscription->getLocale() . '.html.twig',
+                array('subscription' => $subscription)
+            ),
+            'text/html'
+        );
+
+        $this->mailer->send($message);
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
     public function sendFinishedNotification(Subscription $subscription)
     {
         $message = $this->createNewMessage();
