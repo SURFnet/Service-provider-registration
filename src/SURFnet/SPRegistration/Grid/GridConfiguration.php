@@ -11,11 +11,15 @@ use APY\DataGridBundle\Grid\Source\Entity;
 
 /**
  * Class GridConfiguration
+ *
  * @package SURFnet\SPRegistration
  */
 class GridConfiguration
 {
     /**
+     * @param Grid   $grid
+     * @param string $routeUrl
+     *
      * @return Grid
      */
     public function configureGrid(Grid $grid, $routeUrl)
@@ -30,9 +34,11 @@ class GridConfiguration
         $grid->setRouteUrl($routeUrl);
 
         $grid->setDefaultOrder('created', 'desc');
-        $grid->setDefaultFilters(array(
-            'archived' => false,
-        ));
+        $grid->setDefaultFilters(
+            array(
+                'archived' => false,
+            )
+        );
         $grid->setLimits(array(5 => 5, 10 => 10, 15 => 15, 25 => 25, 50 => 50, 99999 => 'all'));
 
         $grid->setActionsColumnTitle('');
@@ -120,7 +126,7 @@ class GridConfiguration
         );
         $grid->addRowAction($rowAction);
 
-        $rowAction = new RowAction('finish', 'admin.subscription.finish');
+        $rowAction = new RowAction('finish', 'admin.subscription.finish', true);
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
                 if ($row->getField('status') !== Subscription::STATE_PUBLISHED) {
@@ -168,9 +174,11 @@ class GridConfiguration
                     return null;
                 }
 
-                return $action->addRouteParameters(array(
-                    'eid' => $subscription->getJanusId(),
-                ));
+                return $action->addRouteParameters(
+                    array(
+                        'eid' => $subscription->getJanusId(),
+                    )
+                );
             }
         );
         $grid->addRowAction($rowAction);

@@ -49,10 +49,11 @@ class Parser
     /**
      * Constructor
      *
-     * @param Fetcher           $fetcher
-     * @param CertificateParser $certParser
-     * @param string            $schemaLocation
-     * @param Logger            $logger
+     * @param Fetcher                      $fetcher
+     * @param CertificateParser            $certParser
+     * @param AttributesMetadataRepository $attributesMetadataRepository
+     * @param string                       $schemaLocation
+     * @param Logger                       $logger
      */
     public function __construct(
         Fetcher $fetcher,
@@ -243,6 +244,7 @@ class Parser
 
             $attr = new Attribute();
             $attr->setRequested(true);
+            $attr->setMotivation('');
 
             $attributes = $attribute->attributes();
 

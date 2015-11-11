@@ -14,3 +14,10 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+doctrine_cache:
+    providers:
+        memcache:
+            servers: %memcached_servers%
+        namespace: cache_test
+        alias: cache

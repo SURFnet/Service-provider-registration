@@ -3,15 +3,17 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Subscription;
-use Ob\HighchartsBundle\Highcharts\ChartOption;
+use AppBundle\Entity\SubscriptionStatusChangeRepository;
+use DateTime;
+use DateTimeZone;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class GridController
- *
  * @Route("/admin")
  */
 class IndexController extends Controller implements SecuredController
@@ -23,49 +25,46 @@ class IndexController extends Controller implements SecuredController
      */
     public function indexAction()
     {
+        return $this->render('admin/index.html.twig');
+    }
+
+    /**
+     * @Route("/status/current.json", name="status_current")
+     *
+     * @return Response
+     */
+    public function getStatusCurrentAction()
+    {
         $repository = $this->get('subscription.manager');
+        return new JsonResponse(array(
+            'draft'     => $repository->countForType(Subscription::STATE_DRAFT),
+            'published' => $repository->countForType(Subscription::STATE_PUBLISHED),
+            'finished'  => $repository->countForType(Subscription::STATE_FINISHED)
+        ));
+    }
 
-        // Chart
-        $series = array(
-            array(
-                'name' => 'Draft',
-                'data' => array(
-                    $repository->countForType(Subscription::STATE_DRAFT)
-                ),
-                'color' => 'white',
-                'type'  => 'column',
-            ),
-            array(
-                'name' => 'Published',
-                'data' => array(
-                    $repository->countForType(Subscription::STATE_PUBLISHED)
-                ),
-                'color' => '#d9edf7',
-                'type'  => 'column',
-            ),
-            array(
-                'name' => 'Final',
-                'data' => array(
-                    $repository->countForType(Subscription::STATE_FINISHED)
-                ),
-                'color' => '#dff0d8',
-                'type'  => 'column',
-            ),
-        );
+    /**
+     * @Route("/status/history.json", name="status_history")
+     *
+     * @return Response
+     */
+    public function getStatusHistoryAction(Request $request)
+    {
+        $from = new DateTime($request->get('from'));
+        $to   = new DateTime($request->get('to'));
 
-        $ob = new Highchart();
-        $ob->chart->renderTo('per-status-chart');  // The #id of the div where to render the chart
-        $ob->chart->backgroundColor('#f8f8f8');
-        $ob->title->text('Registrations per status');
-        $ob->xAxis->title(array('text'  => "Status"));
-        $ob->yAxis->allowDecimals(false);
-        $ob->yAxis->title(array('text'  => "Number of registrations"));
-        $ob->series($series);
+        /** @var SubscriptionStatusChangeRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:SubscriptionStatusChange');
 
-        return $this->render(
-            'admin/index.html.twig',
+        return new JsonResponse(
             array(
-                'chart' => $ob,
+                'meta' => array(
+                    'from' => $from->format('c'),
+                    'to' => $to->format('c'),
+                ),
+                'data' => $repository->countByDateRange($from, $to)
             )
         );
     }

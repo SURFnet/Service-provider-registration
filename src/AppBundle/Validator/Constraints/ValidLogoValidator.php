@@ -34,26 +34,6 @@ class ValidLogoValidator extends ConstraintValidator
 
             return;
         }
-
-        if ($width > 500 || $height > 300) {
-            $this->context->addViolation('Logo is too big, it should be max. 500 x 300 px.');
-
-            return;
-        }
-
-        $fileSize = $this->remoteFileSize($value);
-
-        if ($fileSize === false) {
-            $this->context->addViolation('Unable to determine file size of logo.');
-
-            return;
-        }
-
-        if ($fileSize > 1024 * 1024) {
-            $this->context->addViolation('Logo is too large, it should be max. 1MiB (1.048.576 bytes)');
-
-            return;
-        }
     }
 
     /**

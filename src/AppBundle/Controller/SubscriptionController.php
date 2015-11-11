@@ -4,6 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Form\SubscriptionType;
+use AppBundle\Form\SubscriptionTypeFactory;
+use AppBundle\Manager\MailManager;
+use AppBundle\Manager\SubscriptionManager;
+use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,15 +37,19 @@ class SubscriptionController extends Controller
      *
      * @return Response
      */
-    public function formAction($id, Request $request)
+    public function getAction($id, Request $request)
     {
         try {
             $subscription = $this->getSubscription($id, true, false);
-        } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+        } catch (InvalidArgumentException $e) {
+            return $this->redirect(
+                $this->generateUrl('thanks_finish', array('id' => $id))
+            );
         }
 
-        $form = $this->getForm($subscription, $request->getSession());
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscription.form.factory');
+        $form = $formFactory->buildForm($subscription, $request);
 
         return $this->render(
             'subscription/form.html.twig',
@@ -64,18 +72,29 @@ class SubscriptionController extends Controller
     public function saveAction($id, Request $request)
     {
         $subscription = $this->getSubscription($id);
+        $originalSubscription = clone $subscription;
+        $newSubscription = $subscription;
 
-        if (!$subscription->isDraft()) {
-            throw new \InvalidArgumentException('(auto)save is only allowed for drafts');
+        if (!$newSubscription->isDraft()) {
+            throw new InvalidArgumentException('(auto)save is only allowed for drafts');
         }
 
-        $form = $this->getForm($subscription, $request->getSession());
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscription.form.factory');
+        $form = $formFactory->buildForm($newSubscription, $request);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            $this->get('subscription.manager')->updateSubscription($subscription);
+        if (!$form->isSubmitted()) {
+            return new Response();
         }
+
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+        $subscriptionManager->updateSubscription(
+            $originalSubscription,
+            $newSubscription
+        );
 
         return new Response();
     }
@@ -95,7 +114,9 @@ class SubscriptionController extends Controller
     {
         $subscription = $this->getSubscription($id);
 
-        $form = $this->getForm($subscription, $request->getSession(), false);
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscription.form.factory');
+        $form = $formFactory->buildForm($subscription, $request, false);
 
         $form->submit($request->get($form->getName()), false);
 
@@ -155,38 +176,58 @@ class SubscriptionController extends Controller
      *
      * @return Response
      */
-    public function storeAction($id, Request $request)
+    public function postAction($id, Request $request)
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+            $originalSubscription = clone $subscription;
+        } catch (InvalidArgumentException $e) {
+            return $this->redirect(
+                $this->generateUrl('thanks_finish', array('id' => $id))
+            );
         }
 
-        $form = $this->getForm($subscription, $request->getSession());
+        /** @var SubscriptionTypeFactory $formFactory */
+        $formFactory = $this->get('subscription.form.factory');
+        $form = $formFactory->buildForm($subscription, $request);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($subscription->isPublished()) {
-                $this->get('subscription.manager')->storeSubscriptionInSession($subscription, $request->getSession());
-
-                return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
-            }
-
-            $this->get('subscription.manager')->updateSubscription($subscription);
-
-            return $this->redirect($this->generateUrl('overview_publish', array('id' => $id)));
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->render(
+                'subscription/form.html.twig',
+                array(
+                    'subscription' => $subscription,
+                    'form' => $form->createView(),
+                    'locked' => !$this->get('lock.manager')->lock($id),
+                )
+            );
         }
 
-        return $this->render(
-            'subscription/form.html.twig',
-            array(
-                'subscription' => $subscription,
-                'form'         => $form->createView(),
-                'locked'       => !$this->get('lock.manager')->lock($id),
-            )
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+
+        // If we're moving from published to finished, simply redirect.
+        $requestedState = $request->get('subscription[requestedState]', null, true);
+        if ($subscription->isPublished() && $requestedState === Subscription::STATE_FINISHED) {
+            return $this->redirect($this->generateUrl('overview_finish', array('id' => $id)));
+        }
+
+        // Otherwise if already published remember the changes in the session and redirect.
+        if ($subscription->isPublished()) {
+            $subscriptionManager->storeSubscriptionInSession($subscription, $request->getSession());
+
+            return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
+        }
+
+        // If in draft an explicit save is always an intent to publish,
+        // save and redirect to publish overview.
+        $subscriptionManager->updateSubscription(
+            $originalSubscription,
+            $subscription
         );
+
+        return $this->redirect($this->generateUrl('overview_publish', array('id' => $id)));
     }
 
     /**
@@ -200,7 +241,7 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
         }
 
@@ -227,22 +268,34 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+        } catch (InvalidArgumentException $e) {
+            return $this->redirect(
+                $this->generateUrl('thanks_finish', array('id' => $id))
+            );
         }
 
-        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+
+        if (!$subscriptionManager->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
         }
 
+        $fromSubscription = clone $subscription;
         $subscription->publish();
 
-        $this->get('subscription.manager')->updateSubscription($subscription);
+        $subscriptionManager->updateSubscription(
+            $fromSubscription,
+            $subscription
+        );
 
-        $this->get('mail.manager')->sendPublishedNotification($subscription);
-        $this->get('mail.manager')->sendPublishedConfirmation($subscription);
+        $mailManager = $this->get('mail.manager');
+        $mailManager->sendPublishedNotification($subscription);
+        $mailManager->sendPublishedConfirmation($subscription);
 
-        return $this->redirect($this->generateUrl('thanks_publish', array('id' => $id)));
+        return $this->redirect(
+            $this->generateUrl('thanks_publish', array('id' => $id))
+        );
     }
 
     /**
@@ -273,21 +326,32 @@ class SubscriptionController extends Controller
     public function overviewForUpdateAction($id, Request $request)
     {
         try {
-            $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+            $orgSubscription = clone $this->getSubscription($id);
+        } catch (InvalidArgumentException $e) {
+            return $this->redirect(
+                $this->generateUrl('thanks_finish', array('id' => $id))
+            );
         }
 
-        $subscription = $this->get('subscription.manager')->getSubscriptionFromSession($id, $request->getSession());
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
 
-        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
-            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        $subscription = $subscriptionManager->getSubscriptionFromSession(
+            $id,
+            $request->getSession()
+        );
+
+        if (!$subscriptionManager->isValidSubscription($subscription)) {
+            return $this->redirect(
+                $this->generateUrl('form', array('id' => $id))
+            );
         }
 
         return $this->render(
             'subscription/update_overview.html.twig',
             array(
-                'subscription' => $subscription,
+                'subscription'    => $subscription,
+                'orgSubscription' => $orgSubscription,
             )
         );
     }
@@ -303,21 +367,33 @@ class SubscriptionController extends Controller
     public function confirmForUpdateAction($id, Request $request)
     {
         try {
-            $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+            $originalSubscription = $this->getSubscription($id);
+        } catch (InvalidArgumentException $e) {
+            return $this->redirect(
+                $this->generateUrl('thanks_finish', array('id' => $id))
+            );
         }
 
-        $subscription = $this->get('subscription.manager')->getSubscriptionFromSession($id, $request->getSession());
+        $subscriptionManager = $this->get('subscription.manager');
+        $subscription = $subscriptionManager->getSubscriptionFromSession(
+            $id,
+            $request->getSession()
+        );
 
-        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
-            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        if (!$subscriptionManager->isValidSubscription($subscription)) {
+            return $this->redirect(
+                $this->generateUrl('form', array('id' => $id))
+            );
         }
 
-        $this->get('subscription.manager')->updateSubscription($subscription);
+        $subscriptionManager->updateSubscription(
+            $originalSubscription,
+            $subscription
+        );
 
-        $this->get('mail.manager')->sendPublishedNotification($subscription);
-        $this->get('mail.manager')->sendPublishedConfirmation($subscription);
+        $mailManager = $this->get('mail.manager');
+        $mailManager->sendUpdatedNotification($subscription);
+        $mailManager->sendUpdatedConfirmation($subscription);
 
         $this->addFlash(
             'info',
@@ -338,12 +414,26 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+        } catch (InvalidArgumentException $e) {
+            return $this->redirect(
+                $this->generateUrl('thanks_finish', array('id' => $id))
+            );
         }
 
-        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
-            return $this->redirect($this->generateUrl('form', array('id' => $id)));
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+        $isValid = $subscriptionManager->isValidSubscription(
+            $subscription,
+            array('Default', 'finalize')
+        );
+
+        if (!$isValid) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'form',
+                    array('id' => $id, 'finish'=> '1')
+                )
+            );
         }
 
         return $this->render(
@@ -365,22 +455,35 @@ class SubscriptionController extends Controller
     {
         try {
             $subscription = $this->getSubscription($id);
-        } catch (\InvalidArgumentException $e) {
-            return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+            $originalSubscription = clone $subscription;
+        } catch (InvalidArgumentException $e) {
+            return $this->redirect(
+                $this->generateUrl('thanks_finish', array('id' => $id))
+            );
         }
 
-        if (!$this->get('subscription.manager')->isValidSubscription($subscription)) {
+        /** @var SubscriptionManager $subscriptionManager */
+        $subscriptionManager = $this->get('subscription.manager');
+
+        if (!$subscriptionManager->isValidSubscription($subscription)) {
             return $this->redirect($this->generateUrl('form', array('id' => $id)));
         }
 
         $subscription->finish();
 
-        $this->get('subscription.manager')->updateSubscription($subscription);
+        $subscriptionManager->updateSubscription(
+            $originalSubscription,
+            $subscription
+        );
 
-        $this->get('mail.manager')->sendFinishedNotification($subscription);
-        $this->get('mail.manager')->sendFinishedConfirmation($subscription);
+        /** @var MailManager $mailManager */
+        $mailManager = $this->get('mail.manager');
+        $mailManager->sendFinishedNotification($subscription);
+        $mailManager->sendFinishedConfirmation($subscription);
 
-        return $this->redirect($this->generateUrl('thanks_finish', array('id' => $id)));
+        return $this->redirect(
+            $this->generateUrl('thanks_finish', array('id' => $id))
+        );
     }
 
     /**
@@ -401,27 +504,6 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * @param Subscription     $subscription
-     * @param SessionInterface $session
-     * @param bool             $useCsrf
-     *
-     * @return Form
-     */
-    private function getForm(Subscription $subscription, SessionInterface $session, $useCsrf = true)
-    {
-        $form = $this->createForm(
-            new SubscriptionType($this->get('parser'), $session),
-            $subscription,
-            array(
-                'disabled'        => !$this->get('lock.manager')->lock($subscription->getId()),
-                'csrf_protection' => $useCsrf,
-            )
-        );
-
-        return $form;
-    }
-
-    /**
      * @param string $id
      * @param bool   $checkStatus
      * @param bool   $checkLock
@@ -430,7 +512,11 @@ class SubscriptionController extends Controller
      */
     private function getSubscription($id, $checkStatus = true, $checkLock = true)
     {
-        $subscription = $this->get('subscription.manager')->getSubscription($id, $checkStatus, $checkLock);
+        $subscription = $this->get('subscription.manager')->getSubscription(
+            $id,
+            $checkStatus,
+            $checkLock
+        );
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();

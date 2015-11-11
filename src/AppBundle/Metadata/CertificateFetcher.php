@@ -42,7 +42,7 @@ class CertificateFetcher
         $cont = stream_context_get_params($res);
 
         if (!isset($cont['options']['ssl']['peer_certificate'])) {
-            throw new \InvalidArgumentException('Unable to retrieve SSL certificate.');
+            return null;
         }
 
         if (!openssl_x509_export($cont['options']['ssl']['peer_certificate'], $cert, true)) {

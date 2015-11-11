@@ -114,7 +114,7 @@ $config = array(
      * Options: [syslog,file,errorlog]
      *
      */
-    'logging.level'                 => SimpleSAML_Logger::NOTICE,
+    'logging.level'                 => SimpleSAML_Logger::DEBUG,
     'logging.handler'               => 'syslog',
     /*
      * Specify the format of the logs. Its use varies depending on the log handler used (for instance, you cannot
@@ -292,8 +292,9 @@ $config = array(
      * Options to override the default settings for php sessions.
      */
     'session.phpsession.cookiename' => null,
-    'session.phpsession.savepath'   => null,
-    'session.phpsession.httponly'   => false,
+    'session.phpsession.savepath' => null,
+    'session.phpsession.httponly' => true,
+
     /*
      * Option to override the default settings for the auth token cookie
      */
@@ -589,23 +590,25 @@ $config = array(
      *
      * (This option replaces the old 'session.handler'-option.)
      */
-    'store.type'                    => 'memcache',
+    'store.type'                    => 'sql',
     /*
      * The DSN the sql datastore should connect to.
      *
      * See http://www.php.net/manual/en/pdo.drivers.php for the various
      * syntaxes.
      */
-    'store.sql.dsn'                 => 'sqlite:' . __DIR__ . '/../../../../app/data/simplesaml.db3',
+    'store.sql.dsn'                 => 'mysql:'
+                                        . 'host=' . $params['database_host']
+                                        . ';dbname=' . $params['database_name'],
     /*
      * The username and password to use when connecting to the database.
      */
-    'store.sql.username'            => null,
-    'store.sql.password'            => null,
+    'store.sql.username'            => $params['database_user'],
+    'store.sql.password'            => $params['database_password'],
     /*
      * The prefix we should use on our tables.
      */
-    'store.sql.prefix'              => 'simpleSAMLphp',
+    'store.sql.prefix'              => 'ssp',
     /*
      * Configuration for the MemcacheStore class. This allows you to store
      * multiple redudant copies of sessions on different memcache servers.
@@ -629,7 +632,7 @@ $config = array(
      *  - 'timeout': The timeout for this server. By default, the timeout
      *    is 3 seconds.
      *
-     * Example of redudant configuration with load balancing:
+     * Example of redundant configuration with load balancing:
      * This configuration makes it possible to lose both servers in the
      * a-group or both servers in the b-group without losing any sessions.
      * Note that sessions will be lost if one server is lost from both the

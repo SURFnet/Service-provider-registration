@@ -18,16 +18,26 @@ class SubscriptionEvent extends Event
     /**
      * @var Subscription
      */
-    private $subscription;
+    private $oldSubscription;
+
+    /**
+     * @var Subscription
+     */
+    private $newSubscription;
 
     /**
      * @param int          $subscriptionId
-     * @param Subscription $subscription
+     * @param Subscription $oldSubscription
+     * @param Subscription $newSubscription
      */
-    public function __construct($subscriptionId, Subscription $subscription = null)
-    {
+    public function __construct(
+        $subscriptionId,
+        Subscription $oldSubscription = null,
+        Subscription $newSubscription = null
+    ) {
         $this->subscriptionId = $subscriptionId;
-        $this->subscription = $subscription;
+        $this->oldSubscription = $oldSubscription;
+        $this->newSubscription = $newSubscription;
     }
 
     /**
@@ -39,10 +49,18 @@ class SubscriptionEvent extends Event
     }
 
     /**
-     * @return Subscription
+     * @return Subscription|null
      */
-    public function getSubscription()
+    public function getOldSubscription()
     {
-        return $this->subscription;
+        return $this->oldSubscription;
+    }
+
+    /**
+     * @return Subscription|null
+     */
+    public function getNewSubscription()
+    {
+        return $this->newSubscription;
     }
 }

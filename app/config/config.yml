@@ -21,7 +21,7 @@ framework:
     trusted_proxies: ~
     session:
         # handler_id set to null will use default session handler from php.ini
-        handler_id:      ~
+        handler_id: ~
         cookie_secure:   true
         cookie_httponly: true
     fragments:       ~
@@ -108,11 +108,6 @@ norzechowicz_ace_editor:
 
 doctrine_cache:
     providers:
-        memcache:
-            memcache:
-                servers: %memcached_servers%
-            namespace: cache_ns
-            alias: cache
         metadata:
             file_system:
                 directory: %kernel.root_dir%/data/metadata/

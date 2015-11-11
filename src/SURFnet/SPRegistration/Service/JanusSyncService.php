@@ -4,8 +4,6 @@ namespace SURFnet\SPRegistration\Service;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Manager\SubscriptionManager;
-use OpenConext\JanusClient\ConnectionRevision;
-use OpenConext\JanusClient\Entity\ConnectionDescriptor;
 use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 use OpenConext\JanusClient\Entity\ConnectionRepository;
 use OpenConext\JanusClient\NewConnectionRevision;
@@ -14,35 +12,39 @@ use SURFnet\SPRegistration\Entity\ConnectionRequestTranslator;
 
 /**
  * Class JanusSyncService
+ *
  * @package SURFnet\SPRegistration\Service
  */
 class JanusSyncService
 {
     /**
-     * @param Subscription $subscription
+     * @param Subscription $currentSubscription
      */
-    public function pull(Subscription $subscription)
+    public function pull(Subscription $currentSubscription)
     {
         // Ignore Requests that are not published.
-        if (!$subscription->isPublished()) {
+        if (!$currentSubscription->isPublished()) {
             return;
         }
 
-        if (!$subscription->getJanusId()) {
+        if (!$currentSubscription->getJanusId()) {
             return;
         }
 
         // Otherwise we update our database (cache) with the data from Janus.
         $connection = $this->janusConnectionRepository->fetchById(
-            $subscription->getJanusId()
+            $currentSubscription->getJanusId()
         );
 
-        $subscription = $this->translator->translateFromConnection(
+        $newSubscription = $this->translator->translateFromConnection(
             $connection,
-            $subscription
+            $currentSubscription
         );
 
-        $this->repository->updateSubscription($subscription);
+        $this->repository->updateSubscription(
+            $currentSubscription,
+            $newSubscription
+        );
     }
 
     /**
@@ -86,7 +88,10 @@ class JanusSyncService
 
         $subscription->setJanusId($connection->getId());
 
-        $this->repository->updateSubscription($subscription);
+        $this->repository->updateSubscription(
+            $subscription,
+            $subscription
+        );
     }
 
     /**
@@ -104,10 +109,11 @@ class JanusSyncService
 
     /**
      * JanusSyncService constructor.
-     * @param SubscriptionManager $repository
+     *
+     * @param SubscriptionManager            $repository
      * @param ConnectionDescriptorRepository $janusConnectionDescriptorRepository
-     * @param ConnectionRepository $janusConnectionRepository
-     * @param ConnectionRequestTranslator $translator
+     * @param ConnectionRepository           $janusConnectionRepository
+     * @param ConnectionRequestTranslator    $translator
      */
     public function __construct(
         SubscriptionManager $repository,

@@ -29,6 +29,12 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: metadata }
 
+    validator.entity_id:
+        class: AppBundle\Validator\Constraints\ValidEntityIdValidator
+        arguments: [@janus.connection_descriptor_repository]
+        tags:
+            - { name: validator.constraint_validator, alias: entity_id }
+
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
         arguments: [@cert.fetcher, @cert.parser]
@@ -91,6 +97,19 @@ services:
         arguments: [@janus.sync_service, @subscription.manager]
         tags:
             - {name:kernel.event_subscriber}
+
+    subscriber.status_log:
+        class: SURFnet\SPRegistration\Event\StatusLogSubscriber
+        arguments: [@subscription_status_change.repository]
+        tags:
+            - {name:kernel.event_subscriber}
+
+    subscription_status_change.repository:
+        class: AppBundle\Entity\SubscriptionStatusChangeRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - AppBundle\Entity\SubscriptionStatusChange
 
     janus.sync_service:
         class: SURFnet\SPRegistration\Service\JanusSyncService
@@ -185,6 +204,57 @@ services:
         tags:
             - { name: form.type, alias: purified_textarea }
 
+    subscription.form.factory:
+        class: AppBundle\Form\SubscriptionTypeFactory
+        arguments: [@form.factory, @lock.manager, @parser, @image_resize_service]
+        scope: request
+
     validator.mapping.cache.cache:
         class: Symfony\Component\Validator\Mapping\Cache\DoctrineCache
         arguments: [@cache]
+
+    ssllabs.grade_comparator:
+        class: SURFnet\SslLabs\Service\GradeComparatorService
+
+    ssllabs.analyze_service:
+        class: SURFnet\SslLabs\Service\SynchronousAnalyzeService
+        arguments: [@ssllabs.client]
+
+    ssllabs.client:
+        class: SURFnet\SslLabs\Client
+        arguments: [@ssllabs.http_client, @ssllabs.serializer]
+
+    ssllabs.http_client:
+        class: Guzzle\Http\Client
+        arguments:
+            - 'https://api.ssllabs.com/api/v2/'
+            -
+                headers:
+                    User-Agent: SURFnet Service Provider Registration (https://github.com/SURFnet/Service-provider-registration)
+                    Accept: application/json
+                    Content-Type: application/json
+
+    ssllabs.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            -
+                - @ssllabs.normalizer
+            -
+                - @ssllabs.encoder
+
+    ssllabs.normalizer:
+        class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
+
+    ssllabs.encoder:
+        class: Symfony\Component\Serializer\Encoder\JsonEncoder
+
+    validator.ssllabs:
+        class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
+        arguments: [@ssllabs.analyze_service, @ssllabs.grade_comparator, 'A']
+        tags:
+            - { name: validator.constraint_validator, alias: ssllabs }
+
+    image_resize_service:
+        class: SURFnet\SPRegistration\Service\TransparantImageResizeService
+        arguments: ['%kernel.root_dir%/../web/img/logos/', @router]
+        scope: request

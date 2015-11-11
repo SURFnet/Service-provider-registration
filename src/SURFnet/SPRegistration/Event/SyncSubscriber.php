@@ -2,18 +2,15 @@
 
 namespace SURFnet\SPRegistration\Event;
 
-use AppBundle\Entity\Subscription;
 use AppBundle\Event\SubscriptionEvent;
 use AppBundle\Manager\SubscriptionManager;
 use AppBundle\SubscriptionEvents;
 use SURFnet\SPRegistration\Service\JanusSyncService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class SyncSubscriber
+ *
  * @package SURFnet\SPRegistration\Event
  */
 class SyncSubscriber implements EventSubscriberInterface
@@ -25,21 +22,23 @@ class SyncSubscriber implements EventSubscriberInterface
     {
         $subscriptionRepository = $this->subscriptionRepository;
         $service = $this->service;
-        $this->whileNotSyncing(function () use ($subscriptionRepository, $service, $e) {
-            $subscriptionId = $e->getSubscriptionId();
+        $this->whileNotSyncing(
+            function () use ($subscriptionRepository, $service, $e) {
+                $subscriptionId = $e->getSubscriptionId();
 
-            $subscription = $subscriptionRepository->getSubscription(
-                $subscriptionId,
-                false,
-                false
-            );
+                $subscription = $subscriptionRepository->getSubscription(
+                    $subscriptionId,
+                    false,
+                    false
+                );
 
-            if (!$subscription) {
-                return;
+                if (!$subscription) {
+                    return;
+                }
+
+                $service->pull($subscription);
             }
-
-            $service->pull($subscription);
-        });
+        );
     }
 
     /**
@@ -48,15 +47,17 @@ class SyncSubscriber implements EventSubscriberInterface
     public function push(SubscriptionEvent $e)
     {
         $service = $this->service;
-        $this->whileNotSyncing(function () use ($service, $e) {
-            $subscription = $e->getSubscription();
+        $this->whileNotSyncing(
+            function () use ($service, $e) {
+                $subscription = $e->getNewSubscription();
 
-            if (!$subscription) {
-                return;
+                if (!$subscription) {
+                    return;
+                }
+
+                $service->push($subscription);
             }
-
-            $service->push($subscription);
-        });
+        );
     }
 
     /**
@@ -80,14 +81,15 @@ class SyncSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            SubscriptionEvents::PRE_READ    => 'pull',
-            SubscriptionEvents::POST_WRITE  => 'push',
+            SubscriptionEvents::PRE_READ   => 'pull',
+            SubscriptionEvents::POST_WRITE => 'push',
         );
     }
 
     /**
      * SyncSubscriber constructor.
-     * @param JanusSyncService $service
+     *
+     * @param JanusSyncService    $service
      * @param SubscriptionManager $subscriptionRepository
      */
     public function __construct(

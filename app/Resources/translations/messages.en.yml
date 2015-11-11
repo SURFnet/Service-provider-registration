@@ -132,7 +132,7 @@ form:
         saved: Saved
         saving: Saving...
         updated: The form has been updated!
-
+        validating: Validating...
     tab:
         attributes: attributes
         comments: comments
@@ -153,6 +153,11 @@ form:
 
     title: SURFnet SP Registration
 
+    placeholder:
+        acsLocation: 'Information is automatically subtracted from the Metadata URL'
+        entityId: 'Information is automatically subtracted from the Metadata URL'
+        certificate: 'Information is automatically subtracted from the Metadata URL'
+        attribute: 'The service will use this attribute to....'
 mail:
     invitation:
         subject: 'Invitation for SURFnet SP Registration (%ticketNo%)'
@@ -163,6 +168,8 @@ mail:
             subject: '(%ticketNo%) %nameEn% published registration form'
         finished:
             subject: '(%ticketNo%) %nameEn% finished registration form'
+        updated:
+            subject: '(%ticketNo%) %nameEn% updated registration form'
     creation:
         subject: 'SURFnet SP Registration has been Created (%ticketNo%)'
     confirmation:
@@ -170,6 +177,8 @@ mail:
             subject: 'Published confirmation for SURFnet SP Registration (%ticketNo%)'
         finished:
             subject: 'Finished confirmation for SURFnet SP Registration (%ticketNo%)'
+        updated:
+            subject: 'Updated confirmation for SURFnet SP Registration (%ticketNo%)'
 
 error:
     general:

@@ -10,6 +10,7 @@
         <link href="{{ asset('compiled/css/bootstrap.css') }}" rel="stylesheet" media="screen">
         {% stylesheets
         'css/style.css'
+        'css/bootstrap-switch.css'
         output='css/compiled/common.css' %}
         <link href="{{ asset_url }}" rel="stylesheet" media="screen">
         {% endstylesheets %}
@@ -42,9 +43,6 @@
 
 {% block javascripts %}
     <script src="{{ asset('compiled/js/bootstrap.js') }}"></script>
-    {% javascripts output='js/compiled/admin.js' %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}
 
 </body>

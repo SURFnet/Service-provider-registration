@@ -29,5 +29,6 @@ window.ParsleyConfig.i18n.en = $.extend(window.ParsleyConfig.i18n.en || {}, {
 });
 
 // If file is loaded after Parsley main file, auto-load locale
-if ('undefined' !== typeof window.ParsleyValidator)
-  window.ParsleyValidator.addCatalog('en', window.ParsleyConfig.i18n.en, true);
+if ('undefined' !== typeof window.Parsley) {
+  window.Parsley.addCatalog('en', window.ParsleyConfig.i18n.en, true);
+}

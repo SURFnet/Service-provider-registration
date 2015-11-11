@@ -2,7 +2,6 @@
 
 namespace AppBundle\Metadata;
 
-use Doctrine\Common\Cache\Cache;
 use Guzzle\Http\Client;
 use Guzzle\Http\Exception\CurlException;
 use Monolog\Logger;

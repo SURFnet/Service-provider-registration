@@ -30,3 +30,11 @@ assetic:
 
 swiftmailer:
     delivery_address: "%error_mail_address%"
+
+doctrine_cache:
+    providers:
+        my_memcached_cache:
+            memcache:
+                servers: %memcached_servers%
+            namespace: cache_dev
+            alias: cache

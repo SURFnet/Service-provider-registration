@@ -113,27 +113,37 @@ class SubscriptionManager
     /**
      * @param Subscription $subscription
      */
-    public function saveSubscription(Subscription $subscription)
+    public function saveNewSubscription(Subscription $subscription)
     {
         $this->em->persist($subscription);
         $this->em->flush($subscription);
 
         $this->dispatcher->dispatch(
             SubscriptionEvents::POST_WRITE,
-            new SubscriptionEvent($subscription->getId(), $subscription)
+            new SubscriptionEvent(
+                $subscription->getId(),
+                NULL,
+                $subscription
+            )
         );
     }
 
     /**
-     * @param Subscription $subscription
+     * @param Subscription $toSubscription
      */
-    public function updateSubscription(Subscription $subscription)
-    {
-        $this->em->flush($subscription);
+    public function updateSubscription(
+        Subscription $fromSubscription,
+        Subscription $toSubscription
+    ) {
+        $this->em->flush($toSubscription);
 
         $this->dispatcher->dispatch(
             SubscriptionEvents::POST_WRITE,
-            new SubscriptionEvent($subscription->getId(), $subscription)
+            new SubscriptionEvent(
+                $toSubscription->getId(),
+                $fromSubscription,
+                $toSubscription
+            )
         );
     }
 
@@ -149,11 +159,12 @@ class SubscriptionManager
     /**
      * @param Subscription $subscription
      *
+     * @param null|array $groups
      * @return bool
      */
-    public function isValidSubscription(Subscription $subscription)
+    public function isValidSubscription(Subscription $subscription, $groups = null)
     {
-        return count($this->validator->validate($subscription)) === 0;
+        return count($this->validator->validate($subscription, $groups)) === 0;
     }
 
     /**

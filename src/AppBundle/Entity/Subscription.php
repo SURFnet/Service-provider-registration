@@ -8,6 +8,7 @@ use AppBundle\Validator\Constraints as AppAssert;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use RuntimeException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
@@ -118,8 +119,14 @@ class Subscription
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Url(protocols={"https"}, message = "url.notSecure")
+     * @Assert\Url(
+     *      protocols={"https"},
+     *      message = "url.notSecure",
+     *      groups={"finished"}
+     * )
+     * @Assert\Url(message = "url.invalid")
      * @AppAssert\ValidMetadata()
+     * @AppAssert\ValidSSLLabsAnalyze()
      */
     private $metadataUrl;
 
@@ -127,7 +134,13 @@ class Subscription
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Url(protocols={"https"})
+     * @Assert\Url(protocols={"https","http"})
+     * @Assert\Url(
+     *      protocols={"https"},
+     *      message = "url.notSecure",
+     *      groups={"finished"}
+     * )
+     * @AppAssert\ValidSSLLabsAnalyze()
      */
     private $acsLocation;
 
@@ -377,19 +390,11 @@ class Subscription
     }
 
     /**
-     *
+     * @return bool
      */
-    public function finish()
+    public function isDraft()
     {
-        $this->status = self::STATE_FINISHED;
-    }
-
-    /**
-     *
-     */
-    public function draft()
-    {
-        $this->status = self::STATE_DRAFT;
+        return $this->status === self::STATE_DRAFT;
     }
 
     /**
@@ -397,15 +402,35 @@ class Subscription
      */
     public function publish()
     {
+        if (!$this->isDraft()) {
+            throw new RuntimeException(
+                "Invalid transition from {$this->status} to published"
+            );
+        }
+
         $this->status = self::STATE_PUBLISHED;
     }
 
     /**
      * @return bool
      */
-    public function isDraft()
+    public function isPublished()
     {
-        return $this->status === self::STATE_DRAFT;
+        return $this->status === self::STATE_PUBLISHED;
+    }
+
+    /**
+     *
+     */
+    public function finish()
+    {
+        if (!$this->isPublished()) {
+            throw new RuntimeException(
+                "Invalid transition from {$this->status} to finished"
+            );
+        }
+
+        $this->status = self::STATE_FINISHED;
     }
 
     /**
@@ -417,11 +442,11 @@ class Subscription
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isPublished()
+    public function getStatus()
     {
-        return $this->status === self::STATE_PUBLISHED;
+        return $this->status;
     }
 
     /**
@@ -1134,6 +1159,9 @@ class Subscription
         );
     }
 
+    /**
+     * @return Subscription
+     */
     public function archive()
     {
         $this->archived = true;

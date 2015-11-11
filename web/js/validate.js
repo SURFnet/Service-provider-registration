@@ -1,232 +1,140 @@
-(function ($) {
+(function ($, Parsley, ParsleyUI, document) {
     'use strict';
 
-    var
-        nl2br = function (str, isXhtml) {
-            var breakTag = (isXhtml || typeof isXhtml === 'undefined') ? '<br />' : '<br>';
-            return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-        },
+    function nlToBr(str, isXhtml) {
+        var breakTag = '<br>',
+            input = String(str);
 
-        updateData = function (dataField, field, val) {
-            clearErrors(dataField);
-
-            if (field.$element.attr('id') !== dataField.$element.attr('id')) {
-                if (dataField.$element.attr('type') === 'checkbox') {
-                    dataField.$element.prop('checked', val).trigger('change');
-                } else {
-                    dataField.$element.val(val);
-                }
-            }
-        },
-
-        updateErrors = function (field, errors) {
-            clearErrors(field);
-
-            $.each(errors, function (key, error) {
-                window.ParsleyUI.addError(field, 'remote', nl2br(error));
-            });
-
-            window.ParsleyUI.manageFailingFieldTrigger(field);
-        },
-
-        // @todo: clean, use recursive method
-        updateDataAndErrors = function (field) {
-            var json;
-
-            clearErrors(field);
-
-            if (typeof field._xhr === 'undefined' || typeof field._xhr.responseText === 'undefined') {
-                return;
-            }
-
-            json = $.parseJSON(field._xhr.responseText);
-
-            $.each(json.data, function (key, val) {
-                if (val === Object(val)) {
-                    $.each(val, function (key2, val2) {
-                        var dataField = $('#subscription_' + key + '_' + key2).parsley();
-                        updateData(dataField, field, val2);
-                    });
-                } else {
-                    var dataField = $('#subscription_' + key).parsley();
-                    updateData(dataField, field, val);
-                }
-            });
-
-            $.each(json.errors, function (key, val) {
-                if (!$.isArray(val)) {
-                    $.each(val, function (key2, val2) {
-                        var field = $('#subscription_' + key + '_' + key2).parsley();
-                        updateErrors(field, val2);
-                    });
-                } else {
-                    var field = $('#subscription_' + key).parsley();
-                    updateErrors(field, val);
-                }
-            });
-        },
-
-        clearErrors = function (field) {
-            field._ui.$errorsWrapper.removeClass('filled').children().remove();
-            field._ui.$errorClassHandler.removeClass(field.options.errorClass);
-            field._ui.lastValidationResult = [];
-            field._ui.validationInformationVisible = false;
-        };
-
-    $(function () {
-        var $form = $('#form'),
-            $inputs = $form.find('input, select, textarea'),
-            $links = $form.find('.popover-link');
-
-        // Prevent onEnter submit
-        $form.find('input, select').on('keypress', function (event) {
-            if (event.which === 13) {
-                event.preventDefault();
-            }
-        });
-
-        $.listen('parsley:field:init', function (field) {
-            field.$element.closest('.form-group').addClass('has-feedback');
-        });
-
-        // Setup validation
-        // @todo double, help text
-        $form.parsley({
-            trigger: 'input',
-            errorClass: 'has-error',
-            successClass: 'has-success',
-            classHandler: function (field) {
-                return field.$element.closest('.form-group');
-            },
-            errorsWrapper: '<ul class="help-block"></ul>'
-        }).subscribe('parsley:form:validated', function (form) {
-            if (true !== form.validationResult) {
-                var tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
-                $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
-            }
-        }).subscribe('parsley:field:validate', function (field) {
-            field.reset();
-            field.$element.next('i').remove();
-            field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
-        }).subscribe('parsley:field:success', function (field) {
-            field.$element.next('i').remove();
-            if (field.validationResult === true) {
-                field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
-            }
-        }).subscribe('parsley:field:error', function (field) {
-            field.$element.next('i').remove();
-            field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
-        });
-
-        // Show external error messages
-        $form.find(':input[data-parsley-remote]').each(function () {
-            var field = $(this).parsley();
-
-            $(this).attr('data-parsley-remote-options', '{ "type": "POST" }');
-            $(this).attr('data-parsley-errors-messages-disabled', 1);
-            field.actualizeOptions();
-
-            field.addAsyncValidator('default', function () {
-                updateDataAndErrors(this);
-
-                return !this._ui.$errorsWrapper.hasClass('filled');
-            }, $(this).data('parsley-remote'));
-        });
-
-        // Prevent caching for the metadataUrl field because the response can be different based on earlier values
-        $('#subscription_metadataUrl').parsley().subscribe('parsley:field:validate', function (field) {
-            field.$element.attr('data-parsley-remote-options', '{ "type": "POST", "ts": ' + Date.now() + ' }');
-            field.actualizeOptions();
-        });
-
-        // A custom validator to check whether the adm. and tech. contact are not the same
-        window.ParsleyValidator
-            .addValidator('contactunique', function () {
-                /*jshint maxcomplexity:7 */
-                var fname1 = $('#subscription_administrativeContact_firstName').val(),
-                    fname2 = $('#subscription_technicalContact_firstName').val(),
-                    lname1 = $('#subscription_administrativeContact_lastName').val(),
-                    lname2 = $('#subscription_technicalContact_lastName').val(),
-                    email1 = $('#subscription_administrativeContact_email').val(),
-                    email2 = $('#subscription_technicalContact_email').val();
-
-                if (!fname1 || !fname2 || !lname1 || !lname2 || !email1 || !email2) {
-                    return true;
-                }
-
-                return !(fname1 === fname2 && lname1 === lname2 && email1 === email2);
-            }, 32)
-            .addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
-            .addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
-
-        function save(options, formData) {
-            /*jshint validthis:true */
-            var self = this;
-
-            $.ajax({
-                url: $form.data('save'),
-                data: formData,
-                type: 'POST',
-                beforeSend: function () {
-                    $('#status-done').addClass('hidden');
-                    $('#status-progress').removeClass('hidden');
-                },
-                complete: function () {
-                    $('#status-progress').addClass('hidden');
-                    $('#status-done').removeClass('hidden');
-
-                    self.next('save');
-                }
-            });
-
-            return false;
+        if (isXhtml || isXhtml === undefined) {
+            breakTag = '<br />';
         }
 
-        // Setup autosave
-        if ($form.hasClass('autosave')) {
-            $form.autosave({
-                callbacks: {
-                    trigger: ['modify', 'change'],
-                    scope: 'all',
-                    save: $.debounce(500, save)
-                }
-            });
-        }
-
-        // Setup locking
-        setInterval(
-            function () {
-                var lockReq = $.get($form.data('lock'));
-
-                lockReq.done(function () {
-                    $inputs.not('.disabled').prop('disabled', false);
-                    $form.find('button').prop('disabled', false);
-                    $('.lock-warning').hide();
-                });
-
-                lockReq.fail(function () {
-                    $inputs.prop('disabled', true);
-                    $form.find('button').prop('disabled', true);
-                    $('.lock-warning').show();
-                });
-            },
-            10000
+        return input.replace(
+            /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,
+            '$1' + breakTag + '$2'
         );
+    }
 
-        // Setup next/prev tab buttons
-        $form.find('.btn-next').on('click', function () {
+    function clearErrors(field) {
+        var errorsWrapper = field._ui.$errorsWrapper,
+            errorsWrapperChildren = errorsWrapper.children();
+
+        errorsWrapper.removeClass('filled');
+        errorsWrapperChildren.remove();
+
+        field._ui.$errorClassHandler.removeClass(field.options.errorClass);
+        field._ui.lastValidationResult = [];
+        field._ui.validationInformationVisible = false;
+    }
+
+    function updateData(dataField, field, val) {
+        clearErrors(dataField);
+
+        if (field.$element.attr('id') !== dataField.$element.attr('id')) {
+            return;
+        }
+
+        if (dataField.$element.attr('type') === 'checkbox') {
+            dataField.$element.prop('checked', val);
+            dataField.$element.trigger('change');
+            return;
+        }
+
+        dataField.$element.val(val);
+        dataField.$element.trigger('change');
+    }
+
+    function updateErrors(field, errors) {
+        clearErrors(field);
+
+        //noinspection JSLint
+        $.each(errors, function (key, error) {
+            var cleanedError = nlToBr(error);
+            ParsleyUI.addError(field, 'remote', cleanedError);
+        });
+
+        ParsleyUI.manageFailingFieldTrigger(field);
+    }
+
+    function setupNextAndPrev(form) {
+        form.find('.btn-next').on('click', function () {
             $('.nav-tabs .active').next().find('a').tab('show');
             return false;
         });
 
-        $form.find('.btn-prev').on('click', function () {
+        form.find('.btn-prev').on('click', function () {
             $('.nav-tabs .active').prev().find('a').tab('show');
             return false;
         });
+    }
+    function setupHelpPopovers(links, inputs) {
+        links.popover({
+            container: 'body',
+            trigger: 'click',
+            html: true
+        });
 
-        // Show active tab on reload
+        links.on('click', function () {
+            return false;
+        });
+
+        inputs.on('focusin', function () {
+            $(this).closest('.row').find('.popover-link').popover('show');
+        });
+
+        links.on('show.bs.popover', function () {
+            links.not(this).popover('hide');
+        });
+
+        $('.nav-tabs a').on('hide.bs.tab', function () {
+            links.popover('hide');
+        });
+    }
+
+    /**
+     * @param {Object} field
+     *
+     * @todo: clean, use recursive method
+     */
+    function updateDataAndErrors(field, xhr) {
+        var json;
+
+        clearErrors(field);
+
+        if (xhr === undefined || xhr.responseText === undefined) {
+            return;
+        }
+
+        json = $.parseJSON(xhr.responseText);
+
+        $.each(json.data, function (key, val) {
+            if (val === Object(val)) {
+                $.each(val, function (key2, val2) {
+                    var dataField = $('#subscription_' + key + '_' + key2).parsley();
+                    updateData(dataField, field, val2);
+                });
+            } else {
+                var dataField = $('#subscription_' + key).parsley();
+                updateData(dataField, field, val);
+            }
+        });
+
+        $.each(json.errors, function (key, val) {
+            if ($.isArray(val)) {
+                var errorField = $('#subscription_' + key).parsley();
+                updateErrors(errorField, val);
+            } else {
+                $.each(val, function (key2, val2) {
+                    var errorFieldNested = $('#subscription_' + key + '_' + key2).parsley();
+                    updateErrors(errorFieldNested, val2);
+                });
+            }
+        });
+    }
+
+    function setupActiveTabHistory() {
         if (location.hash.substr(0, 2) === '#!') {
-            $('a[href="#'  + location.hash.substr(2) + '"]').tab('show');
+            $('a[href="#' + location.hash.substr(2) + '"]').tab('show');
         }
 
         // Remember the hash in the URL without jumping
@@ -236,31 +144,31 @@
                 location.replace('#!' + hash.substr(1));
             }
         });
+    }
 
-        // Setup help popovers
-        $links.popover({
-            container: 'body',
-            trigger: 'click',
-            html: true
-        });
+    function setupLocking(form, inputs) {
+        //noinspection MagicNumberJS
+        setInterval(
+            function () {
+                var lockReq = $.get(form.data('lock'));
 
-        $links.on('click', function () {
-            return false;
-        });
+                lockReq.done(function () {
+                    inputs.not('.disabled').prop('disabled', false);
+                    form.find('button').prop('disabled', false);
+                    $('.lock-warning').hide();
+                });
 
-        $inputs.on('focusin', function () {
-            $(this).closest('.row').find('.popover-link').popover('show');
-        });
+                lockReq.fail(function () {
+                    inputs.prop('disabled', true);
+                    form.find('button').prop('disabled', true);
+                    $('.lock-warning').show();
+                });
+            },
+            10000
+        );
+    }
 
-        $links.on('show.bs.popover', function () {
-            $links.not(this).popover('hide');
-        });
-
-        $('.nav-tabs a').on('hide.bs.tab', function () {
-            $links.popover('hide');
-        });
-
-        // Setup attribute checkboxes
+    function setupAttributeCheckboxes() {
         $('#attributes').find(':checkbox').on('change', function () {
             var checkbox = $(this),
                 textarea = checkbox.closest('.form-group').find('textarea');
@@ -273,5 +181,209 @@
                 textarea.prop('required', false);
             }
         });
+    }
+
+    function showDoneSaving() {
+        $('#status-progress').addClass('hidden');
+        $('#status-done').removeClass('hidden');
+    }
+
+    function showBusySaving() {
+        $('#status-done').addClass('hidden');
+        $('#status-progress').removeClass('hidden');
+    }
+
+    //noinspection JSLint
+    function save(form, formData) {
+        /*jshint validthis:true */
+        var self = this;
+
+        $.ajax({
+            url: form.data('save'),
+            data: formData,
+            type: 'POST',
+            beforeSend: showBusySaving,
+            complete: function () {
+                showDoneSaving();
+
+                self.next('save');
+            }
+        });
+
+        return false;
+    }
+
+    function setupAutoSaving(form) {
+        if (!form.hasClass('autosave')) {
+            return;
+        }
+
+        form.autosave({
+            callbacks: {
+                trigger: ['modify', 'change'],
+                scope: 'all',
+                save: $.debounce(500, function() {
+                    save.bind(this)(form, arguments[1]);
+                })
+            }
+        });
+    }
+
+    // A custom validator to check whether the adm. and tech. contact are not the same
+    function setupUniqueContacts() {
+        var validatorPriority = 32,
+            validator = Parsley.addValidator(
+                'contactunique',
+                function () {
+                    var adminEl = $('#subscription_administrativeContact_email'),
+                        techEl = $('#subscription_technicalContact_email');
+
+                    adminEl.nextAll('ul.help-block').remove();
+                    techEl.nextAll('ul.help-block').remove();
+
+                    return adminEl.val().trim() !== techEl.val().trim();
+                },
+                validatorPriority
+            );
+        validator.addMessage('en', 'contactunique', 'The technical contact should be different from the administrative contact.')
+        validator.addMessage('nl', 'contactunique', 'Het technisch contactpersoon moet verschillen van het administratief contactpersoon.');
+    }
+
+    function preventFormOnEnterSubmit(form) {
+        form.find('input, select').on('keypress', function (event) {
+            //noinspection MagicNumberJS
+            if (event.which !== 13) {
+                return;
+            }
+
+            event.preventDefault();
+        });
+    }
+
+    /**
+     *
+     * @param form
+     * @todo double, help text
+     */
+    function setupValidation(form) {
+        Parsley.on('field:init', function (field) {
+            field.$element.closest('.form-group').addClass('has-feedback');
+        });
+        Parsley.on('form:validate', function () {
+            $('#status-validating').removeClass('hidden');
+        });
+        Parsley.on('form:validated', function (form) {
+            if (form.validationResult !== true) {
+                var tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
+                $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
+            }
+        });
+        Parsley.on('field:validate', function (field) {
+            field.reset();
+            field.$element.next('i').remove();
+            field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
+        });
+        Parsley.on('field:success', function (field) {
+            field.$element.next('i').remove();
+            if (field.validationResult === true) {
+                field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
+            }
+        });
+        Parsley.on('field:error', function (field) {
+            field.$element.next('i').remove();
+            field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
+        });
+
+        form.parsley({
+            trigger: 'input',
+            errorClass: 'has-error',
+            successClass: 'has-success',
+            classHandler: function (field) {
+                return field.$element.closest('.form-group');
+            },
+            errorsWrapper: '<ul class="help-block"></ul>'
+        });
+    }
+
+    function preventMetadataUrlCaching() {
+        var metadataUrlParsley = $('#subscription_metadataUrl').parsley();
+        metadataUrlParsley.on('parsley:field:validate', function (field) {
+            field.$element.attr('data-parsley-remote-options', '{ "type": "POST", "ts": ' + Date.now() + ' }');
+            field.actualizeOptions();
+        });
+        metadataUrlParsley.on('field:ajaxoptions', function (field, options) {
+            var name = 'subscription[requestedState]';
+            options.data[name] = $('input[name="' + name + '"]').val();
+        });
+    }
+
+    function showExternalErrorMessages(form) {
+        form.find(':input[data-parsley-remote]').each(function () {
+            var field = $(this).parsley();
+
+            $(this).attr('data-parsley-remote-options', '{ "type": "POST" }');
+            $(this).attr('data-parsley-errors-messages-disabled', 1);
+            field.actualizeOptions();
+
+            Parsley.addAsyncValidator('default', function (xhr) {
+                updateDataAndErrors(field, xhr);
+
+                return !this._ui.$errorsWrapper.hasClass('filled');
+            }, $(this).data('parsley-remote'));
+        });
+    }
+
+    function hideSpinnerOnAjaxComplete() {
+        $(document).ajaxComplete(function () {
+            $('#status-validating,.fa-spin').addClass('hidden');
+        });
+    }
+
+    function setupFillRequestedState() {
+        $('button[type=submit]').on('click', function () {
+            $('#subscription_requestedState').val(
+                $(this).attr('data-requestedState')
+            );
+        });
+    }
+
+    function autoUpdateLogo() {
+        setInterval(function() {
+            var logoUrlEl = $('#subscription_logoUrl'),
+                previewEl = $('#subscription_logoUrl_preview');
+
+            if (logoUrlEl.val().trim() === '') {
+                previewEl.hide();
+            }
+            else {
+                previewEl.attr("src", logoUrlEl.val());
+                previewEl.show();
+            }
+        }, 500);
+    }
+
+    $(function () {
+        var form = $('#form'),
+            inputs = form.find('input, select, textarea'),
+            links = form.find('.popover-link');
+
+        setupValidation(form);
+        setupFillRequestedState(form);
+        showExternalErrorMessages(form);
+        setupUniqueContacts();
+
+        preventFormOnEnterSubmit(form);
+        preventMetadataUrlCaching();
+        hideSpinnerOnAjaxComplete();
+
+        setupNextAndPrev(form);
+        setupActiveTabHistory();
+        setupHelpPopovers(links, inputs);
+        setupAttributeCheckboxes();
+
+        setupAutoSaving(form);
+        setupLocking(form, inputs);
+
+        autoUpdateLogo();
     });
-})(window.jQuery);
+}(window.jQuery, window.Parsley, window.ParsleyUI, window.document));

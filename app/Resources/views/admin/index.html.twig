@@ -1,15 +1,33 @@
 {% extends "admin/base.html.twig" %}
 
 {% block body %}
-    <div id="per-status-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    <div id="current-statuses-chart" style="min-width: 400px; width: 1170px; height: 400px; margin: 0 auto; display: none"></div>
+    <div id="status-history-chart" style="min-width: 400px; width: 1170px; height: 400px; margin: 0 auto; display: none"></div>
+
+    <section id="chart-controls" style="display: none">
+        <button id="status-history-prev"
+                class="btn">Prev</button>
+        <button id="status-history-next"
+                class="btn"
+                disabled="disabled"
+                style="float: right">Next</button>
+    </section>
+
+    <section id="chart-switch">
+        <label for="enable-date-selection">Historische data</label>
+        <input id="enable-date-selection" name="enable-date-selection" class="bootstrap-switch" type="checkbox" />
+    </section>
 {% endblock body %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
-    <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
-    <script src="{{ asset('js/highcharts.theme.light.js') }}"></script>
-    <script type="text/javascript">
-        {{ chart(chart) }}
-    </script>
+    {% javascripts
+        'bundles/obhighcharts/js/highcharts/highcharts.js'
+        'bundles/obhighcharts/js/highcharts/modules/exporting.js'
+        'js/highcharts.theme.light.js'
+        'js/bootstrap-switch.js'
+        'js/admin-dashboard.js'
+        output='js/compiled/admin-dashboard.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

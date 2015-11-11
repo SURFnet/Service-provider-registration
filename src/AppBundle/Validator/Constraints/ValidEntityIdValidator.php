@@ -2,6 +2,7 @@
 namespace AppBundle\Validator\Constraints;
 
 use AppBundle\Entity\Subscription;
+use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 use Pdp\Parser;
 use Pdp\PublicSuffixListManager;
 use Symfony\Component\Validator\Constraint;
@@ -12,6 +13,19 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class ValidEntityIdValidator extends ConstraintValidator
 {
+    /**
+     * @var ConnectionDescriptorRepository
+     */
+    private $janus;
+
+    /**
+     * @param ConnectionDescriptorRepository $janus
+     */
+    public function __construct(ConnectionDescriptorRepository $janus)
+    {
+        $this->janus = $janus;
+    }
+
     /**
      * @param string     $value
      * @param Constraint $constraint
@@ -24,6 +38,10 @@ class ValidEntityIdValidator extends ConstraintValidator
             $subscription = $root;
         } else {
             $subscription = $root->getData();
+        }
+
+        if (!$subscription->isDraft()) {
+            return;
         }
 
         $metadataUrl = $subscription->getMetadataUrl();
@@ -62,5 +80,19 @@ class ValidEntityIdValidator extends ConstraintValidator
 
             return;
         }
+
+        try {
+            $entity = $this->janus->findByName($value);
+        } catch (\Exception $e) {
+            $this->context->addViolation('Failed checking registry.');
+
+            return;
+        }
+
+        if (!$entity) {
+            return;
+        }
+
+        $this->context->addViolation('Entity has already been registered.');
     }
 }

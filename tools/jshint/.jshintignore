@@ -1,3 +1,4 @@
-web/js/compiled/*
-web/js/jquery.*
-web/js/parsley.*
+../../web/js/compiled/*
+../../web/js/jquery.*
+../../web/js/parsley.*
+../../web/js/highcharts.*

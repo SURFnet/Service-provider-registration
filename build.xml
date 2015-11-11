@@ -48,6 +48,7 @@
         <exec executable="node" failonerror="true" >
             <arg value="bin/jshint"/>
             <arg value="--config=tools/jshint/.jshintrc"/>
+            <arg value="--exclude-path=tools/jshint/.jshintignore"/>
             <arg value="web/js"/>
         </exec>
     </target>

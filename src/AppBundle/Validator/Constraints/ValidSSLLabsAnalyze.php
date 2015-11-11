@@ -7,15 +7,12 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class ValidSSLCertificate extends Constraint
+class ValidSSLLabsAnalyze extends Constraint
 {
-    public $message = 'The certificate is not valid.';
+    public $message = 'Required SSL Labs grade not met.';
 
-    /**
-     * @return string
-     */
     public function validatedBy()
     {
-        return 'certificate';
+        return 'ssllabs';
     }
 }
