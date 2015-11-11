@@ -1,4 +1,4 @@
-server 'localhost', :app, :web, :primary => true
+server 'surf.dev', :app, :web, :primary => true
 
 set :deploy_to,   "/var/www/spform/"
 
