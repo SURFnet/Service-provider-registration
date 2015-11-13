@@ -37,6 +37,7 @@ logger.level = Logger::MAX_LEVEL
 
 # Run migrations before warming the cache
 before "symfony:cache:warmup", "symfony:doctrine:schema:update"
+after "symfony:doctrine:schema:update", "deploy:migrate"
 
 # Update translations
 namespace :symfony do

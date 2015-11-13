@@ -40,7 +40,9 @@
         "sensio/framework-extra-bundle":        "~3.0",
         "stfalcon/tinymce-bundle":              "0.3.*",
         "sybio/image-workshop":                 "^2.0",
-        "twbs/bootstrap":                       "~3.3"
+        "twbs/bootstrap":                       "~3.3",
+        "doctrine/migrations":                  "v1.0.0-alpha3 as 1.0.0",
+        "doctrine/doctrine-migrations-bundle":  "1.0.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
