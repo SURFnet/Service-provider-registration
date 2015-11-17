@@ -2456,7 +2456,7 @@ if ('undefined' !== typeof window.Parsley) {
     function updateData(dataField, field, val) {
         clearErrors(dataField);
 
-        if (field.$element.attr('id') !== dataField.$element.attr('id')) {
+        if (field.$element.attr('id') === dataField.$element.attr('id')) {
             return;
         }
 
@@ -2744,19 +2744,15 @@ if ('undefined' !== typeof window.Parsley) {
     }
 
     function showExternalErrorMessages(form) {
-        form.find(':input[data-parsley-remote]').each(function () {
-            var field = $(this).parsley();
-
-            $(this).attr('data-parsley-remote-options', '{ "type": "POST" }');
-            $(this).attr('data-parsley-errors-messages-disabled', 1);
-            field.actualizeOptions();
-
-            Parsley.addAsyncValidator('default', function (xhr) {
-                updateDataAndErrors(field, xhr);
+        Parsley.addAsyncValidator(
+            'metadataUrl',
+            function (xhr) {
+                updateDataAndErrors(this, xhr);
 
                 return !this._ui.$errorsWrapper.hasClass('filled');
-            }, $(this).data('parsley-remote'));
-        });
+            },
+            $(this).data('parsley-remote')
+        );
     }
 
     function hideSpinnerOnAjaxComplete() {
