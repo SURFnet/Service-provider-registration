@@ -362,6 +362,34 @@
         }, 500);
     }
 
+    function setupUrlValidation() {
+        $('input.url-validated').on('change', function() {
+            var inputEl = this;
+
+            $.ajax({
+                type: "POST",
+                url: window.location.pathname + '/validate-url',
+                data: {
+                    "url": $(this).val(),
+                    "subscription": {
+                        "token": $('#subscription__token').val()
+                    }
+                },
+                success: function (data) {
+                    if (!data.validation) {
+                        return;
+                    }
+
+                    updateErrors(
+                        $(inputEl).parsley(),
+                        data
+                    );
+                },
+                dataType: 'json'
+            });
+        });
+    }
+
     $(function () {
         var form = $('#form'),
             inputs = form.find('input, select, textarea'),
@@ -371,6 +399,7 @@
         setupFillRequestedState(form);
         showExternalErrorMessages(form);
         setupUniqueContacts();
+        setupUrlValidation();
 
         preventFormOnEnterSubmit(form);
         preventMetadataUrlCaching();
