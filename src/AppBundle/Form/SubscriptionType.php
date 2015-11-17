@@ -102,7 +102,7 @@ class SubscriptionType extends AbstractType
         $subscription = $event->getData();
 
         // If metadataUrl is not submitted return early
-        if (!array_key_exists('metadataUrl', $subscription)) {
+        if (!$subscription || !array_key_exists('metadataUrl', $subscription)) {
             return;
         }
 
