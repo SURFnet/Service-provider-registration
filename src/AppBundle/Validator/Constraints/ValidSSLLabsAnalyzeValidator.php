@@ -2,16 +2,17 @@
 
 namespace AppBundle\Validator\Constraints;
 
+use SURFnet\SslLabs\Dto\Host;
+use SURFnet\SslLabs\Service\AnalyzeServiceInterface;
 use SURFnet\SslLabs\Service\GradeComparatorService;
-use SURFnet\SslLabs\Service\SynchronousAnalyzeService;
-use SURFnet\SslLabs\Service\ValidateRequiredGradeService;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 class ValidSSLLabsAnalyzeValidator extends ConstraintValidator
 {
     /**
-     * @var SynchronousAnalyzeService
+     * @var AnalyzeServiceInterface
      */
     private $analyzeService;
 
@@ -26,13 +27,23 @@ class ValidSSLLabsAnalyzeValidator extends ConstraintValidator
     private $passingGrade;
 
     /**
+     * @var Host|null
+     */
+    private $lastHostDto = null;
+
+    /**
+     * @var null
+     */
+    private $lastViolation = null;
+
+    /**
      * ValidSSLLabsAnalyzeValidator constructor.
-     * @param SynchronousAnalyzeService $analyzeService
+     * @param AnalyzeServiceInterface $analyzeService
      * @param GradeComparatorService $gradeComparator
      * @param string $passingGrade
      */
     public function __construct(
-        SynchronousAnalyzeService $analyzeService,
+        AnalyzeServiceInterface $analyzeService,
         GradeComparatorService $gradeComparator,
         $passingGrade
     ) {
@@ -47,6 +58,8 @@ class ValidSSLLabsAnalyzeValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
+        $this->lastViolation = null;
+
         $protocol = strtolower(parse_url($value, PHP_URL_SCHEME));
 
         if ($protocol !== 'https') {
@@ -56,6 +69,12 @@ class ValidSSLLabsAnalyzeValidator extends ConstraintValidator
         $hostname = parse_url($value, PHP_URL_HOST);
 
         $hostDto = $this->analyzeService->analyze($hostname);
+        $this->lastHostDto = $hostDto;
+
+        $endStatuses = array(Host::STATUS_ERROR, Host::STATUS_READY);
+        if (!in_array($hostDto->status, $endStatuses)) {
+            return;
+        }
 
         $validated = true;
         foreach ($hostDto->endpoints as $endpoint) {
@@ -69,13 +88,32 @@ class ValidSSLLabsAnalyzeValidator extends ConstraintValidator
             return;
         }
 
-        $this->context->addViolation(
-            "At least a {$this->passingGrade} is required from SSL Labs, "
+        $violation = "At least a {$this->passingGrade} is required from SSL Labs, "
             . "however not all server configurations match this, "
             . "please see: https://www.ssllabs.com/ssltest/analyze.html?d="
             . $hostname
             . ' . Use SSL Labs "Clear cache" on this URL to retry'
-            . ' after making server configurations.'
-        );
+            . ' after making server configurations.';
+
+        if ($this->context) {
+            $this->context->addViolation($violation);
+        }
+        $this->lastViolation = $violation;
+    }
+
+    /**
+     * @return Host
+     */
+    public function getLastHostDto()
+    {
+        return $this->lastHostDto;
+    }
+
+    /**
+     * @return null
+     */
+    public function getLastViolation()
+    {
+        return $this->lastViolation;
     }
 }

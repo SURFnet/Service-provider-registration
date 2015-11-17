@@ -1,7 +1,7 @@
 <fieldset>
     <div class="row">
         <div class="col-xs-11">
-            {{ form_row(form.metadataUrl, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
+            {{ form_row(form.metadataUrl, {attr: {'class': 'url-validated', 'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
         </div>
 
         <div class="col-xs-1">
@@ -13,7 +13,7 @@
 
     <div class="row">
         <div class="col-xs-11">
-            {{ form_row(form.acsLocation, {attr: {'class': 'disabled', 'placeholder': 'form.placeholder.acsLocation'|trans}}) }}
+            {{ form_row(form.acsLocation, {attr: {'class': 'disabled url-validated', 'placeholder': 'form.placeholder.acsLocation'|trans}}) }}
         </div>
 
         <div class="col-xs-1">
