@@ -1,7 +1,23 @@
 <fieldset>
     <div class="row">
         <div class="col-xs-11">
-            {{ form_row(form.metadataUrl, {attr: {'class': 'url-validated', 'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
+            {{
+                form_row(
+                    form.metadataUrl,
+                    {
+                        attr: {
+                            'class': 'url-validated',
+                            'data-parsley-remote': path(
+                                'validate',
+                                {id: subscription.id}
+                            ),
+                            'data-parsley-remote-validator': 'metadataUrl',
+                            'data-parsley-remote-options': '{ "type": "POST" }',
+                            'data-parsley-errors-messages-disabled': 'true'
+                        }
+                    }
+                )
+            }}
         </div>
 
         <div class="col-xs-1">
@@ -49,7 +65,19 @@
 
     <div class="row">
         <div class="col-xs-11">
-            {{ form_row(form.logoUrl, {'attr': {'data-parsley-remote': path('validate', {id: subscription.id}) }}) }}
+            {{
+                form_row(
+                    form.logoUrl,
+                    {
+                        'attr': {
+                            'data-parsley-remote': path(
+                                'validate',
+                                {id: subscription.id}
+                            )
+                        }
+                    }
+                )
+            }}
         </div>
 
         <img id="subscription_logoUrl_preview"

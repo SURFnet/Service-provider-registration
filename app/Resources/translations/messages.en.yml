@@ -154,9 +154,9 @@ form:
     title: SURFnet SP Registration
 
     placeholder:
-        acsLocation: 'Information is automatically subtracted from the Metadata URL'
-        entityId: 'Information is automatically subtracted from the Metadata URL'
-        certificate: 'Information is automatically subtracted from the Metadata URL'
+        acsLocation: 'Information is automatically retrieved from the Metadata'
+        entityId: 'Information is automatically retrieved from the Metadata'
+        certificate: 'Information is automatically retrieved from the Metadata'
         attribute: 'The service will use this attribute to....'
 mail:
     invitation:
