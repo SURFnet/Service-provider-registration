@@ -218,6 +218,10 @@ services:
 
     ssllabs.analyze_service:
         class: SURFnet\SslLabs\Service\SynchronousAnalyzeService
+        arguments: [@ssllabs.analyze_service.async]
+
+    ssllabs.analyze_service.async:
+        class: SURFnet\SslLabs\Service\AsynchronousAnalyzeService
         arguments: [@ssllabs.client]
 
     ssllabs.client:
@@ -250,7 +254,13 @@ services:
 
     validator.ssllabs:
         class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
-        arguments: [@ssllabs.analyze_service, @ssllabs.grade_comparator, 'A']
+        arguments: [@ssllabs.analyze_service, @ssllabs.grade_comparator, 'B']
+        tags:
+            - { name: validator.constraint_validator, alias: ssllabs }
+
+    validator.ssllabs.async:
+        class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
+        arguments: [@ssllabs.analyze_service.async, @ssllabs.grade_comparator, 'B']
         tags:
             - { name: validator.constraint_validator, alias: ssllabs }
 

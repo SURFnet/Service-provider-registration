@@ -7,15 +7,20 @@ use AppBundle\Form\SubscriptionType;
 use AppBundle\Form\SubscriptionTypeFactory;
 use AppBundle\Manager\MailManager;
 use AppBundle\Manager\SubscriptionManager;
+use AppBundle\Validator\Constraints\ValidSSLLabsAnalyze;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use SURFnet\SslLabs\Client;
+use SURFnet\SslLabs\Dto\Host;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Validator\Context\ExecutionContextFactory;
 
 /**
  * Class FormController
@@ -500,6 +505,76 @@ class SubscriptionController extends Controller
             array(
                 'subscription' => $this->getSubscription($id, false),
             )
+        );
+    }
+
+    /**
+     * @Route("/{id}/validate-url", name="validate_url")
+     * @Method("POST")
+     *
+     * @return Response
+     */
+    public function validateUrlAction(Request $request)
+    {
+        $subscriptionRequestData = $request->get('subscription');
+
+        $validToken = $this->get('security.csrf.token_manager')->isTokenValid(
+            new CsrfToken(
+                'subscription',
+                $subscriptionRequestData['token']
+            )
+        );
+        if (!$validToken) {
+            return new Response('Invalid CSRF token', 400);
+        }
+
+        $url = $request->get('url');
+
+        if (empty($url)) {
+            return new Response('No URL sent', 400);
+        }
+
+        $parsedUrl = parse_url($url);
+
+        if (empty($parsedUrl['host'])) {
+            return new Response('Unable to get host from url', 400);
+        }
+
+        $client = $this->get('ssllabs.client');
+
+        $info = $client->info();
+        if ($info->currentAssessments >= $info->maxAssessments) {
+            return new Response('Maximum requests reached', 503);
+        }
+
+        $validator = $this->get('validator.ssllabs');
+        $validator->validate(
+            $url,
+            new ValidSSLLabsAnalyze()
+        );
+        $hostDto = $validator->getLastHostDto();
+
+        if (!$hostDto) {
+            throw new \RuntimeException('No host from validator');
+        }
+
+        $endStatuses = array(Host::STATUS_ERROR, Host::STATUS_READY);
+        if (!in_array($hostDto->status, $endStatuses)) {
+            return new Response('Unable to validate host', 400);
+        }
+
+        $statusCode = 202; // Accepted
+
+        if ($hostDto->status === Host::STATUS_ERROR) {
+            $statusCode = 500; // Server Error
+        }
+        if ($hostDto->status === Host::STATUS_READY) {
+            $statusCode = 200; // Okay
+        }
+
+        return new JsonResponse(
+            array('violation' => $validator->getLastViolation()),
+            $statusCode
         );
     }
 
