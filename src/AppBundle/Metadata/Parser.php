@@ -157,48 +157,54 @@ class Parser
 
         $metadata->logoUrl = (string)$ui->Logo;
 
-        foreach ($ui->Description as $description) {
-            $lang = $description->attributes(static::NS_LANG);
-            $lang = $lang['lang'];
+        if (!empty($ui->Description)) {
+            foreach ($ui->Description as $description) {
+                $lang = $description->attributes(static::NS_LANG);
+                $lang = $lang['lang'];
 
-            switch ($lang) {
-                case 'en':
-                    $metadata->descriptionEn = (string)$description;
-                    break;
+                switch ($lang) {
+                    case 'en':
+                        $metadata->descriptionEn = (string)$description;
+                        break;
 
-                case 'nl':
-                    $metadata->descriptionNl = (string)$description;
-                    break;
+                    case 'nl':
+                        $metadata->descriptionNl = (string)$description;
+                        break;
+                }
             }
         }
 
-        foreach ($ui->DisplayName as $name) {
-            $lang = $name->attributes(static::NS_LANG);
-            $lang = $lang['lang'];
+        if (!empty($ui->DisplayName)) {
+            foreach ($ui->DisplayName as $name) {
+                $lang = $name->attributes(static::NS_LANG);
+                $lang = $lang['lang'];
 
-            switch ($lang) {
-                case 'en':
-                    $metadata->nameEn = (string)$name;
-                    break;
+                switch ($lang) {
+                    case 'en':
+                        $metadata->nameEn = (string)$name;
+                        break;
 
-                case 'nl':
-                    $metadata->nameNl = (string)$name;
-                    break;
+                    case 'nl':
+                        $metadata->nameNl = (string)$name;
+                        break;
+                }
             }
         }
 
-        foreach ($ui->InformationURL as $url) {
-            $lang = $url->attributes(static::NS_LANG);
-            $lang = $lang['lang'];
+        if (!empty($ui->InformationURL)) {
+            foreach ($ui->InformationURL as $url) {
+                $lang = $url->attributes(static::NS_LANG);
+                $lang = $lang['lang'];
 
-            switch ($lang) {
-                case 'en':
-                    $metadata->applicationUrlEn = (string)$url;
-                    break;
+                switch ($lang) {
+                    case 'en':
+                        $metadata->applicationUrlEn = (string)$url;
+                        break;
 
-                case 'nl':
-                    $metadata->applicationUrlNl = (string)$url;
-                    break;
+                    case 'nl':
+                        $metadata->applicationUrlNl = (string)$url;
+                        break;
+                }
             }
         }
     }
