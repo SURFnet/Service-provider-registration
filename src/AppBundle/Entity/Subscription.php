@@ -402,7 +402,7 @@ class Subscription
     }
 
     /**
-     *
+     * @return $this
      */
     public function publish()
     {
@@ -413,6 +413,24 @@ class Subscription
         }
 
         $this->status = self::STATE_PUBLISHED;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function revertToPublished()
+    {
+        if (!$this->isFinished()) {
+            throw new RuntimeException(
+                "Invalid transition from {$this->status} back to published"
+            );
+        }
+
+        $this->status = self::STATE_PUBLISHED;
+
+        return $this;
     }
 
     /**
@@ -435,6 +453,8 @@ class Subscription
         }
 
         $this->status = self::STATE_FINISHED;
+
+        return $this;
     }
 
     /**

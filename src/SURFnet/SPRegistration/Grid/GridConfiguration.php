@@ -111,9 +111,33 @@ class GridConfiguration
      */
     private function configureRowActions(Grid $grid)
     {
+        $this->addViewLink($grid);
+
+        $this->addEditLink($grid);
+
+        $this->addFinishLink($grid);
+
+        $this->addPublishLink($grid);
+
+        $this->addArchiveLink($grid);
+
+        $this->addLinkToJanus($grid);
+    }
+
+    /**
+     * @param Grid $grid
+     */
+    private function addViewLink(Grid $grid)
+    {
         $rowAction = new RowAction('view', 'admin.subscription.view');
         $grid->addRowAction($rowAction);
+    }
 
+    /**
+     * @param Grid $grid
+     */
+    private function addEditLink(Grid $grid)
+    {
         $rowAction = new RowAction('edit', 'form', false, '_blank');
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
@@ -125,7 +149,13 @@ class GridConfiguration
             }
         );
         $grid->addRowAction($rowAction);
+    }
 
+    /**
+     * @param Grid $grid
+     */
+    private function addFinishLink(Grid $grid)
+    {
         $rowAction = new RowAction('finish', 'admin.subscription.finish', true);
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
@@ -137,7 +167,35 @@ class GridConfiguration
             }
         );
         $grid->addRowAction($rowAction);
+    }
 
+    /**
+     * @param Grid $grid
+     */
+    private function addPublishLink(Grid $grid)
+    {
+        $rowAction = new RowAction(
+            'revert to published',
+            'admin.subscription.publish',
+            true
+        );
+        $rowAction->manipulateRender(
+            function (RowAction $action, Row $row) {
+                if ($row->getField('status') !== Subscription::STATE_FINISHED) {
+                    return null;
+                }
+
+                return $action;
+            }
+        );
+        $grid->addRowAction($rowAction);
+    }
+
+    /**
+     * @param Grid $grid
+     */
+    private function addArchiveLink(Grid $grid)
+    {
         $rowAction = new RowAction('archive', 'admin.subscription.archive');
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
@@ -152,8 +210,6 @@ class GridConfiguration
             }
         );
         $grid->addRowAction($rowAction);
-
-        $this->addLinkToJanus($grid);
     }
 
     /**
