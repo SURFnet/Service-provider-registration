@@ -12,7 +12,6 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class MailManager
 {
-
     /**
      * @var \Swift_Mailer
      */
@@ -27,6 +26,16 @@ class MailManager
      * @var TranslatorInterface
      */
     private $translator;
+
+    /**
+     * @var string
+     */
+    private $sender;
+
+    /**
+     * @var string
+     */
+    private $receiver;
 
     /**
      * Constructor
@@ -70,7 +79,6 @@ class MailManager
                 $subscription->getLocale()
             )
         );
-        $message->setFrom($this->sender);
         $message->setTo(
             array(
                 $contact->getEmail() => $contact->getFirstName()
@@ -103,8 +111,6 @@ class MailManager
                 )
             )
         );
-        $message->setFrom($this->sender);
-        $message->setTo($this->receiver);
         $message->setBody(
             $this->renderView(
                 'admin/mail/creation.html.twig',
@@ -132,8 +138,6 @@ class MailManager
                 )
             )
         );
-        $message->setFrom($this->sender);
-        $message->setTo($this->receiver);
         $message->setBody(
             $this->renderView(
                 'admin/mail/notification.published.html.twig',
@@ -163,7 +167,6 @@ class MailManager
                 $subscription->getLocale()
             )
         );
-        $message->setFrom($this->sender);
         $message->setTo(
             array(
                 $contact->getEmail() => $contact->getFirstName()
@@ -198,8 +201,6 @@ class MailManager
                 )
             )
         );
-        $message->setFrom($this->sender);
-        $message->setTo($this->receiver);
         $message->setBody(
             $this->renderView(
                 'admin/mail/notification.updated.html.twig',
@@ -229,7 +230,6 @@ class MailManager
                 $subscription->getLocale()
             )
         );
-        $message->setFrom($this->sender);
         $message->setTo(
             array(
                 $contact->getEmail() => $contact->getFirstName()
@@ -264,8 +264,6 @@ class MailManager
                 )
             )
         );
-        $message->setFrom($this->sender);
-        $message->setTo($this->receiver);
         $message->setBody(
             $this->renderView(
                 'admin/mail/notification.finished.html.twig',
@@ -295,7 +293,6 @@ class MailManager
                 $subscription->getLocale()
             )
         );
-        $message->setFrom($this->sender);
         $message->setTo(array($contact->getEmail() => $contact->getFirstName() . ' ' . $contact->getLastName()));
         $message->setBody(
             $this->renderView(
@@ -315,8 +312,6 @@ class MailManager
     {
         $message = $this->createNewMessage();
         $message->setSubject($this->translator->trans('mail.report.subject'));
-        $message->setFrom($this->sender);
-        $message->setTo($this->receiver);
         $message->setBody(
             $this->renderView(
                 'admin/mail/report.html.twig',
@@ -338,6 +333,8 @@ class MailManager
         $headers = $message->getHeaders();
         $headers->addTextHeader('Auto-Submitted', 'auto-generated');
         $headers->addTextHeader('Return-Path', '<>');
+        $message->setFrom($this->sender);
+        $message->setTo($this->receiver);
 
         return $message;
     }
