@@ -36,3 +36,5 @@ parameters:
     janus_url: https://engineblock:engineblock@serviceregistry.demo.openconext.org/janus/app.php/api
     error_mail_address: boy@ibuildings.nl
     error_mail_subject: Service Provider Registration Error
+
+    ssllabs_required_grade: B

@@ -254,13 +254,19 @@ services:
 
     validator.ssllabs:
         class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
-        arguments: [@ssllabs.analyze_service, @ssllabs.grade_comparator, 'B']
+        arguments:
+        - @ssllabs.analyze_service
+        - @ssllabs.grade_comparator
+        - '%ssllabs_required_grade%'
         tags:
             - { name: validator.constraint_validator, alias: ssllabs }
 
     validator.ssllabs.async:
         class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
-        arguments: [@ssllabs.analyze_service.async, @ssllabs.grade_comparator, 'B']
+        arguments:
+        - @ssllabs.analyze_service
+        - @ssllabs.grade_comparator
+        - '%ssllabs_required_grade%'
         tags:
             - { name: validator.constraint_validator, alias: ssllabs }
 
