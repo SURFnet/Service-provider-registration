@@ -280,17 +280,17 @@
         });
         Parsley.on('field:validate', function (field) {
             field.reset();
-            field.$element.next('i').remove();
+            field.$element.nextAll('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
         });
         Parsley.on('field:success', function (field) {
-            field.$element.next('i').remove();
+            field.$element.nextAll('i').remove();
             if (field.validationResult === true) {
                 field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
             }
         });
         Parsley.on('field:error', function (field) {
-            field.$element.next('i').remove();
+            field.$element.nextAll('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
         });
 
