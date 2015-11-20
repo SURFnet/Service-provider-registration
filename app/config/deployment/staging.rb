@@ -4,4 +4,4 @@ set :webserver_user, "www-data"
 set :deploy_to,   "/srv/spform-staging/"
 
 default_run_options[:pty] = true
-
+set :symfony_env_prod, "test"
