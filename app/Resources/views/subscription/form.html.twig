@@ -154,6 +154,7 @@
                 {% if (subscription.isPublished) %}
                     <button id="subscription_updatebtn"
                             class="btn btn-primary"
+                            formnovalidate="formnovalidate"
                             data-requestedState="published"
                             type="submit"
                            {% if locked %}disabled="disabled"{% endif %}>
@@ -161,6 +162,7 @@
                     </button>
                     <button id="subscription_finishbtn"
                             class="btn btn-success"
+                            formnovalidate="formnovalidate"
                             data-requestedState="finished"
                             type="submit"
                            {% if locked %}disabled="disabled"{% endif %}>
@@ -170,6 +172,7 @@
                 {% if (subscription.isDraft) %}
                 <button type="submit"
                         class="btn btn-primary"
+                        formnovalidate="formnovalidate"
                         data-requestedState="published"
                         {% if locked %}disabled="disabled"{% endif %}>
                     {{ 'form.button.publish'|trans }}
