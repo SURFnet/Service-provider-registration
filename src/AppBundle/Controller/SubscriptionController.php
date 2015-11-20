@@ -214,13 +214,21 @@ class SubscriptionController extends Controller
 
         // If we're moving from published to finished, simply redirect.
         $requestedState = $request->get('subscription[requestedState]', null, true);
-        if ($subscription->isPublished() && $requestedState === Subscription::STATE_FINISHED) {
-            return $this->redirect($this->generateUrl('overview_finish', array('id' => $id)));
+        if ($subscription->isPublished() && $requestedState === 'finished') {
+            return $this->redirect(
+                $this->generateUrl(
+                    'overview_finish',
+                    array('id' => $id)
+                )
+            );
         }
 
         // Otherwise if already published remember the changes in the session and redirect.
         if ($subscription->isPublished()) {
-            $subscriptionManager->storeSubscriptionInSession($subscription, $request->getSession());
+            $subscriptionManager->storeSubscriptionInSession(
+                $subscription,
+                $request->getSession()
+            );
 
             return $this->redirect($this->generateUrl('overview_update', array('id' => $id)));
         }
