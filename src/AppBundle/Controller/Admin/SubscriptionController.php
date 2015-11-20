@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Form\Admin\SubscriptionType;
+use AppBundle\Manager\SubscriptionManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SURFnet\SPRegistration\Grid\GridConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -123,9 +124,13 @@ class SubscriptionController extends Controller implements SecuredController
             throw $this->createNotFoundException();
         }
 
+        $originalSubscription = clone $subscription;
         $subscription->finish();
 
-        $this->get('subscription.manager')->updateSubscription($subscription);
+        $this->get('subscription.manager')->updateSubscription(
+            $originalSubscription,
+            $subscription
+        );
 
         $this->get('mail.manager')->sendFinishedNotification($subscription);
 
@@ -147,11 +152,49 @@ class SubscriptionController extends Controller implements SecuredController
             throw $this->createNotFoundException();
         }
 
+        $originalSubscription = clone $subscription;
         $subscription->archive();
 
-        $this->get('subscription.manager')->updateSubscription($subscription);
+        $this->get('subscription.manager')->updateSubscription(
+            $originalSubscription,
+            $subscription
+        );
 
         return $this->redirect($this->generateUrl('admin.subscription.overview'));
+    }
+
+    /**
+     * @Route("/{id}/publish", name="admin.subscription.publish")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function publishAction($id)
+    {
+        $subscriptionManager = $this->get('subscription.manager');
+        $subscription = $subscriptionManager->getSubscription($id);
+
+        if (empty($subscription)) {
+            throw $this->createNotFoundException();
+        }
+
+        $subscription = $this->linkSubscriptionToJanusConnection(
+            $subscriptionManager,
+            $subscription
+        );
+
+        // And update the subscription.
+        $subscriptionManager->updateSubscription(
+            clone $subscription,
+            $subscription->revertToPublished()
+        );
+
+        $this->get('janus.sync_service')->push($subscription);
+
+        return $this->redirect(
+            $this->generateUrl('admin.subscription.overview')
+        );
     }
 
     /**
@@ -171,10 +214,15 @@ class SubscriptionController extends Controller implements SecuredController
         $newUrl .= $urlParts['host'];
         $newUrl .= '/simplesaml/module.php/janus/editentity.php?eid=' . $eid;
 
-
         return $this->redirect($newUrl);
     }
 
+    /**
+     * Get the certificate subject from a given URL.
+     *
+     * @param string $url URL to get cert subject from.
+     * @return string Certificate subject or empty string
+     */
     private function getCertSubject($url)
     {
         if (!$url) {
@@ -200,5 +248,45 @@ class SubscriptionController extends Controller implements SecuredController
         }
 
         return '';
+    }
+
+    private function linkSubscriptionToJanusConnection(
+        SubscriptionManager $subscriptionManager,
+        Subscription $subscription
+    ) {
+        // Try to find the janus id from the subscription.
+        $connectionRepository = $this->get('janus.connection_repository');
+        $connection = $connectionRepository->findById(
+            $subscription->getJanusId()
+        );
+
+        // If we found it, then we're all good.
+        if ($connection) {
+            return $subscription;
+        }
+
+        // If not, we must go deeper by looking for a connection by entityid.
+        $connectionDescriptorRepository = $this->get(
+            'janus.connection_descriptor_repository'
+        );
+        $connectionDescriptor = $connectionDescriptorRepository->fetchByName(
+            $subscription->getEntityId()
+        );
+
+        // Assume we found nothing and need to set the id to NULL
+        // (this will force creation of a new janus connection).
+        $connectionId = null;
+        // But if we did find a connection for the entity id, use that one.
+        if ($connectionDescriptor) {
+            $connectionId = $connectionDescriptor->getId();
+        }
+
+        // And update the subscription.
+        $subscriptionManager->updateSubscription(
+            clone $subscription,
+            $subscription->setJanusId($connectionId)
+        );
+
+        return $subscription;
     }
 }

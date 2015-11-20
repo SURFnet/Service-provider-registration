@@ -22,7 +22,7 @@
         {% endif %}
         {{ subscription.metadataUrl }}
     </dd>
-    {% if metadataUrlSubject is not empty %}
+    {% if metadataUrlSubject is defined and metadataUrlSubject is not empty %}
     <dt>Certificate Subject</dt>
     <dd>
         {{ metadataUrlSubject }}
@@ -36,7 +36,7 @@
         {% endif %}
         {{ subscription.acsLocation }}
     </dd>
-    {% if acsLocationSubject is not empty %}
+    {% if acsLocationSubject is defined and acsLocationSubject is not empty %}
         <dt>Certificate Subject</dt>
         <dd>
             {{ acsLocationSubject }}

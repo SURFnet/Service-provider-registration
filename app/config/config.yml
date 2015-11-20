@@ -121,7 +121,7 @@ doctrine_cache:
 
 braincrafted_bootstrap:
     output_dir: compiled
-    jquery_path: js/jquery.min.js
+    jquery_path: js/jquery-2.1.4.js
     icon_prefix: fa
     fonts_dir: %kernel.root_dir%/../web/compiled/fonts
     customize:
