@@ -51,7 +51,7 @@ class TransparantImageResizeService
 
         $urlDimensions = $image->getDimensions();
 
-        if ($requiredDimensions->isGreaterThan($urlDimensions)) {
+        if (!$urlDimensions->isGreaterThan($requiredDimensions)) {
             return $url;
         }
 
