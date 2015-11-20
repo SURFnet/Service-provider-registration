@@ -21,6 +21,13 @@ class ContactNotEqualsValidator extends ConstraintValidator
     {
         $subscription = $this->getSubscriptionFromContext();
 
+        if (!$subscription->getAdministrativeContact()) {
+            return;
+        }
+        if (!$subscription->getTechnicalContact()) {
+            return;
+        }
+
         $adminEmail = $subscription->getAdministrativeContact()->getEmail();
         $techEmail  = $subscription->getTechnicalContact()->getEmail();
 
