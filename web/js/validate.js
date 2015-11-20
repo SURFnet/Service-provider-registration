@@ -365,11 +365,15 @@
 
             if (logoUrlEl.val().trim() === '') {
                 previewEl.hide();
+                return;
             }
-            else {
-                previewEl.attr("src", logoUrlEl.val());
-                previewEl.show();
+
+            if (previewEl.attr("src") === logoUrlEl.val()) {
+                return;
             }
+
+            previewEl.attr("src", logoUrlEl.val());
+            previewEl.show();
         }, 500);
     }
 
