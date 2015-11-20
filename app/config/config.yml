@@ -159,3 +159,7 @@ stfalcon_tinymce:
 exercise_html_purifier:
     default:
         Attr.AllowedFrameTargets: "_blank"
+
+accelerator_cache:
+    host: https://support.surfconext.nl
+    web_dir: %kernel.root_dir%/../web

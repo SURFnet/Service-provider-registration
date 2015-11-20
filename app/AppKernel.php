@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
             new Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
+            new SmartCore\Bundle\AcceleratorCacheBundle\AcceleratorCacheBundle(),
 
             new AppBundle\AppBundle()
         );

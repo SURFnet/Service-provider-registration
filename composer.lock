@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "10bda3344171bc48bbb8278a59e8772a",
-    "content-hash": "4b3b8704224530347ad4d195543bd595",
+    "hash": "73c0c31bf5b7e29ab1fdd2522c7c0371",
+    "content-hash": "696b5b676461008973ab653186bbe8ab",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -2604,6 +2604,62 @@
                 "xmlsec"
             ],
             "time": "2013-06-19 00:00:00"
+        },
+        {
+            "name": "smart-core/accelerator-cache-bundle",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Smart-Core/AcceleratorCacheBundle.git",
+                "reference": "9ba8758a0bf0e0229a61021855fcde16cdd6e312"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Smart-Core/AcceleratorCacheBundle/zipball/9ba8758a0bf0e0229a61021855fcde16cdd6e312",
+                "reference": "9ba8758a0bf0e0229a61021855fcde16cdd6e312",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/framework-bundle": ">=2.1"
+            },
+            "require-dev": {
+                "matthiasnoback/symfony-dependency-injection-test": "^0.7.3",
+                "symfony/console": ">=2.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SmartCore\\Bundle\\AcceleratorCacheBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thibault Duplessis",
+                    "homepage": "https://github.com/ornicar"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/Smart-Core/AcceleratorCacheBundle/contributors"
+                }
+            ],
+            "description": "Provides a command line task to clear PHP Accelerators cache from the console",
+            "homepage": "https://github.com/Smart-Core/AcceleratorCacheBundle",
+            "keywords": [
+                "Opcache",
+                "apc",
+                "task",
+                "wincache"
+            ],
+            "time": "2015-11-07 20:33:19"
         },
         {
             "name": "stfalcon/tinymce-bundle",
@@ -5374,8 +5430,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "apy/datagrid-bundle": 20,
-        "openid/php-openid": 20,
-        "doctrine/migrations": 15
+        "doctrine/migrations": 15,
+        "openid/php-openid": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

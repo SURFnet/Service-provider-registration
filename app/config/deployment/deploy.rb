@@ -69,5 +69,18 @@ end
 
 after "deploy:update", "memcached:flush"
 
+namespace :symfony do
+  desc "Clear accelerator cache"
+  task :clear_accelerator_cache do
+    capifony_pretty_print "--> Clear accelerator cache"
+    run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} cache:accelerator:clear #{console_options}'"
+    capifony_puts_ok
+  end
+end
+
+# clear accelerator cache
+after "deploy", "symfony:clear_accelerator_cache"
+after "deploy:rollback:cleanup", "symfony:clear_accelerator_cache"
+
 # Clean old releases after deploy
 after "deploy", "deploy:cleanup"
