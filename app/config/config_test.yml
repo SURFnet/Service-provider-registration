@@ -23,4 +23,4 @@ doctrine_cache:
         alias: cache
 
 accelerator_cache:
-    host: https://imogen.surfnet.nl
+    host: https://imogen.surfnet.nl/spform/
