@@ -28,7 +28,7 @@
     }
 
     function updateData(dataField, field, val) {
-        if (field.$element.attr('id') === dataField.$element.attr('id')) {
+        if (dataField.$element.val() === val) {
             return;
         }
 
