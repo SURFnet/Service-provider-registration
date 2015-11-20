@@ -40,6 +40,9 @@
             return;
         }
 
+        dataField.$element.nextAll('i').remove();
+        dataField.$element.nextAll('.help-block').remove();
+
         dataField.$element.val(val);
         dataField.$element.trigger('change');
     }
@@ -280,17 +283,20 @@
         });
         Parsley.on('field:validate', function (field) {
             field.reset();
+            field.$element.nextAll('.help-block').remove();
             field.$element.nextAll('i').remove();
             field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
         });
         Parsley.on('field:success', function (field) {
             field.$element.nextAll('i').remove();
+            field.$element.nextAll('.help-block').remove();
             if (field.validationResult === true) {
                 field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
             }
         });
         Parsley.on('field:error', function (field) {
             field.$element.nextAll('i').remove();
+            field.$element.nextAll('.help-block').remove();
             field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
         });
 
