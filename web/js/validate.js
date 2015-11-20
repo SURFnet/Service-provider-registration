@@ -28,11 +28,11 @@
     }
 
     function updateData(dataField, field, val) {
-        clearErrors(dataField);
-
         if (field.$element.attr('id') === dataField.$element.attr('id')) {
             return;
         }
+
+        clearErrors(dataField);
 
         if (dataField.$element.attr('type') === 'checkbox') {
             dataField.$element.prop('checked', val);
