@@ -276,28 +276,37 @@
             $('#status-validating').removeClass('hidden');
         });
         Parsley.on('form:validated', function (form) {
+            var tabId;
             if (form.validationResult !== true) {
-                var tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
+                tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
                 $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
             }
         });
         Parsley.on('field:validate', function (field) {
             field.reset();
             field.$element.nextAll('.help-block').remove();
-            field.$element.nextAll('i').remove();
-            field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
+
+            window.setTimeout(function() {
+                field.$element.nextAll('i').remove();
+                field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
+            }, 50);
         });
         Parsley.on('field:success', function (field) {
-            field.$element.nextAll('i').remove();
             field.$element.nextAll('.help-block').remove();
             if (field.validationResult === true) {
-                field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
+                window.setTimeout(function() {
+                    field.$element.nextAll('i').remove();
+                    field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
+                }, 50);
             }
         });
         Parsley.on('field:error', function (field) {
-            field.$element.nextAll('i').remove();
             field.$element.nextAll('.help-block').remove();
-            field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
+
+            window.setTimeout(function(){
+                field.$element.nextAll('i').remove();
+                field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
+            }, 50);
         });
 
         form.parsley({
