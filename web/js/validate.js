@@ -334,7 +334,7 @@
 
     function showExternalErrorMessages(form) {
         Parsley.addAsyncValidator(
-            'metadataUrl',
+            'default',
             function (xhr) {
                 updateDataAndErrors(this, xhr);
 
