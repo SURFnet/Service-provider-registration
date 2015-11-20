@@ -16,6 +16,8 @@
         "doctrine/doctrine-bundle":             "~1.2",
         "doctrine/doctrine-cache-bundle":       "~1.0",
         "doctrine/doctrine-fixtures-bundle":    "~2.2",
+        "doctrine/migrations":                  "v1.0.0-alpha3 as 1.0.0",
+        "doctrine/doctrine-migrations-bundle":  "1.0.1",
         "exercise/htmlpurifier-bundle":         "0.1.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "janus-ssp/client":                     "~0.2",
@@ -31,6 +33,7 @@
         "twig/extensions":                      "~1.0",
         "stof/doctrine-extensions-bundle":      "~1.1",
         "simplesamlphp/simplesamlphp":          "~1.13",
+        "smart-core/accelerator-cache-bundle":  "^1.1",
         "surfnet/ssllabs-client":               "~0.5",
         "symfony/symfony":                      "~2.5",
         "symfony/assetic-bundle":               "~2.3",
@@ -40,9 +43,7 @@
         "sensio/framework-extra-bundle":        "~3.0",
         "stfalcon/tinymce-bundle":              "0.3.*",
         "sybio/image-workshop":                 "^2.0",
-        "twbs/bootstrap":                       "~3.3",
-        "doctrine/migrations":                  "v1.0.0-alpha3 as 1.0.0",
-        "doctrine/doctrine-migrations-bundle":  "1.0.1"
+        "twbs/bootstrap":                       "~3.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

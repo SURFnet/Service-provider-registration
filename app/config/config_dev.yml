@@ -38,3 +38,6 @@ doctrine_cache:
                 servers: %memcached_servers%
             namespace: cache_dev
             alias: cache
+
+accelerator_cache:
+    host: https://surf.dev

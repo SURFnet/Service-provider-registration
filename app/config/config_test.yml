@@ -21,3 +21,6 @@ doctrine_cache:
             servers: %memcached_servers%
         namespace: cache_test
         alias: cache
+
+accelerator_cache:
+    host: https://imogen.surfnet.nl
