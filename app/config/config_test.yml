@@ -17,10 +17,11 @@ swiftmailer:
 
 doctrine_cache:
     providers:
-        memcache:
-            servers: %memcached_servers%
-        namespace: cache_test
-        alias: cache
+        my_memcached_cache:
+            memcache:
+                servers: %memcached_servers%
+            namespace: cache_test
+            alias: cache
 
 accelerator_cache:
     host: https://imogen.surfnet.nl/spform/
