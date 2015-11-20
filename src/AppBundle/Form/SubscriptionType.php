@@ -116,20 +116,18 @@ class SubscriptionType extends AbstractType
         $previousMetadataUrl = $this->session->get($sessionCacheId, $orgSubscription->getMetadataUrl());
         $this->session->set($sessionCacheId, $metadataUrl);
 
+        if ($metadataUrl === $previousMetadataUrl) {
+            return;
+        }
+
         $metadata = new Metadata();
 
         try {
-            // Only if the submitted url differs from the previously validated url, retrieve the metadata
-            if ($metadataUrl != $previousMetadataUrl) {
-                $metadata = $this->parser->parse($metadataUrl);
-            }
+            $metadata = $this->parser->parse($metadataUrl);
         } catch (\InvalidArgumentException $e) {
             // Exceptions are deliberately ignored because they are caught by the validator
         }
-
-        $formData = $this->mapMetadataToFormData($subscription, $metadata);
-
-        $event->setData($formData);
+        $event->setData($this->mapMetadataToFormData($subscription, $metadata));
     }
 
     public function onLogoUrlSubmit(FormEvent $event)
