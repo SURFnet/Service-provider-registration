@@ -1,27 +1,40 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_driver: pdo_mysql
-    database_host: 127.0.0.1
-    database_port: null
-    database_name: surf
-    database_user: root
-    database_password: null
-    database_path: '%kernel.root_dir%/data/data.db3'
-    mailer_transport: smtp
-    mailer_host: mail.zeelandnet.nl
-    mailer_user: null
-    mailer_password: null
-    locale: en
-    secret: ThisTokenIsNotSoSecretChangeIt
-    debug_toolbar: true
-    debug_redirects: false
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     surf
+    database_user:     root
+    database_password: ~
+    database_path:     "%kernel.root_dir%/data.db3"
+
+    mailer_transport:  smtp
+    mailer_host:       mail.zeelandnet.nl
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    debug_toolbar:          true
+    debug_redirects:        false
     use_assetic_controller: false
+
     memcached_servers: {localhost: 11211}
+
     router.request_context.host: surf.dev
-    mail_from: support@surfconext.nl
+
+    mail_from:     support@surfconext.nl
     mail_receiver: support@surfconext.nl
+
     simplesamlphp.path: simplesaml/
-    simplesamlphp.admin_password: null
-    simplesamlphp.technical_contact_name: 'Technical Contact'
-    simplesamlphp.technical_contact_email: mail@email.com
+    simplesamlphp.admin_password: admin
+    simplesamlphp.technical_contact_name: "Admin"
+    simplesamlphp.technical_contact_email: "admin@example.edu"
     simplesamlphp.idp: 'https://openidp.feide.no'
+
+    janus_url: https://engineblock:engineblock@serviceregistry.demo.openconext.org/janus/app.php/api
+    error_mail_address: boy@ibuildings.nl
+    error_mail_subject: Service Provider Registration Error
+
+    ssllabs_required_grade: B
