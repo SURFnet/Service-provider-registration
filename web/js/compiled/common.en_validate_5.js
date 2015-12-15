@@ -28,17 +28,20 @@
     }
 
     function updateData(dataField, field, val) {
-        clearErrors(dataField);
-
-        if (field.$element.attr('id') === dataField.$element.attr('id')) {
+        if (dataField.$element.val() === val) {
             return;
         }
+
+        clearErrors(dataField);
 
         if (dataField.$element.attr('type') === 'checkbox') {
             dataField.$element.prop('checked', val);
             dataField.$element.trigger('change');
             return;
         }
+
+        dataField.$element.nextAll('i').remove();
+        dataField.$element.nextAll('.help-block').remove();
 
         dataField.$element.val(val);
         dataField.$element.trigger('change');
@@ -273,25 +276,53 @@
             $('#status-validating').removeClass('hidden');
         });
         Parsley.on('form:validated', function (form) {
+            var tabId;
             if (form.validationResult !== true) {
-                var tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
+                tabId = form.$element.find('.has-error').first().closest('.tab-pane').attr('id');
                 $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
             }
         });
+        /** TODO (BaZo)
+          * ugly fix: the Parsley form:validated thingy in setupValidation() is never called when publishing
+          */
+        var reqState=$('#subscription_requestedState').val();
+        if (reqState=='published' || reqState=='finished') {
+            var errorElements = form.find('.has-error');
+            if (errorElements.length>0)
+            {
+                var tabId = errorElements.first().closest('.tab-pane').attr('id');
+                $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
+                location.replace('#!' + tabId);
+            }
+        }
+        /* end ugliness */
+
+
         Parsley.on('field:validate', function (field) {
             field.reset();
-            field.$element.next('i').remove();
-            field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
+            field.$element.nextAll('.help-block').remove();
+
+            window.setTimeout(function() {
+                field.$element.nextAll('i').remove();
+                field.$element.after('<i class="form-control-feedback fa fa-cog fa-spin"></i>');
+            }, 50);
         });
         Parsley.on('field:success', function (field) {
-            field.$element.next('i').remove();
+            field.$element.nextAll('.help-block').remove();
             if (field.validationResult === true) {
-                field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
+                window.setTimeout(function() {
+                    field.$element.nextAll('i').remove();
+                    field.$element.after('<i class="form-control-feedback fa fa-check"></i>');
+                }, 50);
             }
         });
         Parsley.on('field:error', function (field) {
-            field.$element.next('i').remove();
-            field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
+            field.$element.nextAll('.help-block').remove();
+
+            window.setTimeout(function(){
+                field.$element.nextAll('i').remove();
+                field.$element.after('<i class="form-control-feedback fa fa-remove"></i>');
+            }, 50);
         });
 
         form.parsley({
@@ -319,7 +350,7 @@
 
     function showExternalErrorMessages(form) {
         Parsley.addAsyncValidator(
-            'metadataUrl',
+            'default',
             function (xhr) {
                 updateDataAndErrors(this, xhr);
 
@@ -350,11 +381,15 @@
 
             if (logoUrlEl.val().trim() === '') {
                 previewEl.hide();
+                return;
             }
-            else {
-                previewEl.attr("src", logoUrlEl.val());
-                previewEl.show();
+
+            if (previewEl.attr("src") === logoUrlEl.val()) {
+                return;
             }
+
+            previewEl.attr("src", logoUrlEl.val());
+            previewEl.show();
         }, 500);
     }
 
