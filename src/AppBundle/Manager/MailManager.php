@@ -332,7 +332,8 @@ class MailManager
 
         $headers = $message->getHeaders();
         $headers->addTextHeader('Auto-Submitted', 'auto-generated');
-        $headers->addTextHeader('Return-Path', '<>');
+        # TODO: ugly hack, see https://github.com/swiftmailer/swiftmailer/issues/705
+        $message->setReturnPath('no-reply@surfnet.nl');
         $message->setFrom($this->sender);
         $message->setTo($this->receiver);
 
