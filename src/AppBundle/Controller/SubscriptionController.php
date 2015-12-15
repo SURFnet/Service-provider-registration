@@ -548,12 +548,17 @@ class SubscriptionController extends Controller
             return new Response('Unable to get host from url', 400);
         }
 
+        # TODO: BaZo
+        # TODO: disable SSLlabs
         $client = $this->get('ssllabs.client');
 
         $info = $client->info();
         if ($info->currentAssessments >= $info->maxAssessments) {
             return new Response('Maximum requests reached', 503);
         }
+
+        /* TODO: (BaZo) disable SSLlabs for now */
+        return new Response('OK', 200);
 
         $validator = $this->get('validator.ssllabs');
         $validator->validate(
