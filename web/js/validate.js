@@ -282,6 +282,22 @@
                 $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
             }
         });
+        /** TODO (BaZo)
+          * ugly fix: the Parsley form:validated thingy in setupValidation() is never called when publishing
+          */
+        var reqState=$('#subscription_requestedState').val();
+        if (reqState=='published' || reqState=='finished') {
+            var errorElements = form.find('.has-error');
+            if (errorElements.length>0)
+            {
+                var tabId = errorElements.first().closest('.tab-pane').attr('id');
+                $('.nav-tabs a[href="#' + tabId + '"]').tab('show');
+                location.replace('#!' + tabId);
+            }
+        }
+        /* end ugliness */
+
+
         Parsley.on('field:validate', function (field) {
             field.reset();
             field.$element.nextAll('.help-block').remove();

@@ -63,7 +63,7 @@ after "symfony:update_translations", "symfony:update_templates"
 namespace :memcached do
   desc 'Flushes whole memcached local instance'
   task :flush do
-    stream "echo 'flush_all' | nc localhost 11211"
+    stream "perl -MIO::Socket::INET -e '$sock = IO::Socket::INET->new(\"localhost:11211\"); $sock->write(\"flush_all\n\"); print $sock->getline(); $sock->close();'"
   end
 end
 
