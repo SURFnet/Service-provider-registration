@@ -17,14 +17,14 @@ set :webserver_user,      "support_surfconext"
 
 set :permission_method,   :acl
 set :use_set_permissions, true
-set :writable_dirs,       ["app/cache", "app/logs", "app/data"]
+set :writable_dirs,       ["app/cache", "app/logs", "app/data", web_path + "/img/logos"]
 
-set :keep_releases, 3
+set :keep_releases, 999
 
 set :deploy_via, :remote_cache
 
 set :shared_files,    ["app/config/parameters.yml"]
-set :shared_children, [app_path + "/logs", app_path + "/data", web_path + "/uploads"]
+set :shared_children, [app_path + "/logs", app_path + "/data", web_path + "/uploads", web_path + "/img/logos"]
 
 set :use_composer, true
 set :copy_vendors, true
@@ -83,4 +83,5 @@ after "deploy", "symfony:clear_accelerator_cache"
 after "deploy:rollback:cleanup", "symfony:clear_accelerator_cache"
 
 # Clean old releases after deploy
-after "deploy", "deploy:cleanup"
+# Don't: will do this manually, if required
+#after "deploy", "deploy:cleanup"
