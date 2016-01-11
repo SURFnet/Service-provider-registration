@@ -1,6 +1,6 @@
 server 'info2.surfnet.nl', :app, :web, :primary => true
 
-set :deploy_to,   "/www/support/spform/"
+set :deploy_to,   "/www/support/spform-v2/"
 
 default_run_options[:pty] = true
 
