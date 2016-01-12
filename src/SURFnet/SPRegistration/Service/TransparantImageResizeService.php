@@ -69,6 +69,7 @@ class TransparantImageResizeService
         $newUrl = $context->getScheme()
             . '://'
             . $context->getHost()
+            . $context->getBaseUrl()
             . '/img/logos/'
             . $fileName;
 
