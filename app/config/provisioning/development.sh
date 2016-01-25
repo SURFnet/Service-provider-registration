@@ -2,6 +2,7 @@
 yum -y install php-apc
 yum -y install php-mcrypt
 yum -y install php-mbstring
+yum -y install php-gd
 yum -y remove php-pecl-memcached
 yum -y install php-pecl-memcache
 
