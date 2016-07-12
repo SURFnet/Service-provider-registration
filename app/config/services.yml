@@ -1,89 +1,89 @@
 services:
     attributes.metadata_repository:
         class: AppBundle\Metadata\AttributesMetadataRepository
-        arguments: [%kernel.root_dir%]
+        arguments:  ['%kernel.root_dir%']
 
     cert.fetcher:
         class: AppBundle\Metadata\CertificateFetcher
-        arguments: [@cache]
+        arguments: ['@cache']
 
     cert.parser:
         class: AppBundle\Metadata\CertificateParser
 
     fetcher:
         class: AppBundle\Metadata\Fetcher
-        arguments: [@guzzle.client, @monolog.logger.metadata]
+        arguments: ['@guzzle.client', '@monolog.logger.metadata']
 
     parser:
         class: AppBundle\Metadata\Parser
         arguments:
-            - @fetcher
-            - @cert.parser
-            - @attributes.metadata_repository
-            - %kernel.root_dir%/Resources/schemas/
-            - @monolog.logger.metadata
+            - '@fetcher'
+            - '@cert.parser'
+            - '@attributes.metadata_repository'
+            - '%kernel.root_dir%/Resources/schemas/'
+            - '@monolog.logger.metadata'
 
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator
-        arguments: [@parser]
+        arguments:  ['@parser']
         tags:
             - { name: validator.constraint_validator, alias: metadata }
 
     validator.entity_id:
         class: AppBundle\Validator\Constraints\ValidEntityIdValidator
-        arguments: [@janus.connection_descriptor_repository]
+        arguments:  ['@janus.connection_descriptor_repository']
         tags:
             - { name: validator.constraint_validator, alias: entity_id }
 
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
-        arguments: [@cert.fetcher, @cert.parser]
+        arguments:  ['@cert.fetcher', '@cert.parser']
         tags:
             - { name: validator.constraint_validator, alias: certificate }
 
     subscription.manager:
         class: AppBundle\Manager\SubscriptionManager
         arguments:
-            - @doctrine.orm.entity_manager
-            - @validator
-            - @lock.manager
-            - @event_dispatcher
+            - '@doctrine.orm.entity_manager'
+            - '@validator'
+            - '@lock.manager'
+            - '@event_dispatcher'
 
     lock.manager:
         class: AppBundle\Manager\LockManager
-        arguments: [@cache, @session]
+        arguments:  ['@cache', '@session']
 
     mail.manager:
         class: AppBundle\Manager\MailManager
         arguments:
-            - @mailer
-            - @templating
-            - @translator
+            - '@mailer'
+            - '@templating'
+            - '@translator'
             - '%mail_from%'
             - '%mail_receiver%'
 
     menu_builder:
         class: AppBundle\Menu\MenuBuilder
-        arguments: ["@knp_menu.factory"]
+        arguments: ['@knp_menu.factory']
 
     menu:
         class: Knp\Menu\MenuItem
         factory_service: menu_builder
         factory_method: createAdminMenu
-        arguments: ["@request"]
+        arguments: ['@request']
         scope: request
         tags:
             - { name: knp_menu.menu, alias: menu }
 
     twig.database_loader:
         class: AppBundle\Twig\DatabaseLoader
-        arguments: [ @doctrine.orm.entity_manager, @cache ]
+        arguments: [ '@doctrine.orm.entity_manager', '@cache' ]
         tags:
             - { name: twig.loader }
 
     validator.twig:
         class: AppBundle\Validator\Constraints\ValidTwigTemplateValidator
-        arguments: [@twig]
+        arguments:  ['@twig']
         tags:
             - { name: validator.constraint_validator, alias: twig_template }
 
@@ -94,13 +94,13 @@ services:
 
     subscriber.janus_sync:
         class: SURFnet\SPRegistration\Event\SyncSubscriber
-        arguments: [@janus.sync_service, @subscription.manager]
+        arguments:  ['@janus.sync_service', '@subscription.manager']
         tags:
             - {name:kernel.event_subscriber}
 
     subscriber.status_log:
         class: SURFnet\SPRegistration\Event\StatusLogSubscriber
-        arguments: [@subscription_status_change.repository]
+        arguments:  ['@subscription_status_change.repository']
         tags:
             - {name:kernel.event_subscriber}
 
@@ -114,10 +114,10 @@ services:
     janus.sync_service:
         class: SURFnet\SPRegistration\Service\JanusSyncService
         arguments:
-            - @subscription.manager
-            - @janus.connection_descriptor_repository
-            - @janus.connection_repository
-            - @janus.connection_translator
+            - '@subscription.manager'
+            - '@janus.connection_descriptor_repository'
+            - '@janus.connection_repository'
+            - '@janus.connection_translator'
 
     janus.http_client:
         class: Guzzle\Http\Client
@@ -144,15 +144,15 @@ services:
 
     janus.response_status_code_validator:
         class: OpenConext\JanusClient\ResponseStatusCodeValidator
-        arguments: [@logger]
+        arguments:  ['@logger']
 
     janus.serializer:
         class: Symfony\Component\Serializer\Serializer
         arguments:
             -
-                - @janus.normalizer
+                - '@janus.normalizer'
             -
-                - @janus.encoder
+                - '@janus.encoder'
 
     janus.normalizer:
         class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
@@ -163,31 +163,31 @@ services:
     janus.connection_descriptor_repository:
         class: OpenConext\JanusClient\Entity\ConnectionDescriptorRepository
         arguments:
-            - @janus.http_client
-            - @logger
-            - @janus.connection_descriptor_assembler
-            - @janus.serializer
-            - @janus.response_status_code_validator
+            - '@janus.http_client'
+            - '@logger'
+            - '@janus.connection_descriptor_assembler'
+            - '@janus.serializer'
+            - '@janus.response_status_code_validator'
 
     janus.connection_repository:
         class: OpenConext\JanusClient\Entity\ConnectionRepository
         arguments:
-            - @janus.http_client
-            - @janus.connection_assembler
-            - @janus.connection_disassembler
-            - @janus.serializer
-            - @janus.response_status_code_validator
+            - '@janus.http_client'
+            - '@janus.connection_assembler'
+            - '@janus.connection_disassembler'
+            - '@janus.serializer'
+            - '@janus.response_status_code_validator'
 
     janus.connection_translator:
         class: SURFnet\SPRegistration\Entity\ConnectionRequestTranslator
         arguments:
-            - @janus.arp_mapper
-            - @janus.contact_mapper
-            - @janus.metadata_mapper
+            - '@janus.arp_mapper'
+            - '@janus.contact_mapper'
+            - '@janus.metadata_mapper'
 
     janus.arp_mapper:
         class: SURFnet\SPRegistration\Janus\ArpMapper
-        arguments: [@attributes.metadata_repository]
+        arguments:  ['@attributes.metadata_repository']
 
     janus.contact_mapper:
         class: SURFnet\SPRegistration\Janus\ContactMapper
@@ -197,37 +197,37 @@ services:
 
     form.transformer.html_purifier:
         class: Exercise\HTMLPurifierBundle\Form\HTMLPurifierTransformer
-        arguments: [@exercise_html_purifier.default]
+        arguments:  ['@exercise_html_purifier.default']
 
     form.type.purified_textarea:
         class: AppBundle\Form\Admin\Type\PurifiedTextareaType
-        arguments: [@form.transformer.html_purifier]
+        arguments:  ['@form.transformer.html_purifier']
         tags:
             - { name: form.type, alias: purified_textarea }
 
     subscription.form.factory:
         class: AppBundle\Form\SubscriptionTypeFactory
-        arguments: [@form.factory, @lock.manager, @parser, @image_resize_service]
+        arguments:  ['@form.factory', '@lock.manager', '@parser', '@image_resize_service']
         scope: request
 
     validator.mapping.cache.cache:
         class: Symfony\Component\Validator\Mapping\Cache\DoctrineCache
-        arguments: [@cache]
+        arguments:  ['@cache']
 
     ssllabs.grade_comparator:
         class: SURFnet\SslLabs\Service\GradeComparatorService
 
     ssllabs.analyze_service:
         class: SURFnet\SslLabs\Service\SynchronousAnalyzeService
-        arguments: [@ssllabs.analyze_service.async]
+        arguments:  ['@ssllabs.analyze_service.async']
 
     ssllabs.analyze_service.async:
         class: SURFnet\SslLabs\Service\AsynchronousAnalyzeService
-        arguments: [@ssllabs.client]
+        arguments:  ['@ssllabs.client']
 
     ssllabs.client:
         class: SURFnet\SslLabs\Client
-        arguments: [@ssllabs.http_client, @ssllabs.serializer]
+        arguments:  ['@ssllabs.http_client', '@ssllabs.serializer']
 
     ssllabs.http_client:
         class: Guzzle\Http\Client
@@ -243,9 +243,9 @@ services:
         class: Symfony\Component\Serializer\Serializer
         arguments:
             -
-                - @ssllabs.normalizer
+                - '@ssllabs.normalizer'
             -
-                - @ssllabs.encoder
+                - '@ssllabs.encoder'
 
     ssllabs.normalizer:
         class: Symfony\Component\Serializer\Normalizer\PropertyNormalizer
@@ -256,8 +256,8 @@ services:
     validator.ssllabs:
         class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
         arguments:
-        - @ssllabs.analyze_service
-        - @ssllabs.grade_comparator
+        - '@ssllabs.analyze_service'
+        - '@ssllabs.grade_comparator'
         - '%ssllabs_required_grade%'
         tags:
             - { name: validator.constraint_validator, alias: ssllabs }
@@ -265,13 +265,13 @@ services:
     validator.ssllabs.async:
         class: AppBundle\Validator\Constraints\ValidSSLLabsAnalyzeValidator
         arguments:
-        - @ssllabs.analyze_service
-        - @ssllabs.grade_comparator
+        - '@ssllabs.analyze_service'
+        - '@ssllabs.grade_comparator'
         - '%ssllabs_required_grade%'
         tags:
             - { name: validator.constraint_validator, alias: ssllabs }
 
     image_resize_service:
         class: SURFnet\SPRegistration\Service\TransparantImageResizeService
-        arguments: ['%kernel.root_dir%/../web/img/logos/', @router]
+        arguments: ['%kernel.root_dir%/../web/img/logos/', '@router']
         scope: request
