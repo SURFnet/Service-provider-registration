@@ -106,7 +106,6 @@ form:
         metadataUrl: form.help.metadataUrl   # FIXME
         nameEn: form.help.nameEn   # FIXME
         nameNl: form.help.nameNl   # FIXME
-        organizationalUnitAttribute: form.help.organizationalUnitAttribute   # FIXME
         organizationAttribute: form.help.organizationAttribute   # FIXME
         organizationTypeAttribute: form.help.organizationTypeAttribute   # FIXME
         personalCodeAttribute: form.help.personalCodeAttribute   # FIXME

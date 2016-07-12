@@ -341,14 +341,6 @@ class Subscription
      * @Assert\Type(type="AppBundle\Model\Attribute")
      * @Assert\Valid()
      */
-    private $organizationalUnitAttribute;
-
-    /**
-     * @var Attribute
-     * @ORM\Column(type="object", nullable=true)
-     * @Assert\Type(type="AppBundle\Model\Attribute")
-     * @Assert\Valid()
-     */
     private $personalCodeAttribute;
 
     /**
@@ -1088,26 +1080,6 @@ class Subscription
     public function setPreferredLanguageAttribute($preferredLanguageAttribute)
     {
         $this->preferredLanguageAttribute = $preferredLanguageAttribute;
-
-        return $this;
-    }
-
-    /**
-     * @return Attribute
-     */
-    public function getOrganizationalUnitAttribute()
-    {
-        return $this->organizationalUnitAttribute;
-    }
-
-    /**
-     * @param Attribute $organizationalUnitAttribute
-     *
-     * @return Subscription
-     */
-    public function setOrganizationalUnitAttribute($organizationalUnitAttribute)
-    {
-        $this->organizationalUnitAttribute = $organizationalUnitAttribute;
 
         return $this;
     }
