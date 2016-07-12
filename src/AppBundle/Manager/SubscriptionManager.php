@@ -4,6 +4,7 @@ namespace AppBundle\Manager;
 
 use AppBundle\Entity\Subscription;
 use AppBundle\Event\SubscriptionEvent;
+use AppBundle\Metadata\Generator;
 use AppBundle\SubscriptionEvents;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -40,6 +41,11 @@ class SubscriptionManager
     private $lockManager;
 
     /**
+     * @var Generator
+     */
+    private $generator;
+
+    /**
      * @var EventDispatcherInterface
      */
     private $dispatcher;
@@ -50,18 +56,21 @@ class SubscriptionManager
      * @param EntityManager            $entityManager
      * @param ValidatorInterface       $validator
      * @param LockManager              $lockManager
+     * @param Generator                $generator
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         EntityManager $entityManager,
         ValidatorInterface $validator,
         LockManager $lockManager,
+        Generator $generator,
         EventDispatcherInterface $dispatcher
     ) {
         $this->em = $entityManager;
         $this->repo = $entityManager->getRepository('AppBundle:Subscription');
         $this->validator = $validator;
         $this->lockManager = $lockManager;
+        $this->generator = $generator;
         $this->dispatcher = $dispatcher;
     }
 
@@ -122,7 +131,7 @@ class SubscriptionManager
             SubscriptionEvents::POST_WRITE,
             new SubscriptionEvent(
                 $subscription->getId(),
-                NULL,
+                null,
                 $subscription
             )
         );
@@ -165,6 +174,22 @@ class SubscriptionManager
     public function isValidSubscription(Subscription $subscription, $groups = null)
     {
         return count($this->validator->validate($subscription, $groups)) === 0;
+    }
+
+    /**
+     * @param Subscription $subscription
+     *
+     * @return string
+     */
+    public function generateMetadata(Subscription $subscription)
+    {
+        if ($subscription->isDraft()) {
+            throw new \InvalidArgumentException(
+                'Subscription must not be in draft when generating the Metadata'
+            );
+        }
+
+        return $this->generator->generate($subscription);
     }
 
     /**

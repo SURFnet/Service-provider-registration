@@ -172,6 +172,8 @@ mail:
             subject: '(%ticketNo%) %nameEn% updated registration form'
     creation:
         subject: 'SURFnet SP Registration has been Created (%ticketNo%)'
+    error:
+        subject: 'SURFnet SP Registration Form Export Generation Error'
     confirmation:
         published:
             subject: 'Published confirmation for SURFnet SP Registration (%ticketNo%)'
