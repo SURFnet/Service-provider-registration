@@ -40,6 +40,12 @@ final class ArpMapper
         $attributesMetadata = $this->attributesMetadataRepository->findAll();
         foreach ($attributesMetadata as $attributeMetadata) {
             $getter = 'get' . ucfirst($attributeMetadata->id) . 'Attribute';
+
+            if (!method_exists($request, $getter)) {
+                // Ignore attributes that we don't know about.
+                continue;
+            }
+
             $attr = $request->$getter();
 
             if (!$attr instanceof Attribute) {
