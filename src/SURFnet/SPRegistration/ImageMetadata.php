@@ -1,8 +1,6 @@
 <?php
 
-
 namespace SURFnet\SPRegistration;
-
 
 use RuntimeException;
 
@@ -21,7 +19,7 @@ class ImageMetadata
     /**
      * Image constructor.
      * @param ImageDimensions $dimensions
-     * @param string $mimeType
+     * @param string $imageType
      */
     public function __construct(ImageDimensions $dimensions, $imageType)
     {
@@ -57,7 +55,9 @@ class ImageMetadata
         return $this->dimensions;
     }
 
-
+    /**
+     * @return string
+     */
     public function getExtension()
     {
         if ($this->imageType === IMAGETYPE_GIF) {
