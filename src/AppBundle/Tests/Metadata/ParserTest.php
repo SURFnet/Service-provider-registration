@@ -131,7 +131,6 @@ CER
         $this->assertTrue($metadata->surNameAttribute->isRequested());
         $this->assertTrue($metadata->uidAttribute->isRequested());
         $this->assertTrue($metadata->preferredLanguageAttribute->isRequested());
-        $this->assertTrue($metadata->organizationalUnitAttribute->isRequested());
         $this->assertTrue($metadata->personalCodeAttribute->isRequested());
     }
 

@@ -111,10 +111,5 @@ class Metadata
     /**
      * @var Attribute
      */
-    public $organizationalUnitAttribute;
-
-    /**
-     * @var Attribute
-     */
     public $personalCodeAttribute;
 }

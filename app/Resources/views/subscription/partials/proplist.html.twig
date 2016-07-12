@@ -249,28 +249,6 @@
         {% endif %}
     </dd>
 
-{# disabled because this attribute isn't supported in Janus.  See https://github.com/SURFnet/Service-provider-registration/issues/72
-    <dt>{{ 'organizationalUnitAttribute'|humanize|trans }}</dt>
-    <dd>
-        {% if orgSubscription is defined and orgSubscription.organizationalUnitAttribute != subscription.organizationalUnitAttribute %}
-            <del>{{ orgSubscription.organizationalUnitAttribute }}</del>
-        {% endif %}
-        {% if subscription.organizationalUnitAttribute %}
-            {{ subscription.organizationalUnitAttribute }}
-        {% endif %}
-    </dd>
-
-    <dt>{{ 'personalCodeAttribute'|humanize|trans }}</dt>
-    <dd>
-        {% if orgSubscription is defined and orgSubscription.personalCodeAttribute != subscription.personalCodeAttribute %}
-            <del>{{ orgSubscription.personalCodeAttribute }}</del>
-        {% endif %}
-        {% if subscription.personalCodeAttribute %}
-            {{ subscription.personalCodeAttribute }}
-        {% endif %}
-    </dd>
-#}
-
     <dt>{{ 'comments'|humanize|trans }}</dt>
     <dd>
         {% if orgSubscription is defined and orgSubscription.comments != subscription.comments %}
