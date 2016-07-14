@@ -21,7 +21,9 @@ class Version20160712115709 extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-        $this->addSql('ALTER TABLE Subscription ADD environment VARCHAR(255) NOT NULL');
+        $this->addSql(
+            'ALTER TABLE Subscription ADD environment VARCHAR(255) NOT NULL DEFAULT "connect"'
+        );
     }
 
     /**
