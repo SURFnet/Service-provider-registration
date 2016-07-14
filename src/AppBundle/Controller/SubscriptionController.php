@@ -92,19 +92,19 @@ final class SubscriptionController extends Controller
             )
         );
         if (!$validToken) {
-            return new Response('Invalid CSRF token', 400);
+            return new JsonResponse('Invalid CSRF token', 400);
         }
 
         $url = $request->get('url');
 
         if (empty($url)) {
-            return new Response('No URL sent', 400);
+            return new JsonResponse('No URL sent', 400);
         }
 
         $parsedUrl = parse_url($url);
 
         if (empty($parsedUrl['host'])) {
-            return new Response('Unable to get host from url', 400);
+            return new JsonResponse('Unable to get host from url', 400);
         }
 
         # TODO: BaZo
@@ -113,11 +113,11 @@ final class SubscriptionController extends Controller
 
         $info = $client->info();
         if ($info->currentAssessments >= $info->maxAssessments) {
-            return new Response('Maximum requests reached', 503);
+            return new JsonResponse('Maximum requests reached', 503);
         }
 
         /* TODO: (BaZo) disable SSLlabs for now */
-        return new Response('OK', 200);
+        return new JsonResponse('OK', 200);
 
         $validator = $this->get('validator.ssllabs');
         $validator->validate(
@@ -132,7 +132,7 @@ final class SubscriptionController extends Controller
 
         $endStatuses = array(Host::STATUS_ERROR, Host::STATUS_READY);
         if (!in_array($hostDto->status, $endStatuses)) {
-            return new Response('Unable to validate host', 400);
+            return new JsonResponse('Unable to validate host', 400);
         }
 
         $statusCode = 202; // Accepted
