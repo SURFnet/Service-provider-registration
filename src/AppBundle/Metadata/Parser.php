@@ -76,16 +76,23 @@ class Parser
      */
     public function parse($metadataUrl)
     {
-        $responseXml = $this->fetcher->fetch($metadataUrl);
+        return $this->parseXml($this->fetcher->fetch($metadataUrl));
+    }
 
-        $this->validate($responseXml);
+    /**
+     * @param string $xml
+     * @return Metadata
+     */
+    public function parseXml($xml)
+    {
+        $this->validate($xml);
 
-        $responseXml = simplexml_load_string($responseXml);
+        $xml = simplexml_load_string($xml);
 
         $metadata = new Metadata();
-        $metadata->entityId = (string)$responseXml['entityID'];
+        $metadata->entityId = (string)$xml['entityID'];
 
-        $children = $responseXml->children(SAML2_Const::NS_MD);
+        $children = $xml->children(SAML2_Const::NS_MD);
         $descriptor = $children->SPSSODescriptor;
         $contactPersons = $children->ContactPerson;
 
@@ -272,7 +279,7 @@ class Parser
         $doc = new \DOMDocument();
         $doc->loadXml($xml);
 
-        if (!$doc->schemaValidate($this->schemaLocation . 'surf.xsd')) {
+        if (!$doc->schemaValidate($this->schemaLocation . '/surf.xsd')) {
             $errors = libxml_get_errors();
             libxml_clear_errors();
 
