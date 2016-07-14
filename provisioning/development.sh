@@ -2,6 +2,7 @@
 set -e
 
 echo "127.0.0.1     serviceregistry.dev.surfconext.nl" >> /etc/hosts
+echo "cd /vagrant" >> /home/vagrant/.bash_profile
 
 yum -y -q install vim
 

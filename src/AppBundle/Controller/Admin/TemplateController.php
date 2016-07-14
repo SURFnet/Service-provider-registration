@@ -97,8 +97,8 @@ class TemplateController extends Controller implements SecuredController
         $grid->setRouteUrl($this->generateUrl('admin.template.grid'));
 
         $grid->setDefaultOrder('name', 'asc');
-        $grid->setLimits(array(5, 10, 15));
-        $grid->setDefaultLimit(5);
+        $grid->setLimits(array(10, 25, 50));
+        $grid->setDefaultLimit(25);
 
         $grid->setActionsColumnTitle('');
 

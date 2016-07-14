@@ -1,4 +1,3 @@
-
 'Cannot determine key length': 'Cannot determine key length.'
 'Certificate matches certificate of ACSLocation which is not allowed.': 'SAML certificate is the same as HTTPS-certificate of of ACSLocation. This is not allowed.'
 'Domain of entityId (%edomain%) must match domain of metadataUrl (%mdomain%).': 'Domain of EntityID (%edomain%) must match domain of metadata URL (%mdomain%).'
