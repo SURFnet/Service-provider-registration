@@ -2,8 +2,8 @@
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Entity\Subscription;
-use Composer\EventDispatcher\EventSubscriberInterface;
+use AppBundle\Entity\SubscriptionRepository;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -23,12 +23,13 @@ final class SubscriptionLocaleListener implements EventSubscriberInterface
     {
         $request = $e->getRequest();
 
-        $subscription = $request->attributes->get('subscription');
-        if ($subscription) {
+        $id = $request->attributes->get('id');
+        if (!$id) {
             return;
         }
 
-        if (!$subscription instanceof Subscription) {
+        $subscription = $this->repository->findById($id);
+        if (!$subscription) {
             return;
         }
 
@@ -44,4 +45,18 @@ final class SubscriptionLocaleListener implements EventSubscriberInterface
             KernelEvents::REQUEST => array('updateRequestLocale', 17),
         );
     }
+
+    /**
+     * SubscriptionLocaleListener constructor.
+     * @param SubscriptionRepository $repository
+     */
+    public function __construct(SubscriptionRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * @var SubscriptionRepository
+     */
+    private $repository;
 }

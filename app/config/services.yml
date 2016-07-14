@@ -122,6 +122,12 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: twig_template }
 
+    listener.locale:
+        class: AppBundle\EventListener\SubscriptionLocaleListener
+        arguments:
+            - '@subscription.repository'
+        tags: [{ name: kernel.event_subscriber }]
+
     listener.security:
         class: AppBundle\EventListener\SimpleSAMLAuthListener
         tags:
