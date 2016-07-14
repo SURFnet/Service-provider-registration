@@ -395,11 +395,11 @@
 
     function setupUrlValidation() {
         $('input.url-validated').on('change', function() {
-            var inputEl = this;
+            var inputEl = this, formEl = $('form');
 
             $.ajax({
                 type: "POST",
-                url: window.location.pathname + '/validate-url',
+                url: formEl.data('validate-url'),
                 data: {
                     "url": $(this).val(),
                     "subscription": {
