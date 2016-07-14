@@ -1,26 +1,30 @@
 {% extends "base.html.twig" %}
 
+{% block title %}{{ 'title.connect.published.edit'|trans }}{% endblock %}
 {% block body %}
-
     <div class="alert alert-danger lock-warning {% if not locked %}hide{% endif %}">
         <strong>{{ 'form.lock.title'|trans }}</strong> {{ 'form.lock.description'|trans }}
     </div>
 
     {% for type, messages in app.session.flashbag.all %}
         {% for message in messages %}
-        <div class="alert alert-{{ type }} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            {{ message }}
-        </div>
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
         {% endfor %}
     {% endfor %}
 
     <form id="form"
           method="post"
-          {{ form_enctype(form) }}
-          class="form-horizontal{% if (subscription.isDraft) %} autosave{% endif %}"
-          data-save="{{ path('save', {id: subscription.id}) }}"
-          data-lock="{{ path('lock', {id: subscription.id}) }}">
+            {{ form_enctype(form) }}
+          class="form-horizontal autosave"
+          data-save="{{ path('connect_draft_save', {id: subscription.id}) }}"
+          data-lock="{{ path('lock', {id: subscription.id}) }}"
+          data-validate-url="{{ path('validate_url', {id: subscription.id}) }}">
+
         {{ bootstrap_set_style('horizontal') }}
 
         <ul class="nav nav-tabs">
@@ -32,14 +36,10 @@
             <li><a href="#comments" data-toggle="tab">{{ 'form.tab.comments'|trans }}</a></li>
         </ul>
 
+
         <div class="tab-content">
             <div class="tab-pane fade in active" id="info">
-                {% if subscription.isDraft %}
                 <p>{{ 'form.tab.intro.info_draft'|trans|raw }}</p>
-                {% else %}
-                <p>{{ 'form.tab.intro.info_published'|trans|raw }}</p>
-                {% endif %}
-
                 <div class="row">
                     <div class="col-md-offset-10 col-md-2 text-right">
                         <a href="#" class="btn btn-default btn-sm btn-next">
@@ -48,6 +48,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="tab-pane fade" id="general">
 
@@ -70,8 +71,8 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="metadata">
 
+            <div class="tab-pane fade" id="metadata">
                 <p>{{ 'form.tab.intro.metadata'|trans|raw }}</p>
 
                 {% include 'subscription/tabs/tab-metadata.html.twig' %}
@@ -90,6 +91,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="tab-pane fade" id="contact">
 
@@ -112,6 +114,7 @@
                 </div>
             </div>
 
+
             <div class="tab-pane fade" id="attributes">
 
                 <p>{{ 'form.tab.intro.attributes'|trans|raw }}</p>
@@ -133,6 +136,7 @@
                 </div>
             </div>
 
+
             <div class="tab-pane fade" id="comments">
                 <p>{{ 'form.tab.intro.comments'|trans|raw }}</p>
 
@@ -149,48 +153,25 @@
 
         </div>
 
+
         <div class="form-group">
             <div class="col-md-6">
-                {% if (subscription.isPublished) %}
-                    <button id="subscription_updatebtn"
-                            class="btn btn-primary"
-                            formnovalidate="formnovalidate"
-                            data-requestedState="published"
-                            type="submit"
-                           {% if locked %}disabled="disabled"{% endif %}>
-                        {{ 'form.button.update'|trans }}
-                    </button>
-                    <button id="subscription_finishbtn"
-                            class="btn btn-success"
-                            formnovalidate="formnovalidate"
-                            data-requestedState="finished"
-                            type="submit"
-                           {% if locked %}disabled="disabled"{% endif %}>
-                        {{ 'form.button.finish'|trans }}
-                    </button>
-                {% endif %}
-                {% if (subscription.isDraft) %}
-                <button type="submit"
+                <button id="subscription_updatebtn"
                         class="btn btn-primary"
                         formnovalidate="formnovalidate"
                         data-requestedState="published"
+                        type="submit"
                         {% if locked %}disabled="disabled"{% endif %}>
-                    {{ 'form.button.publish'|trans }}
+                    {{ 'form.button.update'|trans }}
                 </button>
-                {% endif %}
-                &nbsp;&nbsp;
-                <span id="status-progress" class="hidden">
-                    <i class="fa fa-cog fa-spin"></i>
-                    {{ 'form.status.saving'|trans }}
-                </span>
-                <span id="status-done" class="hidden">
-                    <i class="fa fa-check"></i>
-                    {{ 'form.status.saved'|trans }}
-                </span>
-                <span id="status-validating" class="hidden">
-                    <i class="fa fa-cog fa-spin"></i>
-                    {{ 'form.status.validating'|trans }}
-                </span>
+                <button id="subscription_finishbtn"
+                        class="btn btn-success"
+                        formnovalidate="formnovalidate"
+                        data-requestedState="finished"
+                        type="submit"
+                        {% if locked %}disabled="disabled"{% endif %}>
+                    {{ 'form.button.finish'|trans }}
+                </button>
             </div>
         </div>
 
