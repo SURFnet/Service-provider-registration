@@ -279,7 +279,7 @@ class Parser
         $doc = new \DOMDocument();
         $doc->loadXml($xml);
 
-        if (!$doc->schemaValidate($this->schemaLocation . 'surf.xsd')) {
+        if (!$doc->schemaValidate($this->schemaLocation . '/surf.xsd')) {
             $errors = libxml_get_errors();
             libxml_clear_errors();
 
