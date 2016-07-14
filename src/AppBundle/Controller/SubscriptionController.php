@@ -80,7 +80,6 @@ final class SubscriptionController extends Controller
     /**
      * @Method("POST")
      * @Route("/{id}/validate-url", name="validate_url")
-     * @ParamConverter("subscription", converter="synchronized_subscription")
      */
     public function validateUrlAction(Request $request)
     {
