@@ -15,9 +15,9 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 /**
  * Class Subscription
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\DoctrineSubscriptionRepository")
  * @GRID\Source(
- *      columns="id, ticketNo, contact, created, updated, status, archived"
+ *      columns="id, ticketNo, contact, created, updated, status, environment, archived"
  * )
  *
  * @todo: spread props over more classes
@@ -31,6 +31,8 @@ class Subscription
     const STATE_DRAFT = 0;
     const STATE_PUBLISHED = 1;
     const STATE_FINISHED = 2;
+    const ENVIRONMENT_CONNECT = 'connect';
+    const ENVIRONMENT_PRODUCTION = 'production';
 
     /**
      * @var string
@@ -59,6 +61,20 @@ class Subscription
      * )
      */
     private $archived = false;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     * @GRID\Column(
+     *      operatorsVisible=false,
+     *      filter="select",
+     *      selectFrom="values",
+     *      values={"connect","production"}
+     * )
+     * @Assert\NotBlank(groups={"creation"})
+     * @Assert\Choice(choices = {"production", "connect"}, groups={"creation"})
+     */
+    private $environment;
 
     /**
      * @var int
@@ -1163,5 +1179,37 @@ class Subscription
         $this->archived = true;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @param string $environment
+     */
+    public function setEnvironment($environment)
+    {
+        $this->environment = $environment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForProduction()
+    {
+        return $this->environment === static::ENVIRONMENT_PRODUCTION;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForConnect()
+    {
+        return $this->environment === static::ENVIRONMENT_CONNECT;
     }
 }
