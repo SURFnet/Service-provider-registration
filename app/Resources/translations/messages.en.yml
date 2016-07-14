@@ -1,192 +1,146 @@
 Dutch: Dutch
 English: English
-
 name: Name
 contact: Contact
 created: Created
 status: Status
 archived: Archived
-ticketNo: Ticket No.
+ticketNo: 'Ticket No.'
 updated: Updated
 key: Key
 domain: Domain
-
-Administrative contact: 'Administrative contact'
-Technical contact: 'Technical contact'
-Support contact: 'Support contact'
-
-Ticket no: Ticket No.
-First name: First name
-Last name: Last name
+'Administrative contact': 'Administrative contact'
+'Technical contact': 'Technical contact'
+'Support contact': 'Support contact'
+'Ticket no': 'Ticket No.'
+'First name': 'First name'
+'Last name': 'Last name'
 Email: Email
 Phone: Phone
-Metadata url: Metadata URL
-Acs location: ACS location
-Entity id: Entity ID
+'Metadata url': 'Metadata URL'
+'Acs location': 'ACS location'
+'Entity id': 'Entity ID'
 Certificate: Certificate
-Logo url: Logo URL
-Name en: Name (en)
-Description en: Description (en)
-Name nl: Name (nl)
-Description nl: Description (nl)
-Application url: Application URL
-Eula url: Eula URL
-
-Given name attribute: Given name attribute
-Sur name attribute: Sur name attribute
-Common name attribute: Common name attribute
-Display name attribute: Display name attribute
-Email address attribute: Email address attribute
-Organization attribute: Organization attribute
-Organization type attribute: Organization type attribute
-Organizational unit attribute: Organizational unit attribute
-Affiliation attribute: Affiliation attribute
-Entitlement attribute: Entitlement attribute
-Principle name attribute: Principle name attribute
-Uid attribute: Uid attribute
-Preferred language attribute: Preferred language attribute
-Personal code attribute: Personal code attribute
-
+'Logo url': 'Logo URL'
+'Name en': 'Name (en)'
+'Description en': 'Description (en)'
+'Name nl': 'Name (nl)'
+'Description nl': 'Description (nl)'
+'Application url': 'Application URL'
+'Eula url': 'Eula URL'
+'Given name attribute': 'Given name attribute'
+'Sur name attribute': 'Sur name attribute'
+'Common name attribute': 'Common name attribute'
+'Display name attribute': 'Display name attribute'
+'Email address attribute': 'Email address attribute'
+'Organization attribute': 'Organization attribute'
+'Organization type attribute': 'Organization type attribute'
+'Organizational unit attribute': 'Organizational unit attribute'
+'Affiliation attribute': 'Affiliation attribute'
+'Entitlement attribute': 'Entitlement attribute'
+'Principle name attribute': 'Principle name attribute'
+'Uid attribute': 'Uid attribute'
+'Preferred language attribute': 'Preferred language attribute'
+'Personal code attribute': 'Personal code attribute'
 Comments: Comments
-
-overview:
-    publish:
-        subtitle: Are you sure?
-        intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        button:
-            cancel: Cancel
-            confirm: Confirm
-    finish:
-        subtitle: Are you sure?
-        intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        button:
-            cancel: Cancel
-            confirm: Confirm
-    update:
-        subtitle: Update
-        intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        button:
-            cancel: Cancel
-            confirm: Confirm
-
-thanks:
-    button.edit: 'Edit'
-    subtitle: Thanks!
-    intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-    finish:
-        subtitle: Thanks!
-        intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-
-form:
-    button:
-        publish: Publish
-        next: Next
-        previous: Previous
-        finish: Finish
-        update: Update
-
-    help:
-        acsLocation: form.help.acsLocation   # FIXME
-        administrativeContact: form.help.administrativeContact   # FIXME
-        affiliationAttribute: form.help.affiliationAttribute   # FIXME
-        applicationUrl: form.help.applicationUrl   # FIXME
-        eulaUrl: form.help.eulaUrl   # FIXME
-        certificate: form.help.certificate   # FIXME
-        comments: form.help.comments   # FIXME
-        commonNameAttribute: form.help.commonNameAttribute   # FIXME
-        contact: form.help.contact   # FIXME
-        descriptionEn: form.help.descriptionEn   # FIXME
-        descriptionNl: form.help.descriptionNl   # FIXME
-        displayNameAttribute: form.help.displayNameAttribute   # FIXME
-        emailAddressAttribute: form.help.emailAddressAttribute   # FIXME
-        entitlementAttribute: form.help.entitlementAttribute   # FIXME
-        entityId: form.help.entityId   # FIXME
-        givenNameAttribute: form.help.givenNameAttribute   # FIXME
-        logoUrl: form.help.logoUrl   # FIXME
-        metadataUrl: form.help.metadataUrl   # FIXME
-        nameEn: form.help.nameEn   # FIXME
-        nameNl: form.help.nameNl   # FIXME
-        organizationalUnitAttribute: form.help.organizationalUnitAttribute   # FIXME
-        organizationAttribute: form.help.organizationAttribute   # FIXME
-        organizationTypeAttribute: form.help.organizationTypeAttribute   # FIXME
-        personalCodeAttribute: form.help.personalCodeAttribute   # FIXME
-        preferredLanguageAttribute: form.help.preferredLanguageAttribute   # FIXME
-        principleNameAttribute: form.help.principleNameAttribute   # FIXME
-        supportContact: form.help.supportContact   # FIXME
-        surNameAttribute: form.help.surNameAttribute   # FIXME
-        technicalContact: form.help.technicalContact   # FIXME
-        ticketNo: form.help.ticketNo   # FIXME
-        uidAttribute: form.help.uidAttribute   # FIXME
-
-    legend:
-        contact: 'General contact'
-        administrativeContact: 'Administrative contact'
-        supportContact: 'Support contact'
-        technicalContact: 'Technical contact'
-
-    lock:
-        description: 'Please wait until the lock has been released.'
-        title: 'Form has been locked!'
-
-    status:
-        saved: Saved
-        saving: Saving...
-        updated: The form has been updated!
-        validating: Validating...
-    tab:
-        attributes: attributes
-        comments: comments
-        contact: contact
-        general: general
-        info: info
-
-        intro:
-            attributes: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            comments: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            contact: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            general: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            info_draft: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            info_published: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            metadata: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-
-        metadata: metadata
-
-    title: SURFnet SP Registration
-
-    placeholder:
-        acsLocation: 'Information is automatically retrieved from the Metadata'
-        entityId: 'Information is automatically retrieved from the Metadata'
-        certificate: 'Information is automatically retrieved from the Metadata'
-        attribute: 'The service will use this attribute to....'
-mail:
-    invitation:
-        subject: 'Invitation for SURFnet SP Registration (%ticketNo%)'
-    report:
-        subject: 'SURFnet SP Registration Report'
-    notification:
-        published:
-            subject: '(%ticketNo%) %nameEn% published registration form'
-        finished:
-            subject: '(%ticketNo%) %nameEn% finished registration form'
-        updated:
-            subject: '(%ticketNo%) %nameEn% updated registration form'
-    creation:
-        subject: 'SURFnet SP Registration has been Created (%ticketNo%)'
-    error:
-        subject: 'SURFnet SP Registration Form Export Generation Error'
-    confirmation:
-        published:
-            subject: 'Published confirmation for SURFnet SP Registration (%ticketNo%)'
-        finished:
-            subject: 'Finished confirmation for SURFnet SP Registration (%ticketNo%)'
-        updated:
-            subject: 'Updated confirmation for SURFnet SP Registration (%ticketNo%)'
-
-error:
-    general:
-        title: 'An error occurred.'
-        body: 'An unexpected error occurred, the admin has been notified. Please try again later.'
-
-    404:
-        title: 'Page not found'
-        body: 'Oops, we were unable to find the page.'
+overview.publish.subtitle: 'Are you sure?'
+overview.publish.intro: "<p>After pressing 'confirm' the configuration will be published on the SURFconext Connect environment and will immediately be available for testing via the <a href=\"https://wiki.surfnet.nl/display/surfconextdev/Guest+and+Test+Identity+Providers#GuestandTestIdentityProviders-TestIdentityProviders\" target=\"_blank\">test/diy IdP</a>. After publishing this configuration, changes can be made via this form.</p>\n<p>The general contact (see 'general' tab) will receive a confirmation mail.</p>"
+overview.publish.button.cancel: Cancel
+overview.publish.button.confirm: Confirm
+overview.finish.subtitle: 'Are you sure?'
+overview.finish.intro: "<p><strong>Confirm</strong><br />Press 'confirm' to finish this form. After finishing the form it is not possible to make changes to this configuration via the form. When contracts are in place the SURFconext team will move the service to production.</p>\n<p><strong>NOTE:</strong> IdP production metadata of SURFconext is different from the Connect environment. Going to production, please <a href=\"https://wiki.surfnet.nl/display/surfconextdev/Connecting+to+SURFconext+production+environment\" target=\"_blank\">change the metadata in your SAML enabled software</a>.</p>\n<p><strong>This is a test/accept instance<br /></strong>Want to keep this configruation for testing purposes, do not finish this form and press 'cancel'.</p>\n<p><strong>I want to connect a new instance (e.g. for production)<br /></strong>Contact <a href=\"mailto:support@surfconext.nl\">support@surfconext.nl</a> to request a new form.</p>"
+overview.finish.button.cancel: Cancel
+overview.finish.button.confirm: Confirm
+overview.update.subtitle: 'Overview new configuration'
+overview.update.intro: '<p>Press ''confirm'' to apply the changes. The new configuration will be directly available for testing.</p>'
+overview.update.button.cancel: Cancel
+overview.update.button.confirm: Confirm
+thanks.button.edit: Edit
+thanks.subtitle: Thanks!
+thanks.intro: "<p>The service has been succesfully published on the Connect environment of SURFconext and connected to the test/diy IdP. The service is ready for testing.</p>\n<ul><li><a href=\"https://wiki.surfnet.nl/display/surfconextdev/Guest+and+Test+Identity+Providers#GuestandTestIdentityProviders-DIYSURFconextTestIdentityProvider\" target=\"_blank\">More information on test accounts within the test/diy IdP</a></li>\n</ul><p>For more information please refer to <a href=\"https://support.surfconext.nl/sp\" target=\"_blank\">https://support.surfconext.nl/sp</a> or contact <a href=\"mailto:support@surfconext,nl\">support@surfconext.nl.</a> Don't forget to include the ticket number in the subject line (CXT-....).</p>"
+thanks.finish.subtitle: Thanks!
+thanks.finish.intro: "<p>The SP form has been finished. You will not be able to make any changes to your configuration, and your connection to SURFconext Connect might temporary not work.<br /><br />We assume that tests have been successfull and the service is ready for Production. If the contractual phase has not been finished we'll have to wait. If this has been finished we'll bring the service to Production and inform you as soon as possible.</p>\n<p><strong>What's next?<br /></strong>The SURFconext Production environment is completely separated from SURFconext Connect. Therefore, to go from Connect to Production, you need to import a new set of metadata in your service provider. See the necessary steps <a href=\"https://wiki.surfnet.nl/display/surfconextdev/Connecting+to+SURFconext+production+environment\" target=\"_blank\">on our wiki page</a>.</p>\n<p>Questions? Please let us know via <a href=\"mailto:support@surfconext.nl\">support@surfconext.nl</a> (keep CXT-... in subject line).</p>"
+form.button.publish: Publish
+form.button.next: Next
+form.button.previous: Previous
+form.button.finish: 'To production'
+form.button.update: Update
+form.help.acsLocation: "<p>Assertion Consumer Service Location:</p>\n<p>Extracted from MetadataURL. Endpoint where users need to be sent back to after authentication. This must be https with a trusted and valid SSL certificate when going to production. Certificate must differ from the signing certificate.</p>"
+form.help.administrativeContact: "<p>First contact for this service regarding:</p>\n<ul><li>contractual matters</li>\n<li>escalation</li>\n<li>if applicable, licence information</li>\n</ul><p>Must differ from technical contact.</p>"
+form.help.affiliationAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:eduPersonAffiliation<br /></a>urn:oid: <a href=\"http://oid-info.com/get/1.3.6.1.4.1.5923.1.1.1.1\" target=\"_blank\">urn:oid:1.3.6.1.4.1.5923.1.1.1.1</a></p>\n<p>Description: Indicates the relationship between the user and his home organisation. \_The following values are permitted:</p>\n<ul><li>student - student</li>\n<li>employee - all employees</li>\n<li>staff - academic staff</li>\n</ul>"
+form.help.applicationUrl: '<p>This is the URL where end-users can find the application.<br />This information will be displayed on SURFconext dashboard (<a href="https://wiki.surfnet.nl/display/surfconextdev/Connecting+Identity+Providers+to+your+service#ConnectingIdentityProviderstoyourservice-SURFconextDashboard" target="_blank">see wiki</a>). The application webstore for institutions.</p>'
+form.help.eulaUrl: '<p><span class="_Tgc">End-user license agreement: the contract agreement between purchaser and licensor.<br /></span></p>'
+form.help.certificate: "<p>Extracted from MetadataURL</p>\n<ul><li>Valid X.509-certificate.</li>\n<li>Minimum of 2048 bits.</li>\n<li>Can be self-signed.</li>\n<li>Can be expired.</li>\n<li>Cannot match certificate of ACS location.</li>\n</ul>"
+form.help.comments: "<ul><li>SURFconext connection</li>\n<li>Usability of this form</li>\n<li>Etc.</li>\n</ul>"
+form.help.commonNameAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:cn<br /></a>urn:oid: <a href=\"http://oid-info.com/get/2.5.4.3\" target=\"_blank\">urn:oid:2.5.4.3</a></p>\n<p>Description: full name.</p>"
+form.help.contact: '<p>This person initially fills out the form. This is the person with whom the intake did take place. The role of this person can vary (tech, admin).</p>'
+form.help.descriptionEn: '<p>Describe the primary purpose of this service in English. This information should clearly outline what this service provides for end-users.<br />This information will be displayed on SURFconext dashboard (<a href="https://wiki.surfnet.nl/display/surfconextdev/Connecting+Identity+Providers+to+your+service#ConnectingIdentityProviderstoyourservice-SURFconextDashboard" target="_blank">see wiki</a>). The application webstore for institutions.</p>'
+form.help.descriptionNl: '<p>Describe the primary purpose of this service in Dutch. This information should clearly outline what this service provides for end-users.<br />This information will be displayed on SURFconext dashboard (<a href="https://wiki.surfnet.nl/display/surfconextdev/Connecting+Identity+Providers+to+your+service#ConnectingIdentityProviderstoyourservice-SURFconextDashboard" target="_blank">see wiki</a>). The application webstore for institutions.</p>'
+form.help.displayNameAttribute: "<p>urn:mace: <a title=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:displayName<br /></a>urn:oid: <a href=\"http://oid-info.com/cgi-bin/display?oid=2.16.840.1.113730.3.1.241&amp;action=display\" target=\"_blank\">urn:oid:2.16.840.1.113730.3.1.241</a></p>\n<p>Description: name as displayed in applications.</p>"
+form.help.emailAddressAttribute: "<p>urn:mace: <a title=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:mail<br /></a>urn:oid: <a href=\"http://oid-info.com/get/0.9.2342.19200300.100.1.3\">urn:oid:0.9.2342.19200300.100.1.3</a></p>\n<p>Description: e-mail address; syntax in accordance with RFC 5322.</p>"
+form.help.entitlementAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:eduPersonEntitlement<br /></a>urn:oid: <a href=\"http://oid-info.com/get/1.3.6.1.4.1.5923.1.1.1.7\" target=\"_blank\">urn:oid:1.3.6.1.4.1.5923.1.1.1.7</a></p>\n<p>Description: entitlement; custom URI (URL or URN) that indicates an entitlement to something.</p>"
+form.help.entityId: '<p>Extracted from MetadataURL. SAML technical name of your service. Must be unique within SURFconext. See <a href="https://wiki.surfnet.nl/display/surfconextdev/Connection+metadata#Connectionmetadata-SPmetadataHowtotellSURFconextaboutyourservice" target="_blank">this</a> wiki page for more information</p>'
+form.help.givenNameAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:givenName<br /></a>urn:oid: <a href=\"http://oid-info.com/get/2.5.4.3\" target=\"_blank\">urn:oid:2.5.4.3</a></p>\n<p>Description: given name / “name known by”; combinations of title, initials, and “name known</p>"
+form.help.logoUrl: "<ul><li>URL of the location of the logo.</li>\n<li>Dimensions of the image: 500x300 (width: 500 pixels. height: 300 pixels).</li>\n<li>Lossless image format (e.g. .PNG or GIF).</li>\n<li>No JPG.</li>\n</ul><p>The logo will be displayed on SURFconext dashboard (<a href=\"https://wiki.surfnet.nl/display/surfconextdev/Connecting+Identity+Providers+to+your+service#ConnectingIdentityProviderstoyourservice-SURFconextDashboard\" target=\"_blank\">see wiki</a>). The application webstore for institutions.</p>"
+form.help.metadataUrl: '<p>This URL is generated by your SAML2.0 enabled software (ADFS, NETIQ, SimpleSAML). <br />During testing phase http location is ok. Going to production? Then a secured https location (minimal score B on <a href="https://www.ssllabs.com/ssltest/" target="_blank">SSLlabs</a>) is required.</p>'
+form.help.nameEn: '<p>Name of the service in English.<br />This information will be displayed on SURFconext dashboard (<a href="https://wiki.surfnet.nl/display/surfconextdev/Connecting+Identity+Providers+to+your+service#ConnectingIdentityProviderstoyourservice-SURFconextDashboard" target="_blank">see wiki</a>). The application webstore for institutions.</p>'
+form.help.nameNl: '<p>Name of the service in Dutch.<br />This information will be displayed on SURFconext dashboard (<a href="https://wiki.surfnet.nl/display/surfconextdev/Connecting+Identity+Providers+to+your+service#ConnectingIdentityProviderstoyourservice-SURFconextDashboard" target="_blank">see wiki</a>). The application webstore for institutions.</p>'
+form.help.organizationAttribute: "<p>urn:mace: <a href=\"http://www.terena.org/registry/terena.org/attribute-def/\" target=\"_blank\">urn:mace:terena.org:attribute-def:schacHomeOrganization<br /></a>urn:oid: <a href=\"http://oid-info.com/get/1.3.6.1.4.1.25178.1.2.9\" target=\"_blank\">urn:oid:1.3.6.1.4.1.25178.1.2.9</a></p>\n<p>Description: the user's organisation using the organisation’s domain name; syntax in accordance with RFC 1035.</p>"
+form.help.organizationTypeAttribute: "<p>urn:mace: <a href=\"http://www.terena.org/registry/terena.org/attribute-def/\" target=\"_blank\">urn:mace:terena.org:attribute-def:schacHomeOrganizationType<br /></a>urn:oid: <a href=\"http://oid-info.com/get/1.3.6.1.4.1.25178.1.2.10\" target=\"_blank\">urn:oid:1.3.6.1.4.1.25178.1.2.10</a></p>\n<p>Description: designation of the type of organisation as defined on<a href=\"http://www.terena.org/registry/terena.org/schac/homeOrganizationType\" target=\"_blank\"> http://www.terena.org/registry/terena.org/schac/homeOrganizationType.</a></p>"
+form.help.personalCodeAttribute: "<p>urn:mace: <a class=\"external-link\" href=\"https://wiki.refeds.org/display/STAN/SCHAC+schema+IAD+1.5.0.c#SCHACschemaIAD1.5.0.c-schacPersonalUniqueCodeschacPersonalUniqueCode\">urn:schac:attribute-def:schacPersonalUniqueCode</a><a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\"><br /></a>urn:oid: <a class=\"external-link\" href=\"https://wiki.refeds.org/display/STAN/SCHAC+schema+IAD+1.5.0.c#SCHACschemaIAD1.5.0.c-SCHAC_LDAP_SchemaSCHACLDAPSchema\">urn:oid:1.3.6.1.4.1.25178.1.2.14</a></p>\n<p>Description: The user's student, employee, and/or member id as used in the institution's internal systems.</p>\n<p>Example:</p>\n<ul><li>urn:schac:personalUniqueCode:nl:local:example.edu:employeeid:x12-3456</li>\n<li>urn:schac:personalUniqueCode:nl:local:example.nl:studentid:s1234567</li>\n</ul>"
+form.help.preferredLanguageAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:preferredLanguage<br /></a>urn:oid: <a href=\"http://oid-info.com/get/2.16.840.1.113730.3.1.39\" target=\"_blank\">urn:oid:2.16.840.1.113730.3.1.39</a></p>\n<p>Description: a two-letter abbreviation for the preferred language according to the ISO 639 language abbreviation code table; no subcodes.</p>"
+form.help.principleNameAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:eduPersonPrincipalName<br /></a>urn:oid: <a href=\"http://oid-info.com/get/1.3.6.1.4.1.5923.1.1.1.6\" target=\"_blank\">urn:oid:1.3.6.1.4.1.5923.1.1.1.6</a></p>\n<p>Description: unique identifier for a user.</p>"
+form.help.supportContact: "<p>General contact of the service.</p>\n<p>e.g: helpdesk@yourservice.com</p>"
+form.help.surNameAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:givenName<br /></a>urn:oid: <a href=\"http://oid-info.com/get/2.5.4.42\" target=\"_blank\">urn:oid:2.5.4.42</a></p>\n<p>Description: the surname of a person (including any words such as “van”, “de”, “von” etc.) used for personalisation; this can be a combination of existing attributes.</p>"
+form.help.technicalContact: "<p>First contact for this service regarding technical matters:</p>\n<ul><li>connection</li>\n<li>changes</li>\n<li>issues</li>\n</ul><p>Must differ from administrative contact.</p>"
+form.help.ticketNo: 'Ticket number is for our administration. Please keep this number in the subject of your mail when communicating with us.'
+form.help.uidAttribute: "<p>urn:mace: <a href=\"http://middleware.internet2.edu/urn-mace/urn-mace-dir-attribute-def.html\" target=\"_blank\">urn:mace:dir:attribute-def:uid<br /></a>urn:oid: <a href=\"http://oid-info.com/get/1.3.6.1.4.1.1466.115.121.1.15\" target=\"_blank\">urn:oid:0.9.2342.19200300.100.1.1</a></p>\n<p>Description: the unique code for a person that is used as the login name within the institution.</p>"
+form.legend.contact: 'General contact'
+form.legend.administrativeContact: 'Administrative contact'
+form.legend.supportContact: 'Support contact'
+form.legend.technicalContact: 'Technical contact'
+form.lock.description: 'At this moment the form is filled out by another user. Please wait until the lock has been released.'
+form.lock.title: 'Form has been locked!'
+form.status.saved: Saved
+form.status.saving: Saving...
+form.status.updated: 'The configuration has been updated; happy testing!'
+form.status.validating: Validating...
+form.tab.attributes: Attributes
+form.tab.comments: Comments
+form.tab.contact: 'Contact information'
+form.tab.general: General
+form.tab.info: Info
+form.tab.intro.attributes: "<p>When an end-user logs in to your SP, SURFconext sends a SAML-assertion to the SP. The SAML-assertion contains statements about the user, including identity and possibly a number of other attributes (see list below). Select the attributes this service requires to operate. For each attribute you request a <strong>valid reason</strong> must be provided which will be reviewed. Note: <strong>every extra attribute you request could complicate the contractual phase</strong>: just one more reason to not select more attributes than you absolutely need. Also note that SURFconext operates with a minimal disclosure principle. This means that only the absolute necessary (personal) information is transferred to a service. Check this page for more information: <a href=\"https://wiki.surfnet.nl/x/lACtAQ\" target=\"_blank\">https://wiki.surfnet.nl/x/lACtAQ</a>.</p>\n<p>Possibly some boxes have already been checked. This information is reused from the metadata.</p>\n<p><em>Identity Providers will be informed about the attributes your service requests and must agree to the release of these attributes to your service.</em></p>"
+form.tab.intro.comments: '<p>If there are any questions regarding your SURFconext connection or this form, please leave them here.</p>'
+form.tab.intro.contact: "<p>Every service connected to SURFconext requires various types of contact details. Depending on the nature of the issue we will consult the following contact:</p>\n<ol><li>Administrative</li>\n<li>Technical</li>\n<li>Support</li>\n</ol><p>See the question mark for a more extensive description. Possibly some information below already has been filled through the metadata. Please check the fields and edit when necessary.</p>\n<p><em>Technical and administrative contact details will not be communicated to end-users.</em></p>"
+form.tab.intro.general: '<p>Enter/edit your contact information below. We will use this information in case we have additional questions.</p>'
+form.tab.intro.info_draft: "<p>Documentation about this SP registration form can be found at: https://wiki.surfnet.nl/x/vIr8Ag</p>\n<p>The registration of your Service Provider consists of two parts. A contractual and technical part. This form covers the technical part. The contractual part will be handled by SURFmarket. <br />In the following pages we will ask you to submit the necessary information that allows us to create a test connection. With the following details ready we estimate this process will take around 20 minutes to complete. Information we need and collect through this form includes:</p>\n<ul><li>Various contacts responsible for the service. Support, administrative and technical should be present.</li>\n<li>Information about SAML 2.0 configuration.</li>\n<li>Metadata information including URL, certificate and logo of your service.</li>\n<li>A list of the attributes your Service Provider requires to operate.</li>\n</ul><p><strong>Publish<br /></strong>When all fields are filled in correctly you can publish the configuration to the SURFconext test environment. The service will be available directly for testing.</p>\n<p><strong>Update<br /></strong>The configuration can be modified whenever you see fit. Just change the fields, press 'update' and 'confirm'. The changes are available instantenously.</p>\n<p><strong>Production<br /></strong>When tests are successful you can request a production connection. Simply press the button 'to production' to initiate this process.<br /><strong>Note:</strong> your service can get production status only if the required contracts are in place.<br /><br />If there are any questions during completion of the form don’t hesitate to mail to <a href=\"mailto:support@surfconext.nl\">support@surfconext.nl</a>. Please add the ticket number to the subject (CXT-...).</p>"
+form.tab.intro.info_published: "<p><strong>Test<br /></strong>The service is ready for testing. For more information on testing your SP <a href=\"https://wiki.surfnet.nl/display/surfconextdev/Guest+and+Test+Identity+Providers\" target=\"_blank\">look on this wikipage</a>.</p>\n<p><strong>Manage configuration<br /></strong>Change the fields you want to modify and press 'update' and next press 'confirm'. The updated configuration is now live and ready for testing.</p>\n<p><strong>Production<br /></strong>When the configuration is ready for production, press 'to production'. After the contractual part has been finished the SURFconext team will put the service on production.<br /><strong>Note:</strong> production environment uses different SURFconext metadata. Make sure to\_<a href=\"https://wiki.surfnet.nl/display/surfconextdev/Connecting+to+SURFconext+production+environment\" target=\"_blank\">prepare</a> the SAML 2.0 software of your application.</p>"
+form.tab.intro.metadata: '<p>Please provide the metadata URL of your service. The URL will be validated and the fields below will be filled in automatically (when available in the metadata). <strong>If the input is not correct please change the settings in your SAML enabled software.</strong> Note that the fields with a * are required and need to be correctly configured. Check the following page for more information: <a href="https://wiki.surfnet.nl/x/VQEWAg" target="_blank">https://wiki.surfnet.nl/x/VQEWAg</a>.</p>'
+form.tab.metadata: Metadata
+form.title: 'Service Provider registration form (Connect environment)'
+form.placeholder.acsLocation: 'Information is automatically subtracted from the Metadata URL'
+form.placeholder.entityId: 'Information is automatically subtracted from the Metadata URL'
+form.placeholder.certificate: 'Information is automatically subtracted from the Metadata URL'
+form.placeholder.attribute: 'The service will use this attribute to....'
+mail.invitation.subject: '%ticketNo% Invitation for SURFconext SP Registration form'
+mail.report.subject: 'SURFconext SP Registration Report'
+mail.notification.published.subject: '(%ticketNo%) %nameEn% published registration form'
+mail.notification.finished.subject: '(%ticketNo%) %nameEn% finished registration form'
+mail.notification.updated.subject: '(%ticketNo%) %nameEn% updated registration form'
+mail.creation.subject: 'SURFnet SP Registration has been Created (%ticketNo%)'
+mail.confirmation.published.subject: 'New SP published on SURFconext test environment (%ticketNo%)'
+mail.confirmation.finished.subject: 'Finished confirmation for SURFnet SP Registration (%ticketNo%)'
+mail.confirmation.updated.subject: 'Updated confirmation for SURFnet SP Registration (%ticketNo%)'
+error.general.title: 'An error occurred.'
+error.general.body: 'An unexpected error occurred, the admin has been notified. Please try again later.'
+error.404.title: 'Page not found'
+error.404.body: 'Oops, we were unable to find the page.'
+overview.subtitle: 'Are you sure?'
+overview.intro: '<p>You''ve now supplied all data required to register a new service provider. Check your input below. If you''d like to change anything press cancel. When you are ready to finalise your registration click the confirm button below.</p>'
+overview.button.cancel: Cancel
+overview.button.confirm: Confirm
+form.tab.intro.info: ''
+mail.notification.subject: '%ticketNo% %nameEn% finished SP registration form'
+form.help.organizationalUnitAttribute: '<p>Not yet available</p>'
+mail.error.subject: 'SURFnet SP Registration Form Export Generation Error'

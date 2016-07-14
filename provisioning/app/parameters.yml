@@ -27,13 +27,13 @@ parameters:
     mail_from:     support@surfconext.nl
     mail_receiver: support@surfconext.nl
 
-    simplesamlphp.path: simplesaml/
+    simplesamlphp.path: registration/simplesaml/
     simplesamlphp.admin_password: admin
     simplesamlphp.technical_contact_name: "Admin"
     simplesamlphp.technical_contact_email: "admin@example.edu"
-    simplesamlphp.idp: 'https://openidp.feide.no'
+    simplesamlphp.idp: 'https://serviceregistry.dev.support.surfconext.nl/saml2/idp/metadata.php'
 
-    janus_url: https://engineblock:engineblock@serviceregistry.demo.openconext.org/janus/app.php/api
+    janus_url: 'http://spform:spform@serviceregistry.dev.support.surfconext.nl/janus/api'
     error_mail_address: boy@ibuildings.nl
     error_mail_subject: Service Provider Registration Error
 

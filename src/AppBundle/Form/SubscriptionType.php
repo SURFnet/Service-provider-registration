@@ -230,7 +230,6 @@ class SubscriptionType extends AbstractType
             'principleNameAttribute',
             'uidAttribute',
             'preferredLanguageAttribute',
-            'organizationalUnitAttribute',
             'personalCodeAttribute',
         );
     }
