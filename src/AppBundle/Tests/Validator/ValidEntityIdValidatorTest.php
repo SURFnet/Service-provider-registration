@@ -1,5 +1,34 @@
 <?php
 
+use AppBundle\Validator\Constraints\ValidEntityIdValidator;
+
+/**
+ * Class TestValidEntityIdValidator
+ *
+ * So... the janus ConnectionDescriptorRepository class is final.
+ * Which is the required contructor argument of the ValidEntityIdValidator.
+ * Requiring this subclass...
+ * @todo don't make library classes final.
+ */
+class TestValidEntityIdValidator extends ValidEntityIdValidator
+{
+    public function __construct($mock)
+    {
+        $object = new ReflectionObject($this);
+        $property = $object->getParentClass()->getProperty('janus');
+        $property->setAccessible(true);
+        $property->setValue($this, $mock);
+    }
+}
+
+class TestConnectionDescriptorRepository
+{
+    public function findByName($name)
+    {
+        return NULL;
+    }
+}
+
 /**
  * Class ValidEntityIdValidatorTest
  */
@@ -12,7 +41,7 @@ class ValidEntityIdValidatorTest extends \Symfony\Component\Validator\Tests\Cons
 
     protected function createValidator()
     {
-        return new \AppBundle\Validator\Constraints\ValidEntityIdValidator();
+        return new TestValidEntityIdValidator(new TestConnectionDescriptorRepository());
     }
 
     public function testSuccess()
