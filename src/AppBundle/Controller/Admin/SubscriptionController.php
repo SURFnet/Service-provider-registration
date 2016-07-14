@@ -3,8 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Entity\SubscriptionRepository;
 use AppBundle\Form\Admin\SubscriptionType;
-use AppBundle\Manager\SubscriptionManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SURFnet\SPRegistration\Grid\GridConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -63,7 +63,7 @@ class SubscriptionController extends Controller implements SecuredController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->get('subscription.manager')->saveNewSubscription($subscription);
+            $this->get('subscription.repository')->insert($subscription);
 
             $this->get('mail.manager')->sendInvitation($subscription);
             $this->get('mail.manager')->sendCreatedNotification($subscription);
@@ -89,7 +89,7 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function viewAction($id)
     {
-        $subscription = $this->get('subscription.manager')->getSubscription($id);
+        $subscription = $this->get('subscription.repository')->findById($id);
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();
@@ -118,7 +118,7 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function finishAction($id)
     {
-        $subscription = $this->get('subscription.manager')->getSubscription($id);
+        $subscription = $this->get('subscription.repository')->findById($id);
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();
@@ -127,7 +127,7 @@ class SubscriptionController extends Controller implements SecuredController
         $originalSubscription = clone $subscription;
         $subscription->finish();
 
-        $this->get('subscription.manager')->updateSubscription(
+        $this->get('subscription.repository')->update(
             $originalSubscription,
             $subscription
         );
@@ -146,7 +146,7 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function archiveAction($id)
     {
-        $subscription = $this->get('subscription.manager')->getSubscription($id);
+        $subscription = $this->get('subscription.repository')->findById($id);
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();
@@ -155,7 +155,7 @@ class SubscriptionController extends Controller implements SecuredController
         $originalSubscription = clone $subscription;
         $subscription->archive();
 
-        $this->get('subscription.manager')->updateSubscription(
+        $this->get('subscription.repository')->update(
             $originalSubscription,
             $subscription
         );
@@ -172,29 +172,25 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function publishAction($id)
     {
-        $subscriptionManager = $this->get('subscription.manager');
-        $subscription = $subscriptionManager->getSubscription($id);
+        $subscriptionRepository = $this->get('subscription.repository');
+        $subscription = $subscriptionRepository->findById($id);
 
         if (empty($subscription)) {
             throw $this->createNotFoundException();
         }
 
         $subscription = $this->linkSubscriptionToJanusConnection(
-            $subscriptionManager,
+            $subscriptionRepository,
             $subscription
         );
 
         // And update the subscription.
-        $subscriptionManager->updateSubscription(
+        $subscriptionRepository->update(
             clone $subscription,
             $subscription->revertToPublished()
         );
 
-        $this->get('janus.sync_service')->push($subscription);
-
-        return $this->redirect(
-            $this->generateUrl('admin.subscription.overview')
-        );
+        return $this->redirectToRoute('admin.subscription.overview');
     }
 
     /**
@@ -250,8 +246,13 @@ class SubscriptionController extends Controller implements SecuredController
         return '';
     }
 
+    /**
+     * @param SubscriptionRepository $subscriptionRepository
+     * @param Subscription $subscription
+     * @return Subscription
+     */
     private function linkSubscriptionToJanusConnection(
-        SubscriptionManager $subscriptionManager,
+        SubscriptionRepository $subscriptionRepository,
         Subscription $subscription
     ) {
         // Try to find the janus id from the subscription.
@@ -282,7 +283,7 @@ class SubscriptionController extends Controller implements SecuredController
         }
 
         // And update the subscription.
-        $subscriptionManager->updateSubscription(
+        $subscriptionRepository->update(
             clone $subscription,
             $subscription->setJanusId($connectionId)
         );

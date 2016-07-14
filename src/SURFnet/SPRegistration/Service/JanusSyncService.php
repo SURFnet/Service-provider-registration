@@ -2,8 +2,8 @@
 
 namespace SURFnet\SPRegistration\Service;
 
+use AppBundle\Entity\DoctrineSubscriptionRepository;
 use AppBundle\Entity\Subscription;
-use AppBundle\Manager\SubscriptionManager;
 use OpenConext\JanusClient\Entity\ConnectionDescriptorRepository;
 use OpenConext\JanusClient\Entity\ConnectionRepository;
 use OpenConext\JanusClient\NewConnectionRevision;
@@ -19,16 +19,17 @@ class JanusSyncService
 {
     /**
      * @param Subscription $currentSubscription
+     * @return Subscription
      */
     public function pull(Subscription $currentSubscription)
     {
         // Ignore Requests that are not published.
         if (!$currentSubscription->isPublished()) {
-            return;
+            return $currentSubscription;
         }
 
         if (!$currentSubscription->getJanusId()) {
-            return;
+            return $currentSubscription;
         }
 
         // Otherwise we update our database (cache) with the data from Janus.
@@ -41,7 +42,7 @@ class JanusSyncService
             $currentSubscription
         );
 
-        $this->repository->updateSubscription(
+        return $this->repository->update(
             $currentSubscription,
             $newSubscription
         );
@@ -49,12 +50,13 @@ class JanusSyncService
 
     /**
      * @param Subscription $subscription
+     * @return Subscription
      */
     public function push(Subscription $subscription)
     {
         // Ignore Requests that are not published.
         if (!$subscription->isPublished()) {
-            return;
+            return $subscription;
         }
 
         if (!$subscription->getJanusId()) {
@@ -62,10 +64,13 @@ class JanusSyncService
         } else {
             $this->updateInJanus($subscription);
         }
+
+        return $subscription;
     }
 
     /**
      * @param Subscription $subscription
+     * @return Subscription
      */
     private function insertInJanus(Subscription $subscription)
     {
@@ -86,11 +91,9 @@ class JanusSyncService
             )
         );
 
-        $subscription->setJanusId($connection->getId());
-
-        $this->repository->updateSubscription(
-            $subscription,
-            $subscription
+        return $this->repository->update(
+            clone $subscription,
+            $subscription->setJanusId($connection->getId())
         );
     }
 
@@ -99,7 +102,7 @@ class JanusSyncService
      */
     private function updateInJanus(Subscription $subscription)
     {
-        $this->janusConnectionRepository->update(
+        return $this->janusConnectionRepository->update(
             new NewConnectionRevision(
                 $this->translator->translateToConnection($subscription),
                 'Updated entity from intakeform id: ' . $subscription->getId()
@@ -110,13 +113,13 @@ class JanusSyncService
     /**
      * JanusSyncService constructor.
      *
-     * @param SubscriptionManager            $repository
+     * @param DoctrineSubscriptionRepository $repository
      * @param ConnectionDescriptorRepository $janusConnectionDescriptorRepository
      * @param ConnectionRepository           $janusConnectionRepository
      * @param ConnectionRequestTranslator    $translator
      */
     public function __construct(
-        SubscriptionManager $repository,
+        DoctrineSubscriptionRepository $repository,
         ConnectionDescriptorRepository $janusConnectionDescriptorRepository,
         ConnectionRepository $janusConnectionRepository,
         ConnectionRequestTranslator $translator
@@ -128,7 +131,7 @@ class JanusSyncService
     }
 
     /**
-     * @var SubscriptionManager
+     * @var DoctrineSubscriptionRepository
      */
     private $repository;
 

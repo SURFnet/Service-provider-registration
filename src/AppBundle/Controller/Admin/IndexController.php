@@ -35,7 +35,7 @@ class IndexController extends Controller implements SecuredController
      */
     public function getStatusCurrentAction()
     {
-        $repository = $this->get('subscription.manager');
+        $repository = $this->get('subscription.repository.doctrine');
         return new JsonResponse(array(
             'draft'     => $repository->countForType(Subscription::STATE_DRAFT),
             'published' => $repository->countForType(Subscription::STATE_PUBLISHED),
