@@ -28,7 +28,7 @@ final class ProductionFinishController extends Controller
     {
         SubscriptionValidator::create($subscription)
             ->isForEnvironment(Subscription::ENVIRONMENT_PRODUCTION)
-            ->isOfStatus(Subscription::STATE_PUBLISHED);
+            ->isOfStatus(Subscription::STATE_DRAFT);
 
         if (!$this->get('lock.manager')->lock($subscription->getId())) {
             throw new BadRequestHttpException('Subscription is locked to another session');

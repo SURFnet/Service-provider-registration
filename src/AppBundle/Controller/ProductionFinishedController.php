@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Validator\SubscriptionValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -23,6 +24,10 @@ final class ProductionFinishedController extends Controller
      */
     public function thanksAction(Subscription $subscription)
     {
+        SubscriptionValidator::create($subscription)
+            ->isForEnvironment(Subscription::ENVIRONMENT_PRODUCTION)
+            ->isOfStatus(Subscription::STATE_FINISHED);
+
         return $this->render(
             ':subscription/production:finished_thanks.html.twig',
             array(

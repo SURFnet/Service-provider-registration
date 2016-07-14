@@ -43,7 +43,7 @@ final class SubscriptionValidator
 
         throw new BadRequestHttpException(
             sprintf(
-                'Subscription "%s" is of status "%s" expected status "%s"',
+                'Subscription "%s" is for environment "%s" expected environment "%s"',
                 $this->subscription->getId(),
                 $this->subscription->getEnvironment(),
                 $environment

@@ -454,9 +454,9 @@ class Subscription
      */
     public function finish()
     {
-        if (!$this->isPublished()) {
+        if ($this->isForConnect() && !$this->isPublished()) {
             throw new RuntimeException(
-                "Invalid transition from {$this->status} to finished"
+                "May not skip published for connect subscriptions"
             );
         }
 
