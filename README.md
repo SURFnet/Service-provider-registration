@@ -47,6 +47,8 @@ Environments
 * git clone git@github.com:SURFnet/Service-provider-registration.git .
 * add to local hosts file: 192.168.33.19 surf.dev
 * vagrant up
+* Test at: https://dev.support.surfconext.nl/registration/app_dev.php/admin ( log in with admin/admin )
+* Administer the Service Registry at: https://serviceregistry.dev.support.surfconext.nl/module.php/janus/dashboard.php/entities ( log in with student/studentpass )
 
 ### Setup Deploy env (@ SURFnet)
 * install capifony

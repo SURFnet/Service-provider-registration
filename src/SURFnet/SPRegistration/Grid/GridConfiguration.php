@@ -122,6 +122,8 @@ class GridConfiguration
         $this->addArchiveLink($grid);
 
         $this->addLinkToJanus($grid);
+
+        $this->addMetadataUrlLink($grid);
     }
 
     /**
@@ -138,11 +140,15 @@ class GridConfiguration
      */
     private function addEditLink(Grid $grid)
     {
-        $rowAction = new RowAction('edit', 'form', false, '_blank');
+        $rowAction = new RowAction('edit', 'subscription', false, '_blank');
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
                 if ($row->getField('status') == Subscription::STATE_FINISHED) {
                     return null;
+                }
+
+                if ($row->getField('environment') === Subscription::ENVIRONMENT_PRODUCTION) {
+                    $action->setRoute('production_draft_edit');
                 }
 
                 return $action;
@@ -235,6 +241,24 @@ class GridConfiguration
                         'eid' => $subscription->getJanusId(),
                     )
                 );
+            }
+        );
+        $grid->addRowAction($rowAction);
+    }
+
+    /**
+     * @param Grid $grid
+     */
+    private function addMetadataUrlLink(Grid $grid)
+    {
+        $rowAction = new RowAction('metadata', 'export', false, '_blank');
+        $rowAction->manipulateRender(
+            function (RowAction $action, Row $row) {
+                if ($row->getField('status') == Subscription::STATE_DRAFT) {
+                    return null;
+                }
+
+                return $action;
             }
         );
         $grid->addRowAction($rowAction);

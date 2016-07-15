@@ -15,9 +15,9 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 /**
  * Class Subscription
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\DoctrineSubscriptionRepository")
  * @GRID\Source(
- *      columns="id, ticketNo, contact, created, updated, status, archived"
+ *      columns="id, ticketNo, contact, created, updated, status, environment, archived"
  * )
  *
  * @todo: spread props over more classes
@@ -31,6 +31,10 @@ class Subscription
     const STATE_DRAFT = 0;
     const STATE_PUBLISHED = 1;
     const STATE_FINISHED = 2;
+    const ENVIRONMENT_CONNECT = 'connect';
+    const ENVIRONMENT_PRODUCTION = 'production';
+    const LANG_EN = 'en';
+    const LANG_NL = 'nl';
 
     /**
      * @var string
@@ -47,7 +51,7 @@ class Subscription
      * @Assert\NotBlank(groups={"creation"})
      * @Assert\Choice(choices = {"en", "nl"}, groups={"creation"})
      */
-    private $locale = 'en';
+    private $locale = self::LANG_EN;
 
     /**
      * @var bool
@@ -59,6 +63,20 @@ class Subscription
      * )
      */
     private $archived = false;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     * @GRID\Column(
+     *      operatorsVisible=false,
+     *      filter="select",
+     *      selectFrom="values",
+     *      values={"connect","production"}
+     * )
+     * @Assert\NotBlank(groups={"creation"})
+     * @Assert\Choice(choices = {"production", "connect"}, groups={"creation"})
+     */
+    private $environment = self::ENVIRONMENT_CONNECT;
 
     /**
      * @var int
@@ -169,6 +187,7 @@ class Subscription
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Url()
      * @AppAssert\ValidLogo()
+     * @Assert\NotBlank()
      */
     private $logoUrl;
 
@@ -341,14 +360,6 @@ class Subscription
      * @Assert\Type(type="AppBundle\Model\Attribute")
      * @Assert\Valid()
      */
-    private $organizationalUnitAttribute;
-
-    /**
-     * @var Attribute
-     * @ORM\Column(type="object", nullable=true)
-     * @Assert\Type(type="AppBundle\Model\Attribute")
-     * @Assert\Valid()
-     */
     private $personalCodeAttribute;
 
     /**
@@ -446,9 +457,9 @@ class Subscription
      */
     public function finish()
     {
-        if (!$this->isPublished()) {
+        if ($this->isForConnect() && !$this->isPublished()) {
             throw new RuntimeException(
-                "Invalid transition from {$this->status} to finished"
+                "May not skip published for connect subscriptions"
             );
         }
 
@@ -1095,26 +1106,6 @@ class Subscription
     /**
      * @return Attribute
      */
-    public function getOrganizationalUnitAttribute()
-    {
-        return $this->organizationalUnitAttribute;
-    }
-
-    /**
-     * @param Attribute $organizationalUnitAttribute
-     *
-     * @return Subscription
-     */
-    public function setOrganizationalUnitAttribute($organizationalUnitAttribute)
-    {
-        $this->organizationalUnitAttribute = $organizationalUnitAttribute;
-
-        return $this;
-    }
-
-    /**
-     * @return Attribute
-     */
     public function getPersonalCodeAttribute()
     {
         return $this->personalCodeAttribute;
@@ -1191,5 +1182,37 @@ class Subscription
         $this->archived = true;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @param string $environment
+     */
+    public function setEnvironment($environment)
+    {
+        $this->environment = $environment;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForProduction()
+    {
+        return $this->environment === static::ENVIRONMENT_PRODUCTION;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isForConnect()
+    {
+        return $this->environment === static::ENVIRONMENT_CONNECT;
     }
 }

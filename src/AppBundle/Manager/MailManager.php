@@ -71,7 +71,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.invitation.subject',
+                $subscription->getEnvironment() . '.mail.invitation.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo()
                 ),
@@ -88,7 +88,7 @@ class MailManager
         );
         $message->setBody(
             $this->renderView(
-                'invitation.' . $subscription->getLocale() . '.html.twig',
+                $subscription->getEnvironment() . '.invitation.' . $subscription->getLocale() . '.html.twig',
                 array('subscription' => $subscription)
             ),
             'text/html'
@@ -105,7 +105,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.creation.subject',
+                $subscription->getEnvironment() . '.mail.creation.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo()
                 )
@@ -130,7 +130,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.notification.published.subject',
+                $subscription->getEnvironment() . '.mail.notification.published.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo(),
                     '%nameEn%'   => $subscription->getNameEn(),
@@ -159,7 +159,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.confirmation.published.subject',
+                $subscription->getEnvironment() . '.mail.confirmation.published.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo()
                 ),
@@ -176,7 +176,10 @@ class MailManager
         );
         $message->setBody(
             $this->renderView(
-                'confirmation.published.' . $subscription->getLocale() . '.html.twig',
+                $subscription->getEnvironment()
+                . '.confirmation.published.'
+                . $subscription->getLocale()
+                . '.html.twig',
                 array('subscription' => $subscription)
             ),
             'text/html'
@@ -193,7 +196,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.notification.updated.subject',
+                $subscription->getEnvironment() . '.mail.notification.updated.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo(),
                     '%nameEn%'   => $subscription->getNameEn(),
@@ -222,7 +225,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.confirmation.updated.subject',
+                $subscription->getEnvironment() . '.mail.confirmation.updated.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo()
                 ),
@@ -256,7 +259,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.notification.finished.subject',
+                $subscription->getEnvironment() . '.mail.notification.finished.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo(),
                     '%nameEn%'   => $subscription->getNameEn(),
@@ -285,7 +288,7 @@ class MailManager
         $message = $this->createNewMessage();
         $message->setSubject(
             $this->translator->trans(
-                'mail.confirmation.finished.subject',
+                $subscription->getEnvironment() . '.mail.confirmation.finished.subject',
                 array(
                     '%ticketNo%' => $subscription->getTicketNo()
                 ),
@@ -296,7 +299,7 @@ class MailManager
         $message->setTo(array($contact->getEmail() => $contact->getFirstName() . ' ' . $contact->getLastName()));
         $message->setBody(
             $this->renderView(
-                'confirmation.finished.' . $subscription->getLocale() . '.html.twig',
+                $subscription->getEnvironment() . '.confirmation.finished.' . $subscription->getLocale() . '.html.twig',
                 array('subscription' => $subscription)
             ),
             'text/html'
@@ -316,6 +319,32 @@ class MailManager
             $this->renderView(
                 'admin/mail/report.html.twig',
                 array('subscriptions' => $subscriptions)
+            ),
+            'text/html'
+        );
+
+        $this->mailer->send($message);
+    }
+
+    /**
+     * @param Subscription $subscription
+     * @param \Exception   $exception
+     */
+    public function sendErrorNotification(Subscription $subscription, $xml, \Exception $exception)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($this->translator->trans('mail.error.subject'))
+            ->setFrom($this->sender)
+            ->setTo($this->receiver);
+
+        $message->setBody(
+            $this->renderView(
+                'admin/mail/error.html.twig',
+                array(
+                    'subscription' => $subscription,
+                    'xml'          => $xml,
+                    'exception'    => $exception,
+                )
             ),
             'text/html'
         );
