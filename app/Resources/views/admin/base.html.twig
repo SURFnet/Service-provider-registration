@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin | SURFnet SP Registration</title>
+    <title>Admin | {{ 'site.title'|trans }}</title>
 
     {% block stylesheets %}
         <link href="{{ asset('compiled/css/bootstrap.css') }}" rel="stylesheet" media="screen">
         {% stylesheets
         'css/style.css'
         'css/bootstrap-switch.css'
-        output='css/compiled/common.css' %}
+        output='css/compiled/admin-common.css' %}
         <link href="{{ asset_url }}" rel="stylesheet" media="screen">
         {% endstylesheets %}
     {% endblock %}
