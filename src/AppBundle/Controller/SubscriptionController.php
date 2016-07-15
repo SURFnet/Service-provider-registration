@@ -151,6 +151,35 @@ final class SubscriptionController extends Controller
     }
 
     /**
+     * @Route("/{id}/metadata", name="export")
+     * @ParamConverter("subscription", converter="synchronized_subscription")
+     */
+    public function exportAction(Subscription $subscription)
+    {
+        if ($subscription->isDraft()) {
+            throw new BadRequestHttpException(
+                'Subscription must not be in draft when generating the Metadata'
+            );
+        }
+
+        $xml = $this->get('generator')->generate($subscription);
+
+        // Perform a sanity check on the generated metadata
+        try {
+            $this->get('parser')->parseXml($xml);
+        } catch (\Exception $e) {
+            $this->get('mail.manager')->sendErrorNotification($subscription, $xml, $e);
+
+            throw $e;
+        }
+
+        $response = new Response($xml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
+    }
+
+    /**
      * @Method({"GET"})
      * @Route("/{id}/lock", name="lock")
      * @ParamConverter("subscription", converter="synchronized_subscription")

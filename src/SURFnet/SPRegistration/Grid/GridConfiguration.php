@@ -122,6 +122,8 @@ class GridConfiguration
         $this->addArchiveLink($grid);
 
         $this->addLinkToJanus($grid);
+
+        $this->addMetadataUrlLink($grid);
     }
 
     /**
@@ -239,6 +241,24 @@ class GridConfiguration
                         'eid' => $subscription->getJanusId(),
                     )
                 );
+            }
+        );
+        $grid->addRowAction($rowAction);
+    }
+
+    /**
+     * @param Grid $grid
+     */
+    private function addMetadataUrlLink(Grid $grid)
+    {
+        $rowAction = new RowAction('metadata', 'export', false, '_blank');
+        $rowAction->manipulateRender(
+            function (RowAction $action, Row $row) {
+                if ($row->getField('status') == Subscription::STATE_DRAFT) {
+                    return null;
+                }
+
+                return $action;
             }
         );
         $grid->addRowAction($rowAction);

@@ -327,6 +327,32 @@ class MailManager
     }
 
     /**
+     * @param Subscription $subscription
+     * @param \Exception   $exception
+     */
+    public function sendErrorNotification(Subscription $subscription, $xml, \Exception $exception)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($this->translator->trans('mail.error.subject'))
+            ->setFrom($this->sender)
+            ->setTo($this->receiver);
+
+        $message->setBody(
+            $this->renderView(
+                'admin/mail/error.html.twig',
+                array(
+                    'subscription' => $subscription,
+                    'xml'          => $xml,
+                    'exception'    => $exception,
+                )
+            ),
+            'text/html'
+        );
+
+        $this->mailer->send($message);
+    }
+
+    /**
      * @return Swift_Message
      */
     private function createNewMessage()

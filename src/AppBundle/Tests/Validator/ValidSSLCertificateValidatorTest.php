@@ -88,7 +88,7 @@ class ValidSSLCertificateValidatorTest extends \Symfony\Component\Validator\Test
         $cert = file_get_contents(__DIR__ . '/Fixtures/certificate.cer');
         $this->validator->validate($cert, new \AppBundle\Validator\Constraints\ValidSSLCertificate());
 
-        $this->assertViolation('Unable to retrieve SSL certificate of ACSLocation.');
+        $this->assertViolation('ACSLocation unreachable or invalid cert found.');
     }
 
     public function testMatchingAcsLocation()

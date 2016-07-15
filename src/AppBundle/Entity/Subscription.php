@@ -185,6 +185,7 @@ class Subscription
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Url()
      * @AppAssert\ValidLogo()
+     * @Assert\NotBlank()
      */
     private $logoUrl;
 

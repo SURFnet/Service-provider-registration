@@ -38,6 +38,10 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: entity_id }
 
+    generator:
+        class: AppBundle\Metadata\Generator
+        arguments:  ['@fetcher', '@cache.metadata', '@monolog.logger.metadata']
+
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
         arguments:  ['@cert.fetcher', '@cert.parser']
