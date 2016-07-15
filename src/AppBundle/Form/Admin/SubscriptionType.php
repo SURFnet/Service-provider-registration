@@ -26,7 +26,6 @@ class SubscriptionType extends AbstractType
                 array(
                     'choices'  => array('connect' => 'Connect', 'production' => 'Production'),
                     'expanded' => true,
-                    'data' => 'connect',
                 )
             )
             ->add(
