@@ -70,6 +70,7 @@
             return false;
         });
     }
+
     function setupHelpPopovers(links, inputs) {
         links.popover({
             container: 'body',
@@ -405,6 +406,12 @@
                     "subscription": {
                         "token": $('#subscription__token').val()
                     }
+                },
+                error: function(jqXHR) {
+                    updateErrors(
+                        $(inputEl).parsley(),
+                        [jqXHR.responseText]
+                    );
                 },
                 success: function (data) {
                     if (!data.validation) {

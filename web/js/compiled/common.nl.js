@@ -2496,6 +2496,7 @@ if ('undefined' !== typeof window.Parsley) {
             return false;
         });
     }
+
     function setupHelpPopovers(links, inputs) {
         links.popover({
             container: 'body',
@@ -2831,6 +2832,12 @@ if ('undefined' !== typeof window.Parsley) {
                     "subscription": {
                         "token": $('#subscription__token').val()
                     }
+                },
+                error: function(jqXHR) {
+                    updateErrors(
+                        $(inputEl).parsley(),
+                        [jqXHR.responseText]
+                    );
                 },
                 success: function (data) {
                     if (!data.validation) {
