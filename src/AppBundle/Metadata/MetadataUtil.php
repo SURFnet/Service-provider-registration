@@ -145,13 +145,6 @@ abstract class MetadataUtil
                 ),
                 'friendlyName' => 'preferredLanguage'
             ),
-            'organizationalUnit' => array(
-                'name'         => array(
-                    'urn:mace:dir:attribute-def:eduPersonOrgUnitDN',
-                    'urn:oid:1.3.6.1.4.1.5923.1.1.1.4'
-                ),
-                'friendlyName' => 'organizationalUnit'
-            ),
             'personalCode'       => array(
                 'name'         => array(
                     'urn:mace:dir:attribute-def:schacPersonalUniqueCode',
