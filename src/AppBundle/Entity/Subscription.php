@@ -33,6 +33,8 @@ class Subscription
     const STATE_FINISHED = 2;
     const ENVIRONMENT_CONNECT = 'connect';
     const ENVIRONMENT_PRODUCTION = 'production';
+    const LANG_EN = 'en';
+    const LANG_NL = 'nl';
 
     /**
      * @var string
@@ -49,7 +51,7 @@ class Subscription
      * @Assert\NotBlank(groups={"creation"})
      * @Assert\Choice(choices = {"en", "nl"}, groups={"creation"})
      */
-    private $locale = 'en';
+    private $locale = self::LANG_EN;
 
     /**
      * @var bool
@@ -74,7 +76,7 @@ class Subscription
      * @Assert\NotBlank(groups={"creation"})
      * @Assert\Choice(choices = {"production", "connect"}, groups={"creation"})
      */
-    private $environment;
+    private $environment = self::ENVIRONMENT_CONNECT;
 
     /**
      * @var int
