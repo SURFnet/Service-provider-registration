@@ -21,6 +21,15 @@ class SubscriptionType extends AbstractType
             ->add('ticketNo')
             ->add('contact', new ContactType(), array('by_reference' => false))
             ->add(
+                'environment',
+                'choice',
+                array(
+                    'choices'  => array('connect' => 'Connect', 'production' => 'Production'),
+                    'expanded' => true,
+                    'data' => 'connect',
+                )
+            )
+            ->add(
                 'locale',
                 'choice',
                 array(

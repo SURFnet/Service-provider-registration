@@ -1,0 +1,16 @@
+Dear {{ subscription.contact.firstName}} {{ subscription.contact.lastName }},<br>
+
+<p>The service has been successfully registered on the test environment of SURFconext and is connected to the SURFconext DIY IdP and SURFconext mobile demo IdP. Testing is possible as from now. <br>
+See the following wiki pages for more information regarding accounts and attributes available in SURFconext test/diy IdP:</p>
+<b><a href="https://wiki.surfnet.nl/display/surfconextdev/Guest+and+Test+Identity+Providers"> guest and test Identity Providers</a></b>
+<br>
+<b> <a href="https://idp.diy.surfconext.nl/simplesaml/showusers.php">accounts en attributen</a></b>
+<br>
+<b><a href="https://wiki.surfnet.nl/display/surfconextdev/Attributes+and+Attribute+Release+Policy+ARP">attributen en ARP</a></b>
+<br>
+<p>
+Modify configuration? <b><a href="{{ url('subscription', {id: subscription.id} ) }}">Link to form.</a></b></p>
+
+Kind regards,<br>
+<br>
+SURFconext

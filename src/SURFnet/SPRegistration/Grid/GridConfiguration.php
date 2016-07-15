@@ -140,11 +140,15 @@ class GridConfiguration
      */
     private function addEditLink(Grid $grid)
     {
-        $rowAction = new RowAction('edit', 'form', false, '_blank');
+        $rowAction = new RowAction('edit', 'subscription', false, '_blank');
         $rowAction->manipulateRender(
             function (RowAction $action, Row $row) {
                 if ($row->getField('status') == Subscription::STATE_FINISHED) {
                     return null;
+                }
+
+                if ($row->getField('environment') === Subscription::ENVIRONMENT_PRODUCTION) {
+                    $action->setRoute('production_draft_edit');
                 }
 
                 return $action;

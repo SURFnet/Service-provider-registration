@@ -1,5 +1,6 @@
 {% extends "base.html.twig" %}
 
+{% block title %}{{ 'title.connect.published.thanks'|trans }}{% endblock %}
 {% block body %}
     <h2>{{ 'thanks.subtitle'|trans }}</h2>
 
@@ -7,7 +8,7 @@
         {{ 'thanks.intro'|trans|raw }}
     </p>
 
-    <a href="{{ path('form', {id: subscription.id}) }}" class="btn btn-primary">
+    <a href="{{ path('subscription', {id: subscription.id}) }}" class="btn btn-primary">
         {{ 'thanks.button.edit'|trans }}
     </a>
 {% endblock %}

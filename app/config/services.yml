@@ -23,6 +23,9 @@ services:
             - '%kernel.root_dir%/Resources/schemas/'
             - '@monolog.logger.metadata'
 
+    validation_response_builder:
+        class: AppBundle\Response\ValidationReponseBuilder
+
     validator.metadata:
         class: AppBundle\Validator\Constraints\ValidMetadataValidator
         arguments:  ['@parser']
@@ -45,14 +48,45 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: certificate }
 
-    subscription.manager:
-        class: AppBundle\Manager\SubscriptionManager
+    converter.subscription:
+            class: AppBundle\Request\SubscriptionParamConverter
+            arguments:
+                - 'subscription'
+                - '@subscription.repository.doctrine'
+            tags:
+                - { name: request.param_converter, priority: -2, converter: subscription }
+
+    converter.synchronized_subscription:
+        class: AppBundle\Request\SubscriptionParamConverter
         arguments:
+            - 'synchronized_subscription'
+            - '@subscription.repository.synchronized'
+        tags:
+            - { name: request.param_converter, priority: -2, converter: synchronized_subscription }
+
+    subscription.repository:
+        alias: 'subscription.repository.synchronized'
+
+    subscription.repository.doctrine:
+        class: AppBundle\Entity\DoctrineSubscriptionRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - AppBundle\Entity\Subscription
+        calls:
+            - [setDispatcher, ['@event_dispatcher']]
+
+    subscription.repository.synchronized:
+        class: AppBundle\Entity\SynchronizedSubscriptionRepository
+        arguments:
+            - '@subscription.repository.doctrine'
+            - '@janus.sync_service'
+
+    subscription.repository.session:
+        class: AppBundle\Entity\SessionSubscriptionRepository
+        arguments:
+            - '@session'
             - '@doctrine.orm.entity_manager'
-            - '@validator'
-            - '@lock.manager'
-            - '@generator'
-            - '@event_dispatcher'
 
     lock.manager:
         class: AppBundle\Manager\LockManager
@@ -92,16 +126,16 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: twig_template }
 
+    listener.locale:
+        class: AppBundle\EventListener\SubscriptionLocaleListener
+        arguments:
+            - '@subscription.repository'
+        tags: [{ name: kernel.event_subscriber }]
+
     listener.security:
         class: AppBundle\EventListener\SimpleSAMLAuthListener
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
-
-    subscriber.janus_sync:
-        class: SURFnet\SPRegistration\Event\SyncSubscriber
-        arguments:  ['@janus.sync_service', '@subscription.manager']
-        tags:
-            - {name:kernel.event_subscriber}
 
     subscriber.status_log:
         class: SURFnet\SPRegistration\Event\StatusLogSubscriber
@@ -119,7 +153,7 @@ services:
     janus.sync_service:
         class: SURFnet\SPRegistration\Service\JanusSyncService
         arguments:
-            - '@subscription.manager'
+            - '@subscription.repository.doctrine'
             - '@janus.connection_descriptor_repository'
             - '@janus.connection_repository'
             - '@janus.connection_translator'

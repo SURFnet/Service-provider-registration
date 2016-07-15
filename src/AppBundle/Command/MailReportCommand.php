@@ -29,7 +29,9 @@ class MailReportCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $subscriptions = $this->getContainer()->get('subscription.manager')->getDraftSubscriptions();
+        $container = $this->getContainer();
+        $subscriptions = $container->get('subscription.repository.doctrine')
+            ->findDraftSubscriptions();
 
         $this->getContainer()->get('mail.manager')->sendReport($subscriptions);
 

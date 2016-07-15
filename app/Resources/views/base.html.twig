@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ 'form.title'|trans }}</title>
+    <title>{% block title %}{% endblock %} | {{ 'site.title'|trans }}</title>
 
     {% block stylesheets %}
         <link href="{{ asset('compiled/css/bootstrap.css') }}" rel="stylesheet" media="screen">
@@ -23,8 +23,11 @@
         <div class="col-md-9">
             <div class="page-header">
                 <h1>
-                    <img alt="SURFconext" src="{{ asset('img/surf-conext-logo.png') }}">
-                    {{ 'form.title'|trans }}
+                    <img alt="SURFconext"
+                         src="{{ asset('img/surf-conext-logo.png') }}"
+                        style="float:left">
+                    <div style="float:left; margin-right: 1em">&nbsp;{{ block('title') }}</div>
+                    <br style="clear: both" />
                 </h1>
             </div>
             {% block body %}{% endblock %}

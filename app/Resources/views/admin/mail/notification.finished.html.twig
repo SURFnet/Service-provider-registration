@@ -1,8 +1,13 @@
 Hi,<br/>
 
 <p>
-    A SP registration has just been finished. <br />
-    Link to Janus: <a href="{{ url('admin.subscription.janus', {eid: subscription.janusId} ) }}">{{ url('admin.subscription.janus', {eid: subscription.janusId} ) }}</a>
+    A {{ subscription.environment }} SP registration has just been finished. <br />
+    {% if subscription.janusId  %}
+    Link to Janus:
+    <a href="{{ url('admin.subscription.janus', {eid: subscription.janusId} ) }}">
+        {{ url('admin.subscription.janus', {eid: subscription.janusId} ) }}
+    </a>
+    {% endif %}
 </p>
 
 {% include 'subscription/partials/proplist.html.twig' %}

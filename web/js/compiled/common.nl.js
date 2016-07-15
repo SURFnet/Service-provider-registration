@@ -2496,6 +2496,7 @@ if ('undefined' !== typeof window.Parsley) {
             return false;
         });
     }
+
     function setupHelpPopovers(links, inputs) {
         links.popover({
             container: 'body',
@@ -2821,16 +2822,22 @@ if ('undefined' !== typeof window.Parsley) {
 
     function setupUrlValidation() {
         $('input.url-validated').on('change', function() {
-            var inputEl = this;
+            var inputEl = this, formEl = $('form');
 
             $.ajax({
                 type: "POST",
-                url: window.location.pathname + '/validate-url',
+                url: formEl.data('validate-url'),
                 data: {
                     "url": $(this).val(),
                     "subscription": {
                         "token": $('#subscription__token').val()
                     }
+                },
+                error: function(jqXHR) {
+                    updateErrors(
+                        $(inputEl).parsley(),
+                        [jqXHR.responseText]
+                    );
                 },
                 success: function (data) {
                     if (!data.validation) {
