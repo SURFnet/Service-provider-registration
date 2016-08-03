@@ -51,7 +51,7 @@
     "id": "organizationType",
     "friendlyName": "Organization Type",
     "urns": [
-      "urn:mace:terena.org:attribute-def:schacHomeOrganizationType ",
+      "urn:mace:terena.org:attribute-def:schacHomeOrganizationType",
       "urn:oid:1.3.6.1.4.1.25178.1.2.10"
     ]
   },
@@ -115,7 +115,7 @@
     "id": "personalCode",
     "friendlyName": "Employee\/student number",
     "urns": [
-      "urn:mace:dir:attribute-def:schacPersonalUniqueCode",
+      "urn:schac:attribute-def:schacPersonalUniqueCode",
       "urn:oid:1.3.6.1.4.1.1466.155.121.1.15"
     ]
   }

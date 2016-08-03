@@ -98,7 +98,7 @@ abstract class MetadataUtil
             ),
             'organizationType'   => array(
                 'name'         => array(
-                    'urn:mace:terena.org:attribute-def:schacHomeOrganizationType ',
+                    'urn:mace:terena.org:attribute-def:schacHomeOrganizationType',
                     'urn:oid:1.3.6.1.4.1.25178.1.2.10'
                 ),
                 'friendlyName' => 'Organization Type'
@@ -154,7 +154,7 @@ abstract class MetadataUtil
             ),
             'personalCode'       => array(
                 'name'         => array(
-                    'urn:mace:dir:attribute-def:schacPersonalUniqueCode',
+                    'urn:schac:attribute-def:schacPersonalUniqueCode',
                     'urn:oid:1.3.6.1.4.1.1466.155.121.1.15'
                 ),
                 'friendlyName' => 'Employee/student number'

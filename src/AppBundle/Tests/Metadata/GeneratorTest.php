@@ -176,7 +176,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         // Removed existing attribute based on first key
         $this->assertNotContains(
-            'md:RequestedAttribute Name="urn:mace:dir:attribute-def:schacPersonalUniqueCode"',
+            'md:RequestedAttribute Name="urn:schac:attribute-def:schacPersonalUniqueCode"',
             $xml
         );
         $this->assertNotContains('md:RequestedAttribute Name="urn:oid:1.3.6.1.4.1.1466.155.121.1.15"', $xml);
