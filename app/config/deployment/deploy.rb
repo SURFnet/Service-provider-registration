@@ -27,7 +27,7 @@ set :shared_files,    ["app/config/parameters.yml"]
 set :shared_children, [app_path + "/logs", app_path + "/data", web_path + "/uploads", web_path + "/img/logos"]
 
 set :use_composer, true
-set :copy_vendors, true
+set :copy_vendors, false
 
 set :dump_assetic_assets,   false
 set :update_assets_version, true
