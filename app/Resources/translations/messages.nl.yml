@@ -78,6 +78,7 @@ overview.publish.button.cancel: Terug
 overview.publish.button.confirm: Bevestigen
 overview.publish.intro: "<p>Na het drukken op 'bevestigen' wordt de configuratie gepubliceerd op de Connect omgeving van SURFconext en gekoppeld aan de<a href=\"https://wiki.surfnet.nl/display/surfconextdev/Guest+and+Test+Identity+Providers#GuestandTestIdentityProviders-TestIdentityProviders\" target=\"_blank\"> test/diy IdP</a>. Vervolgens is het mogelijk om de dienst te testen met de test/diy IdP. De configuratie kan op ieder moment worden aangepast via dit formulier.<br /><br />De aanvrager\_(zie tabblad 'algemeen') van dit formulier ontvangt een bevestigingsmail.</p>"
 overview.publish.subtitle: 'Weet je het zeker?'
+overview.publish.title: 'Overzicht'
 overview.subtitle: 'Alles gereed?'
 overview.update.button.cancel: Terug
 overview.update.button.confirm: Bevestigen

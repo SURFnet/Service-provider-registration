@@ -128,6 +128,7 @@ overview.publish.button.cancel: Cancel
 overview.publish.button.confirm: Confirm
 overview.publish.intro: "<p>After pressing 'confirm' the configuration will be published on the SURFconext Connect environment and will immediately be available for testing via the <a href=\"https://wiki.surfnet.nl/display/surfconextdev/Guest+and+Test+Identity+Providers#GuestandTestIdentityProviders-TestIdentityProviders\" target=\"_blank\">test/diy IdP</a>. After publishing this configuration, changes can be made via this form.</p>\n<p>The general contact (see 'general' tab) will receive a confirmation mail.</p>"
 overview.publish.subtitle: 'Are you sure?'
+overview.publish.title: 'Overview'
 overview.subtitle: 'Are you sure?'
 overview.update.button.cancel: Cancel
 overview.update.button.confirm: Confirm
