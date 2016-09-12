@@ -8,6 +8,8 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
+use OpenConext\JanusClient\Entity\ConnectionRepository;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
 
 /**
  * Class GridConfiguration
@@ -16,6 +18,27 @@ use APY\DataGridBundle\Grid\Source\Entity;
  */
 class GridConfiguration
 {
+    /**
+     * @var ConnectionRepository
+     */
+    public $connectionRepository;
+
+    /**
+     * @var CsrfTokenManager
+     */
+    public $tokenManager;
+
+    /**
+     * GridConfiguration constructor.
+     * @param ConnectionRepository $connectionRepository
+     * @param CsrfTokenManager $tokenManager
+     */
+    public function __construct(ConnectionRepository $connectionRepository, CsrfTokenManager $tokenManager)
+    {
+        $this->connectionRepository = $connectionRepository;
+        $this->tokenManager = $tokenManager;
+    }
+
     /**
      * @param Grid   $grid
      * @param string $routeUrl
@@ -124,6 +147,8 @@ class GridConfiguration
         $this->addLinkToJanus($grid);
 
         $this->addMetadataUrlLink($grid);
+
+        $this->addDeleteLink($grid);
     }
 
     /**
@@ -239,6 +264,46 @@ class GridConfiguration
                 return $action->addRouteParameters(
                     array(
                         'eid' => $subscription->getJanusId(),
+                    )
+                );
+            }
+        );
+        $grid->addRowAction($rowAction);
+    }
+
+    /**
+     * @param Grid $grid
+     */
+    private function addDeleteLink(Grid $grid)
+    {
+        $configuration = $this;
+
+        $rowAction = new RowAction('delete', 'admin.subscription.delete', true);
+        $rowAction->manipulateRender(
+            function (RowAction $action, Row $row) use ($configuration) {
+                $subscription = $row->getEntity();
+
+                if (!$subscription instanceof Subscription) {
+                    return null;
+                }
+
+                if (!$subscription->getJanusId()) {
+                    return null;
+                }
+
+                $janusConnection = $configuration->connectionRepository->findById(
+                    $subscription->getJanusId()
+                );
+                if ($janusConnection) {
+                    return null;
+                }
+
+                $token = $configuration->tokenManager->getToken('delete');
+
+                return $action->addRouteParameters(
+                    array(
+                        'subscriptionId' => $subscription->getId(),
+                        'token' => $token->getValue(),
                     )
                 );
             }

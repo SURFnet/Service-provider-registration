@@ -1185,6 +1185,14 @@ class Subscription
     }
 
     /**
+     * @return boolean
+     */
+    public function isArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
      * @return string
      */
     public function getEnvironment()

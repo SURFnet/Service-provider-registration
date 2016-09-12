@@ -26,4 +26,10 @@ interface SubscriptionRepository
      * @return Subscription
      */
     public function update(Subscription $oldSubscription, Subscription $newSubscription);
+
+    /**
+     * @param Subscription $subscription
+     * @return void
+     */
+    public function delete(Subscription $subscription);
 }

@@ -5,11 +5,13 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\Subscription;
 use AppBundle\Entity\SubscriptionRepository;
 use AppBundle\Form\Admin\SubscriptionType;
+use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SURFnet\SPRegistration\Grid\GridConfiguration;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 /**
  * Class GridController
@@ -35,7 +37,10 @@ class SubscriptionController extends Controller implements SecuredController
      */
     public function gridAction()
     {
-        $configuration = new GridConfiguration();
+        $configuration = new GridConfiguration(
+            $this->get('janus.connection_repository'),
+            $this->get('security.csrf.token_manager')
+        );
         $grid = $configuration->configureGrid(
             $this->get('grid'),
             $this->generateUrl('admin.subscription.grid')
@@ -78,6 +83,46 @@ class SubscriptionController extends Controller implements SecuredController
                 'form'         => $form->createView(),
             )
         );
+    }
+
+    /**
+     * @Route("/delete", name="admin.subscription.delete")
+     *
+     * @param string $id
+     *
+     * @return Response
+     */
+    public function deleteAction(Request $request)
+    {
+        $id = $request->get('subscriptionId');
+
+        if (empty($id)) {
+            throw new InvalidArgumentException('No subscription id given');
+        }
+
+        $tokenValue = $request->get('token');
+
+        if (empty($tokenValue)) {
+            throw new InvalidArgumentException('Missing token');
+        }
+
+        $tokenManager = $this->get('security.csrf.token_manager');
+        $isValidCsrfToken = $tokenManager->isTokenValid(
+            new CsrfToken('delete', $tokenValue)
+        );
+        if (!$isValidCsrfToken) {
+            throw new InvalidArgumentException('Invalid CSRF token');
+        }
+
+        $subscription = $this->get('subscription.repository.doctrine')->findById($id);
+
+        if (empty($subscription)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->get('subscription.repository.doctrine')->delete($subscription);
+
+        return $this->redirect($this->generateUrl('admin.subscription.overview'));
     }
 
     /**
