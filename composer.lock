@@ -12,12 +12,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Abhoryo/APYDataGridBundle.git",
+                "url": "https://github.com/APY/APYDataGridBundle.git",
                 "reference": "e961c1958cc3d9a90cc89eff8d94a390661b74c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Abhoryo/APYDataGridBundle/zipball/e961c1958cc3d9a90cc89eff8d94a390661b74c5",
+                "url": "https://api.github.com/repos/APY/APYDataGridBundle/zipball/e961c1958cc3d9a90cc89eff8d94a390661b74c5",
                 "reference": "e961c1958cc3d9a90cc89eff8d94a390661b74c5",
                 "shasum": ""
             },
@@ -1419,6 +1419,7 @@
                 "rest",
                 "web service"
             ],
+            "abandoned": "guzzlehttp/guzzle",
             "time": "2015-03-18 18:23:50"
         },
         {
@@ -1474,16 +1475,16 @@
         },
         {
             "name": "janus-ssp/client",
-            "version": "0.3.2",
+            "version": "0.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/janus-ssp/client.git",
-                "reference": "4a530010121d211252c0d535c441f6fba6409e2c"
+                "reference": "43e0e609821dc6278508752a2c7560f4733b6d3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/janus-ssp/client/zipball/4a530010121d211252c0d535c441f6fba6409e2c",
-                "reference": "4a530010121d211252c0d535c441f6fba6409e2c",
+                "url": "https://api.github.com/repos/janus-ssp/client/zipball/43e0e609821dc6278508752a2c7560f4733b6d3c",
+                "reference": "43e0e609821dc6278508752a2c7560f4733b6d3c",
                 "shasum": ""
             },
             "require": {
@@ -1513,7 +1514,7 @@
                 }
             ],
             "description": "PHP Client for accessing Janus REST API",
-            "time": "2015-09-22 11:47:53"
+            "time": "2016-09-12 07:37:27"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1953,6 +1954,7 @@
                 "rest",
                 "web service"
             ],
+            "abandoned": true,
             "time": "2014-12-01 08:29:51"
         },
         {
@@ -2144,7 +2146,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openid/php-openid/zipball/924f9aa42453cd0f9dba72587b4e2cdf7f4de874",
+                "url": "https://api.github.com/repos/openid/php-openid/zipball/ee669c6a9d4d95b58ecd9b6945627276807694fb",
                 "reference": "ee669c6a9d4d95b58ecd9b6945627276807694fb",
                 "shasum": ""
             },
@@ -3276,6 +3278,7 @@
             ],
             "description": "Polyfill for the DateTimeImmutable class added in PHP 5.5.0",
             "homepage": "https://github.com/thewilkybarkid/date-time-immutable",
+            "abandoned": true,
             "time": "2014-10-23 09:01:18"
         },
         {
