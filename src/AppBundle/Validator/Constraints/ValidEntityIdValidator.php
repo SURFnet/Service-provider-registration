@@ -81,6 +81,10 @@ class ValidEntityIdValidator extends ConstraintValidator
             return;
         }
 
+        if ($subscription->isForProduction()) {
+            return;
+        }
+
         try {
             $entity = $this->janus->findByName($value);
         } catch (\Exception $e) {

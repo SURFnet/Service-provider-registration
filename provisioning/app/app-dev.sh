@@ -11,9 +11,7 @@ npm install -g -q uglifycss
 yum -y -q install ant
 yum -y -q install ant-apache-regexp
 
-# @todo broken:
-# ==> default: ERROR:  Error installing capifony:
-# ==> default: 	highline requires Ruby version >= 1.9.3.
-
-#yum -y install rubygems
-#gem install capifony
+yum -y install rubygems
+gem install highline --version "=1.6.2"
+gem install net-ssh --version "=2.9.2"
+gem install capifony

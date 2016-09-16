@@ -69,6 +69,15 @@ final class DoctrineSubscriptionRepository extends EntityRepository implements S
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function delete(Subscription $subscription)
+    {
+        $this->_em->remove($subscription);
+        $this->_em->flush($subscription);
+    }
+
+    /**
      * Save a subscription.
      *
      * @param Subscription $subscription

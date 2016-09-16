@@ -171,6 +171,7 @@ services:
                     timeout: 10
                     connect_timeout: 5
                     http_errors: false
+                    exceptions: false
 
     janus.connection_descriptor_assembler:
         class: OpenConext\JanusClient\Entity\Assembler\ConnectionDescriptorAssembler

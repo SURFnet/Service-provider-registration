@@ -47,13 +47,23 @@ class SessionSubscriptionRepository implements SubscriptionRepository
     /**
      * @param Subscription $subscription
      */
+    public function delete(Subscription $subscription)
+    {
+        $subscriptionSessionId = $this->buildSubscriptionIdentifier($subscription);
+
+        $this->session->remove($subscriptionSessionId);
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
     private function save(Subscription $subscription)
     {
-        $sessionId = 'subscription-' . $subscription->getId();
+        $subscriptionSessionId = $this->buildSubscriptionIdentifier($subscription);
 
         $this->em->detach($subscription);
 
-        $this->session->set($sessionId, $subscription);
+        $this->session->set($subscriptionSessionId, $subscription);
     }
 
     /**
@@ -76,4 +86,14 @@ class SessionSubscriptionRepository implements SubscriptionRepository
      * @var EntityManager
      */
     private $em;
+
+    /**
+     * @param Subscription $subscription
+     * @return string
+     */
+    private function buildSubscriptionIdentifier(Subscription $subscription)
+    {
+        $sessionId = 'subscription-' . $subscription->getId();
+        return $sessionId;
+    }
 }

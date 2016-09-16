@@ -242,7 +242,7 @@ class MailManager
         );
         $message->setBody(
             $this->renderView(
-                'confirmation.updated.' . $subscription->getLocale() . '.html.twig',
+                $subscription->getEnvironment() . '.confirmation.updated.' . $subscription->getLocale() . '.html.twig',
                 array('subscription' => $subscription)
             ),
             'text/html'

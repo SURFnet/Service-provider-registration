@@ -57,6 +57,14 @@ class SynchronizedSubscriptionRepository implements SubscriptionRepository
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function delete(Subscription $newSubscription)
+    {
+        $this->doctrineRepository->delete($newSubscription);
+    }
+
+    /**
      * @param Subscription $subscription
      * @return bool
      */

@@ -52,6 +52,7 @@ class ImportTemplatesCommand extends ContainerAwareCommand
             $manager->remove($template);
             $output->writeln("<info>Removed " . $template->getName() . "<info>");
         }
+        $manager->flush();
 
         foreach ($files as $file) {
             $name = basename($file);

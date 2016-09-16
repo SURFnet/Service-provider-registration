@@ -11,9 +11,9 @@ set :scm,        :git
 set :branch,     "release"
 
 ssh_options[:forward_agent] = true
-set :user,                "bas"
+set :user,                "boy"
 set :use_sudo,            false
-set :webserver_user,      "support_surfconext"
+set :webserver_user,      "apache"
 
 set :permission_method,   :acl
 set :use_set_permissions, true
@@ -27,7 +27,7 @@ set :shared_files,    ["app/config/parameters.yml"]
 set :shared_children, [app_path + "/logs", app_path + "/data", web_path + "/uploads", web_path + "/img/logos"]
 
 set :use_composer, true
-set :copy_vendors, true
+set :copy_vendors, false
 
 set :dump_assetic_assets,   false
 set :update_assets_version, true
@@ -53,7 +53,7 @@ after "symfony:doctrine:schema:update", "symfony:update_translations"
 namespace :symfony do
   desc "Updates templates"
   task :update_templates, :roles => :app, :except => { :no_release => true } do
-    stream "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} app:templates:sync #{console_options}'"
+    stream "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} app:templates:import #{console_options}'"
   end
 end
 
@@ -73,7 +73,7 @@ namespace :symfony do
   desc "Clear accelerator cache"
   task :clear_accelerator_cache do
     capifony_pretty_print "--> Clear accelerator cache"
-    run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} cache:accelerator:clear #{console_options}'"
+    run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} cache:accelerator:clear --cli #{console_options}'"
     capifony_puts_ok
   end
 end

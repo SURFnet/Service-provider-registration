@@ -30,8 +30,8 @@ $metadata['https://serviceregistry.dev.support.surfconext.nl/saml2/idp/metadata.
     'NameIDFormat' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
 );
 
-$metadata['https://engine.surfconext.nl/authentication/idp/metadata/vo:managementvo'] = array(
-    'entityid'                  => 'https://engine.surfconext.nl/authentication/idp/metadata/vo:managementvo',
+$metadata['https://engine.surfconext.nl/authentication/idp/metadata'] = array(
+    'entityid'                  => 'https://engine.surfconext.nl/authentication/idp/metadata',
     'description'               =>
         array(
             'en' => 'SURFnet BV',
@@ -93,7 +93,7 @@ $metadata['https://engine.surfconext.nl/authentication/idp/metadata/vo:managemen
             0 =>
                 array(
                     'Binding'  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                    'Location' => 'https://engine.surfconext.nl/authentication/idp/single-sign-on/vo:managementvo',
+                    'Location' => 'https://engine.surfconext.nl/authentication/idp/single-sign-on',
                 ),
         ),
     'SingleLogoutService'       =>
