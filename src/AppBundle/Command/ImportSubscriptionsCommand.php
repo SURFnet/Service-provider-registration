@@ -133,6 +133,7 @@ class ImportSubscriptionsCommand extends ContainerAwareCommand
 
         $output->writeln("Starting import of subscriptions from v$version instance database at '$dsnUrl'.");
         while ($row = $queryResult->fetch(PDO::FETCH_ASSOC)) {
+            $row = $this->setRowArchived($row);
             $row = $this->setRowEnvironment($row, $version, $environment);
             $row = $this->setRowStatus($row, $version);
 
@@ -167,8 +168,23 @@ class ImportSubscriptionsCommand extends ContainerAwareCommand
 
     /**
      * @param array $row
+     * @return array
+     */
+    private function setRowArchived(array $row)
+    {
+        if (isset($row['archived'])) {
+            return $row;
+        }
+
+        $row['archived'] = 'No';
+        return $row;
+    }
+
+    /**
+     * @param array $row
      * @param int $version
      * @param string $environment
+     * @return array
      */
     private function setRowEnvironment(array $row, $version, $environment)
     {
