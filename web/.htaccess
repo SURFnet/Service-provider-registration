@@ -3,8 +3,11 @@
 # mod_rewrite). Additionally, this reduces the matching process for the
 # start page (path "/") because otherwise Apache will apply the rewriting rules
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
+<IfModule mod_dir.c>
+
 DirectoryIndex app.php
 
+</IfModule>
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -188,7 +191,7 @@ AddDefaultCharset utf-8
     # (for Apache versions below 2.3.7, you don't need to enable `mod_filter`
     #  and can remove the `<IfModule mod_filter.c>` and `</IfModule>` lines
     #  as `AddOutputFilterByType` is still in the core directives).
-#    <IfModule mod_filter.c>
+<IfModule mod_filter.c>
         AddOutputFilterByType DEFLATE application/atom+xml \
                                       application/javascript \
                                       application/json \
@@ -206,7 +209,7 @@ AddDefaultCharset utf-8
                                       text/plain \
                                       text/x-component \
                                       text/xml
-#    </IfModule>
+</IfModule>
 
 </IfModule>
 
