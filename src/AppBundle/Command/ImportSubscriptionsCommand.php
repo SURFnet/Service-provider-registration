@@ -170,7 +170,8 @@ class ImportSubscriptionsCommand extends ContainerAwareCommand
         return $parsedDsnUrl['scheme'] . ':'
             . 'host=' . $parsedDsnUrl['host'] . ';'
             . 'dbname=' . substr($parsedDsnUrl['path'], 1)
-            . (isset($parsedDsnUrl['port']) ? 'port=' . $parsedDsnUrl['port'] . ';': '');
+            . (isset($parsedDsnUrl['port']) ? 'port=' . $parsedDsnUrl['port'] . ';': '')
+            . 'charset=utf8;';
     }
 
     /**
