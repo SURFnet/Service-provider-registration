@@ -140,10 +140,17 @@ class ImportSubscriptionsCommand extends ContainerAwareCommand
             $newRow = array();
             foreach ($this->subscriptionFields as $fieldName) {
                 if (!array_key_exists($fieldName, $row)) {
-                    $output->writeln("{$row['id']} Setting $fieldName to NULL", OutputInterface::VERBOSITY_VERBOSE);
+                    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                        $output->writeln("{$row['id']} Setting $fieldName to NULL");
+                    }
                     $row[$fieldName] = null;
                 }
                 $newRow[] = $row[$fieldName];
+            }
+
+            if ($output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG) {
+                $output->writeln("From: " . print_r($row, true));
+                $output->writeln("To: " . print_r($newRow, true));
             }
 
             $insertQuery->execute($newRow);
