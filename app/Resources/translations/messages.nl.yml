@@ -117,3 +117,6 @@ connect.mail.confirmation.published.subject: 'Nieuwe SP gepubliceerd op SURFcone
 connect.mail.confirmation.updated.subject: 'Configuratie geüpdatet (%ticketNo%)'
 connect.mail.creation.subject: 'Nieuwe SP Registratieformulier aangemaakt (%ticketNo%)'
 connect.mail.notification.published.subject: '(%ticketNo%) %nameEn% registratieformulier gepubliceerd'
+overview.finish.title: __overview.finish.title
+thanks.finish.title: __thanks.finish.title
+production.overview.finish.title: __production.overview.finish.title

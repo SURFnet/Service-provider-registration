@@ -170,3 +170,6 @@ mail.confirmation.published.subject: 'New SP published on SURFconext test enviro
 mail.confirmation.finished.subject: 'Finished confirmation for SURFnet SP Registration (%ticketNo%)'
 mail.notification.updated.subject: '(%ticketNo%) %nameEn% updated registration form'
 mail.confirmation.updated.subject: 'Updated confirmation for SURFnet SP Registration (%ticketNo%)'
+overview.finish.title: __overview.finish.title
+thanks.finish.title: __thanks.finish.title
+production.overview.finish.title: __production.overview.finish.title
