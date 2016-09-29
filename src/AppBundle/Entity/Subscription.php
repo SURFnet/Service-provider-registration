@@ -417,6 +417,11 @@ class Subscription
      */
     public function publish()
     {
+        if (!$this->isForConnect()) {
+            throw new RuntimeException(
+                "Invalid transition for production subscription"
+            );
+        }
         if (!$this->isDraft()) {
             throw new RuntimeException(
                 "Invalid transition from {$this->status} to published"
@@ -433,6 +438,11 @@ class Subscription
      */
     public function revertToPublished()
     {
+        if (!$this->isForConnect()) {
+            throw new RuntimeException(
+                "Invalid transition for production subscription"
+            );
+        }
         if (!$this->isFinished()) {
             throw new RuntimeException(
                 "Invalid transition from {$this->status} back to published"
