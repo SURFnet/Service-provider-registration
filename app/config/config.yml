@@ -103,6 +103,7 @@ monolog:
             to_email:   "%error_mail_address%"
             subject:    "%error_mail_subject%"
             level:      debug
+            formatter: monolog.full_trace_formatter
         metadata:
             type:     stream
             path:     "%kernel.logs_dir%/metadata.log"

@@ -315,3 +315,8 @@ services:
         class: SURFnet\SPRegistration\Service\TransparantImageResizeService
         arguments: ['%kernel.root_dir%/../web/img/logos/', '@router']
         scope: request
+
+    monolog.full_trace_formatter:
+        class: Monolog\Formatter\LineFormatter
+        calls:
+            - [includeStacktraces]
