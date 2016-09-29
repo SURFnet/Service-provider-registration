@@ -24,7 +24,7 @@ error.general.body: 'An unexpected error occurred, the admin has been notified. 
 error.general.title: 'An error occurred.'
 'Eula url': 'Eula URL'
 'First name': 'First name'
-form.button.finish: Submit
+form.button.finish: 'To production'
 form.button.next: Next
 form.button.previous: Previous
 form.button.publish: Publish
@@ -93,10 +93,10 @@ form.title: 'Service Provider registration form (Connect environment)'
 key: Key
 'Last name': 'Last name'
 'Logo url': 'Logo URL'
-connect.mail.confirmation.finished.subject: 'Finished confirmation for SURFnet SP Registration (%ticketNo%)'
-connect.mail.confirmation.published.subject: 'New SP published on SURFconext test environment (%ticketNo%)'
-connect.mail.confirmation.updated.subject: 'Updated confirmation for SURFnet SP Registration (%ticketNo%)'
-connect.mail.creation.subject: 'SURFnet SP Registration has been Created (%ticketNo%)'
+connect.mail.confirmation.finished.subject: 'Production connection has been requested (%ticketNo%)'
+connect.mail.confirmation.published.subject: 'New SP published on SURFconext connect environment (%ticketNo%)'
+connect.mail.confirmation.updated.subject: 'Configuration updated (%ticketNo%)'
+connect.mail.creation.subject: 'New SP Registration form has been created (%ticketNo%)'
 connect.mail.error.subject: 'SURFnet SP Registration Form Export Generation Error'
 connect.mail.invitation.subject: '%ticketNo% Invitation for SURFconext SP Registration form'
 connect.mail.notification.finished.subject: '(%ticketNo%) %nameEn% finished registration form'
@@ -128,7 +128,7 @@ overview.publish.button.cancel: Cancel
 overview.publish.button.confirm: Confirm
 overview.publish.intro: "<p>After pressing 'confirm' the configuration will be published on the SURFconext Connect environment and will immediately be available for testing via the <a href=\"https://wiki.surfnet.nl/display/surfconextdev/Guest+and+Test+Identity+Providers#GuestandTestIdentityProviders-TestIdentityProviders\" target=\"_blank\">test/diy IdP</a>. After publishing this configuration, changes can be made via this form.</p>\n<p>The general contact (see 'general' tab) will receive a confirmation mail.</p>"
 overview.publish.subtitle: 'Are you sure?'
-overview.publish.title: 'Overview'
+overview.publish.title: Overview
 overview.subtitle: 'Are you sure?'
 overview.update.button.cancel: Cancel
 overview.update.button.confirm: Confirm
