@@ -120,3 +120,7 @@ connect.mail.notification.published.subject: '(%ticketNo%) %nameEn% registratief
 overview.finish.title: __overview.finish.title
 thanks.finish.title: __thanks.finish.title
 production.overview.finish.title: __production.overview.finish.title
+production.overview.finish.subtitle: __production.overview.finish.subtitle
+production.overview.finish.intro: __production.overview.finish.intro
+production.overview.finish.button.cancel: __production.overview.finish.button.cancel
+production.overview.finish.button.confirm: __production.overview.finish.button.confirm

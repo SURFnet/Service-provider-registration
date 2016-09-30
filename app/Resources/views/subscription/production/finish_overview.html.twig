@@ -2,21 +2,21 @@
 
 {% block title %}{{ 'production.overview.finish.title'|trans }}{% endblock %}
 {% block body %}
-    <h2>{{ 'overview.finish.subtitle'|trans }}</h2>
+    <h2>{{ 'production.overview.finish.subtitle'|trans }}</h2>
 
     <p>
-        {{ 'overview.finish.intro'|trans|raw }}
+        {{ 'production.overview.finish.intro'|trans|raw }}
     </p>
 
     {% include 'subscription/partials/proplist.html.twig' %}
 
     <a href="{{ path('connect_published_edit', {id: subscription.id}) }}" class="btn btn-default">
-        {{ 'overview.finish.button.cancel'|trans }}
+        {{ 'production.overview.finish.button.cancel'|trans }}
     </a>
     <form method="post" style="display: inline;">
         <input type="submit"
                 class="btn btn-primary"
-                value="{{ 'overview.finish.button.confirm'|trans }}">
+                value="{{ 'production.overview.finish.button.confirm'|trans }}">
     </form>
 
 {% endblock %}
