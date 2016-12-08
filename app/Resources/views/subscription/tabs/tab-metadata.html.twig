@@ -1,29 +1,25 @@
 <fieldset>
     <div class="row">
         <div class="col-xs-11">
-            {{ form_row(form.importUrl) }}
-            {{
-                form_row(
-                    form.import,
-                    {
-                        'attr': {
-                            'data-requestedState': 'import'
+            <div class="form-group has-feedback">
+                {{ form_label(form.importUrl) }}
+                <div class="col-lg-8">
+                {{ form_widget(form.importUrl) }}
+                {{ form_errors(form.importUrl) }}
+                </div>
+                <div class="col-lg-1">
+                {{
+                    form_widget(
+                        form.import,
+                        {
+                            'attr': {
+                                'data-requestedState': 'import'
+                            }
                         }
-                    }
-                )
-            }}
-        </div>
-        <div class="col-xs-1">
-            {{
-                form_widget(
-                    form.import,
-                    {
-                        'attr': {
-                            'data-requestedState': 'import',
-                        },
-                    }
-                )
-            }}
+                    )
+                }}
+                </div>
+            </div>
         </div>
         <div class="col-xs-1">
             <a href="#" class="btn btn-link popover-link" data-content="{{ 'form.help.metadataUrl'|trans|escape('html_attr') }}">
