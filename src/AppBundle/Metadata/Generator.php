@@ -6,7 +6,9 @@ use AppBundle\Entity\Subscription;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use Doctrine\Common\Cache\Cache;
+use InvalidArgumentException;
 use Monolog\Logger;
+use SimpleXMLElement;
 
 /**
  * Class Generator
@@ -37,26 +39,37 @@ class Generator extends MetadataUtil
     public function generate(Subscription $subscription)
     {
         $xml = $subscription->getMetadataXml();
+
+        if (empty($xml)) {
+            throw new InvalidArgumentException(
+                'Subscription without metadata xml: ' . $subscription->getId()
+            );
+        }
+
         $xml = simplexml_load_string($xml);
 
+        if (!$xml instanceof SimpleXMLElement) {
+            throw new InvalidArgumentException(
+                'Subscription without invalid xml: ' . $subscription->getId()
+            );
+        }
+
         $children = $xml->children(self::NS_SAML);
-        /** @var \SimpleXMLElement $descriptor */
+        /** @var SimpleXMLElement $descriptor */
         $descriptor = $children->SPSSODescriptor;
 
         $this->generateUi($descriptor, $subscription);
         $this->generateContacts($xml, $subscription);
         $this->generateAttributes($descriptor, $subscription);
 
-        $xml = $xml->asXML();
-
-        return $xml;
+        return $xml->asXML();
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      * @param Subscription      $subscription
      */
-    private function generateUi(\SimpleXMLElement $xml, Subscription $subscription)
+    private function generateUi(SimpleXMLElement $xml, Subscription $subscription)
     {
         $extensions = $this->setNode($xml, 'md:Extensions', null, array(), array('md' => self::NS_SAML), array(), 0);
         $ui = $this->setNode($extensions, 'ui:UIInfo', null, array(), array('ui' => self::NS_UI));
@@ -110,10 +123,10 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      * @param Subscription      $subscription
      */
-    private function generateLogo(\SimpleXMLElement $xml, Subscription $subscription)
+    private function generateLogo(SimpleXMLElement $xml, Subscription $subscription)
     {
         $logo = $subscription->getLogoUrl();
         if (empty($logo)) {
@@ -141,10 +154,10 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      * @param Subscription      $subscription
      */
-    private function generateContacts(\SimpleXMLElement $xml, Subscription $subscription)
+    private function generateContacts(SimpleXMLElement $xml, Subscription $subscription)
     {
         if ($subscription->getSupportContact() instanceof Contact) {
             $this->generateContact($xml, $subscription->getSupportContact(), 'support');
@@ -160,11 +173,11 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      * @param Contact           $contact
      * @param                   $type
      */
-    private function generateContact(\SimpleXMLElement $xml, Contact $contact, $type)
+    private function generateContact(SimpleXMLElement $xml, Contact $contact, $type)
     {
         $node = $this->setNode(
             $xml,
@@ -181,10 +194,10 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      * @param Subscription      $subscription
      */
-    private function generateAttributes(\SimpleXMLElement $xml, Subscription $subscription)
+    private function generateAttributes(SimpleXMLElement $xml, Subscription $subscription)
     {
         if (!$this->hasRequestedAttributes($subscription)) {
             $this->removeNode($xml, 'md:AttributeConsumingService', array(), array('md' => self::NS_SAML));
@@ -242,11 +255,11 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      * @param array             $names
      * @param string            $friendlyName
      */
-    private function generateAttribute(\SimpleXMLElement $xml, array $names, $friendlyName)
+    private function generateAttribute(SimpleXMLElement $xml, array $names, $friendlyName)
     {
         // First try to find an existing node
         foreach ($names as $name) {
@@ -275,10 +288,10 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param SimpleXMLElement $xml
      * @param array             $names
      */
-    private function removeAttribute(\SimpleXMLElement $xml, array $names)
+    private function removeAttribute(SimpleXMLElement $xml, array $names)
     {
         foreach ($names as $name) {
             $node = $this->findNode(
@@ -297,7 +310,7 @@ class Generator extends MetadataUtil
     /**
      * Update (or Add if it not exists) a child node with the specified value
      *
-     * @param \SimpleXMLElement $rootNode
+     * @param SimpleXMLElement $rootNode
      * @param string            $nodeName
      * @param string            $value
      * @param array             $attributes
@@ -305,10 +318,10 @@ class Generator extends MetadataUtil
      * @param array             $anss     attribute namespaces
      * @param null              $position to add the element, if null, it will be appended to rootNode
      *
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
     private function setNode(
-        \SimpleXMLElement $rootNode,
+        SimpleXMLElement $rootNode,
         $nodeName,
         $value = null,
         $attributes = array(),
@@ -330,15 +343,15 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $rootNode
+     * @param SimpleXMLElement $rootNode
      * @param string            $nodeName
      * @param array             $attributes
      * @param array             $nss
      *
-     * @return null|\SimpleXMLElement
+     * @return null|SimpleXMLElement
      */
     private function findNode(
-        \SimpleXMLElement $rootNode,
+        SimpleXMLElement $rootNode,
         $nodeName,
         $attributes = array(),
         $nss = array()
@@ -363,7 +376,7 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $rootNode
+     * @param SimpleXMLElement $rootNode
      * @param string            $nodeName
      * @param null              $value
      * @param array             $attributes
@@ -371,10 +384,10 @@ class Generator extends MetadataUtil
      * @param array             $anss
      * @param null              $position
      *
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      */
     private function addNode(
-        \SimpleXMLElement $rootNode,
+        SimpleXMLElement $rootNode,
         $nodeName,
         $value = null,
         $attributes = array(),
@@ -394,14 +407,14 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $rootNode
+     * @param SimpleXMLElement $rootNode
      * @param string            $nodeName
      * @param array             $attributes
      * @param array             $cnss
      * @param array             $anss
      */
     private function removeNode(
-        \SimpleXMLElement $rootNode,
+        SimpleXMLElement $rootNode,
         $nodeName,
         $attributes = array(),
         $cnss = array(),
@@ -415,7 +428,7 @@ class Generator extends MetadataUtil
     }
 
     /**
-     * @param \SimpleXMLElement $parent
+     * @param SimpleXMLElement $parent
      * @param string            $nodeName
      * @param string            $value
      * @param string            $ns
@@ -423,7 +436,7 @@ class Generator extends MetadataUtil
      *
      * @return \DOMElement
      */
-    private function addChildNodeAt(\SimpleXMLElement $parent, $nodeName, $value = null, $ns = null, $position = null)
+    private function addChildNodeAt(SimpleXMLElement $parent, $nodeName, $value = null, $ns = null, $position = null)
     {
         $parent = dom_import_simplexml($parent);
 
