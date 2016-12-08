@@ -57,6 +57,10 @@ class Generator
         }
 
         $children = $xml->children(self::NS_SAML);
+
+        // Remove the Signature if it exists.
+        unset($children->Signature);
+
         /** @var SimpleXMLElement $descriptor */
         $descriptor = $children->SPSSODescriptor;
 
