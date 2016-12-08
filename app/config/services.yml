@@ -247,7 +247,7 @@ services:
 
     subscription.form.factory:
         class: AppBundle\Form\SubscriptionTypeFactory
-        arguments:  ['@form.factory', '@lock.manager', '@parser', '@image_resize_service']
+        arguments:  ['@form.factory', '@lock.manager', '@fetcher', '@parser', '@image_resize_service']
         scope: request
 
     validator.mapping.cache.cache:

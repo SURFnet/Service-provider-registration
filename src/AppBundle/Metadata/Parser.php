@@ -70,6 +70,7 @@ class Parser
     }
 
     /**
+     * @deprecated Use Fetcher separately.
      * @param string $metadataUrl
      *
      * @return Metadata

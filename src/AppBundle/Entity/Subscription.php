@@ -134,6 +134,8 @@ class Subscription
     private $contact;
 
     /**
+     * Metadata URL that import last happened from.
+     *
      * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
@@ -148,7 +150,23 @@ class Subscription
      *      groups={"finished"}
      * )
      */
+    private $importUrl;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
     private $metadataUrl;
+
+    /**
+     * SAML XML Metadata for entity.
+     *
+     * Imported from metadataurl.
+     *
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $metadataXml;
 
     /**
      * @var string
@@ -417,6 +435,10 @@ class Subscription
      */
     public function publish()
     {
+        if ($this->status === self::STATE_PUBLISHED) {
+            return $this;
+        }
+
         if (!$this->isForConnect()) {
             throw new RuntimeException(
                 "Invalid transition for production subscription"
@@ -438,6 +460,10 @@ class Subscription
      */
     public function revertToPublished()
     {
+        if ($this->status === self::STATE_PUBLISHED) {
+            return $this;
+        }
+
         if (!$this->isForConnect()) {
             throw new RuntimeException(
                 "Invalid transition for production subscription"
@@ -467,6 +493,10 @@ class Subscription
      */
     public function finish()
     {
+        if ($this->status === self::STATE_FINISHED) {
+            return $this;
+        }
+
         if ($this->isForConnect() && !$this->isPublished()) {
             throw new RuntimeException(
                 "May not skip published for connect subscriptions"
@@ -1232,5 +1262,37 @@ class Subscription
     public function isForConnect()
     {
         return $this->environment === static::ENVIRONMENT_CONNECT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImportUrl()
+    {
+        return $this->importUrl;
+    }
+
+    /**
+     * @param string $importUrl
+     */
+    public function setImportUrl($importUrl)
+    {
+        $this->importUrl = $importUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetadataXml()
+    {
+        return $this->metadataXml;
+    }
+
+    /**
+     * @param string $metadataXml
+     */
+    public function setMetadataXml($metadataXml)
+    {
+        $this->metadataXml = $metadataXml;
     }
 }
