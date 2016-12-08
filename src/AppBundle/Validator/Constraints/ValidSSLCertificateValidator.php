@@ -71,37 +71,5 @@ class ValidSSLCertificateValidator extends ConstraintValidator
 
             return;
         }
-
-        $this->validateUniqueness($value);
-    }
-
-    /**
-     * @param string $value
-     */
-    private function validateUniqueness($value)
-    {
-        if ($this->context->getRoot() instanceof Subscription) {
-            $acsLocation = $this->context->getRoot()->getAcsLocation();
-        } else {
-            $acsLocation = $this->context->getRoot()->getData()->getAcsLocation();
-        }
-
-        try {
-            $acsCert = $this->fetcher->fetch($acsLocation);
-        } catch (InvalidArgumentException $e) {
-            $this->context->addViolation('ACSLocation unreachable or invalid cert found.');
-
-            return;
-        }
-
-        if (!$acsCert) {
-            return;
-        }
-
-        $acsCert = $this->parser->parse($acsCert);
-
-        if ($value === $acsCert) {
-            $this->context->addViolation('Certificate matches certificate of ACSLocation which is not allowed.');
-        }
     }
 }
