@@ -112,4 +112,14 @@ class Metadata
      * @var Attribute
      */
     public $personalCodeAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $scopedAffiliationAttribute;
+
+    /**
+     * @var Attribute
+     */
+    public $eduPersonTargetedIDAttribute;
 }
