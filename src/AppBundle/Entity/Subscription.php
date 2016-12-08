@@ -435,6 +435,10 @@ class Subscription
      */
     public function publish()
     {
+        if ($this->status === self::STATE_PUBLISHED) {
+            return $this;
+        }
+
         if (!$this->isForConnect()) {
             throw new RuntimeException(
                 "Invalid transition for production subscription"
@@ -456,6 +460,10 @@ class Subscription
      */
     public function revertToPublished()
     {
+        if ($this->status === self::STATE_PUBLISHED) {
+            return $this;
+        }
+
         if (!$this->isForConnect()) {
             throw new RuntimeException(
                 "Invalid transition for production subscription"
@@ -485,6 +493,10 @@ class Subscription
      */
     public function finish()
     {
+        if ($this->status === self::STATE_FINISHED) {
+            return $this;
+        }
+
         if ($this->isForConnect() && !$this->isPublished()) {
             throw new RuntimeException(
                 "May not skip published for connect subscriptions"
