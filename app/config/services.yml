@@ -12,7 +12,7 @@ services:
 
     fetcher:
         class: AppBundle\Metadata\Fetcher
-        arguments: ['@guzzle.client', '@monolog.logger.metadata']
+        arguments: ['@guzzle.client', '@monolog.logger.metadata', '%metadata_url_timeout%']
 
     parser:
         class: AppBundle\Metadata\Parser

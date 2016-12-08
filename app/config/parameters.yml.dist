@@ -38,3 +38,5 @@ parameters:
     error_mail_subject: Service Provider Registration Error
 
     ssllabs_required_grade: B
+
+    metadata_url_timeout: 30

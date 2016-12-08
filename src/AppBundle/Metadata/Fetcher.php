@@ -17,15 +17,26 @@ class Fetcher
     private $guzzle;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * @var int
+     */
+    private $timeout;
+
+    /**
      * Constructor
      *
      * @param Client $guzzle
      * @param Logger $logger
      */
-    public function __construct(Client $guzzle, Logger $logger)
+    public function __construct(Client $guzzle, Logger $logger, $timeout)
     {
         $this->guzzle = $guzzle;
         $this->logger = $logger;
+        $this->timeout = (int) $timeout;
     }
 
     /**
@@ -36,8 +47,13 @@ class Fetcher
     public function fetch($url)
     {
         try {
-            $xml = $this->guzzle->get($url, null, array('timeout' => 10, 'verify' => false))->send()->xml();
-            $xml = $xml->asXML();
+            $guzzleOptions = [ 'timeout' => $this->timeout, 'verify' => false ];
+            $request = $this->guzzle->get($url, null, $guzzleOptions);
+
+            $response = $request->send();
+
+            $responseSimpleXml = $response->xml();
+            return $responseSimpleXml->asXML();
         } catch (CurlException $e) {
             $this->logger->addInfo('Metadata CURL exception', array('e' => $e));
 
