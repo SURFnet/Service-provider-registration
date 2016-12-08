@@ -36,12 +36,7 @@ class Generator extends MetadataUtil
      */
     public function generate(Subscription $subscription)
     {
-//        $cacheId = 'generated-xml-' . $subscription->getId();
-//        if (false !== ($xml = $this->cache->fetch($cacheId))) {
-//            return $xml;
-//        }
-
-        $xml = $this->fetcher->fetch($subscription->getMetadataUrl());
+        $xml = $subscription->getMetadataXml();
         $xml = simplexml_load_string($xml);
 
         $children = $xml->children(self::NS_SAML);
@@ -53,8 +48,6 @@ class Generator extends MetadataUtil
         $this->generateAttributes($descriptor, $subscription);
 
         $xml = $xml->asXML();
-
-//        $this->cache->save($cacheId, $xml, 60 * 60);
 
         return $xml;
     }
