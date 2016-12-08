@@ -118,5 +118,13 @@
       "urn:schac:attribute-def:schacPersonalUniqueCode",
       "urn:oid:1.3.6.1.4.1.1466.155.121.1.15"
     ]
+  },
+  {
+    "id": "eduPersonTargetedID",
+    "friendlyName": "eduPersonTargetedID",
+    "urns": [
+      "urn:mace:dir:attribute-def:eduPersonTargetedID",
+      "urn:oid:1.3.6.1.4.1.5923.1.1.1.10"
+    ]
   }
 ]

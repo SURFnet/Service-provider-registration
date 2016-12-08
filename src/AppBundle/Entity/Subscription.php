@@ -381,6 +381,22 @@ class Subscription
     private $personalCodeAttribute;
 
     /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $scopedAffiliationAttribute;
+
+    /**
+     * @var Attribute
+     * @ORM\Column(type="object", nullable=true)
+     * @Assert\Type(type="AppBundle\Model\Attribute")
+     * @Assert\Valid()
+     */
+    private $eduPersonTargetedIDAttribute;
+
+    /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
      */
@@ -1159,6 +1175,44 @@ class Subscription
     public function setPersonalCodeAttribute($personalCodeAttribute)
     {
         $this->personalCodeAttribute = $personalCodeAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getScopedAffiliationAttribute()
+    {
+        return $this->scopedAffiliationAttribute;
+    }
+
+    /**
+     * @param Attribute $scopedAffiliationAttribute
+     * @return $this
+     */
+    public function setScopedAffiliationAttribute($scopedAffiliationAttribute)
+    {
+        $this->scopedAffiliationAttribute = $scopedAffiliationAttribute;
+
+        return $this;
+    }
+
+    /**
+     * @return Attribute
+     */
+    public function getEduPersonTargetedIDAttribute()
+    {
+        return $this->eduPersonTargetedIDAttribute;
+    }
+
+    /**
+     * @param Attribute $eduPersonTargetedIDAttribute
+     * @return $this
+     */
+    public function setEduPersonTargetedIDAttribute($eduPersonTargetedIDAttribute)
+    {
+        $this->eduPersonTargetedIDAttribute = $eduPersonTargetedIDAttribute;
 
         return $this;
     }
