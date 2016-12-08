@@ -3,16 +3,20 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Metadata\Fetcher;
 use AppBundle\Metadata\Parser;
 use AppBundle\Model\Attribute;
 use AppBundle\Model\Contact;
 use AppBundle\Model\Metadata;
+use Exception;
 use SURFnet\SPRegistration\ImageDimensions;
 use SURFnet\SPRegistration\Service\TransparantImageResizeService;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Button;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -37,14 +41,21 @@ class SubscriptionType extends AbstractType
     private $transparantImageResizeService;
 
     /**
+     * @var
+     */
+    private $fetcher;
+
+    /**
      * @param Parser           $parser
      * @param SessionInterface $session
      */
     public function __construct(
+        Fetcher $fetcher,
         Parser $parser,
         SessionInterface $session,
         TransparantImageResizeService $resizeService
     ) {
+        $this->fetcher = $fetcher;
         $this->parser = $parser;
         $this->session = $session;
         $this->transparantImageResizeService = $resizeService;
@@ -59,11 +70,15 @@ class SubscriptionType extends AbstractType
         $builder
             ->add('contact', new ContactType(false), array('by_reference' => false))
             // Tab Metadata
-            ->add('metadataUrl', 'url', array('default_protocol' => 'https'))
-            ->add('acsLocation', null, array('read_only' => true)) // @todo: these should be disabled, but then validation is harder..
-            ->add('entityId', null, array('read_only' => true))
+            ->add('importUrl', 'url', array('default_protocol' => 'https'))
+            ->add('import', 'submit')
+            ->add('metadataUrl', 'hidden', array('required' => false))
+            ->add('metadataXml', 'hidden', array('required' => false))
+            // @todo: these should be disabled, but then validation is harder..
+            ->add('acsLocation', null, array('read_only' => true, 'required' => false))
+            ->add('entityId', null, array('read_only' => true, 'required' => false))
             ->add('certificate', null, array('read_only' => true))
-            ->add('logoUrl')
+            ->add('logoUrl', null, array('required' => false))
             ->add('nameEn')
             ->add('descriptionEn')
             ->add('nameNl')
@@ -74,12 +89,12 @@ class SubscriptionType extends AbstractType
         ;
 
         // Tab Contact
-        foreach ($this->getContacts() as $contact) {
-            $builder->add($contact, new ContactType(), array('by_reference' => false));
+        foreach ($this->getContactsTypeNames() as $contact) {
+            $builder->add($contact, new ContactType(), array('by_reference' => false, 'required' => false));
         }
 
         // Tab Attributes
-        foreach ($this->getAttributes() as $attribute) {
+        foreach ($this->getAttributeFieldNames() as $attribute) {
             $builder->add($attribute, new AttributeType(), array('by_reference' => false, 'required' => false));
         }
 
@@ -102,32 +117,136 @@ class SubscriptionType extends AbstractType
         $subscription = $event->getData();
 
         // If metadataUrl is not submitted return early
-        if (!$subscription || !array_key_exists('metadataUrl', $subscription)) {
+        if (!$subscription || !array_key_exists('importUrl', $subscription)) {
             return;
         }
 
-        $metadataUrl = $subscription['metadataUrl'];
-
-        /** @var Subscription $orgSubscription */
-        $orgSubscription = $event->getForm()->getData();
-
-        $sessionCacheId = $orgSubscription->getId() . '-metadataUrl';
-
-        $previousMetadataUrl = $this->session->get($sessionCacheId, $orgSubscription->getMetadataUrl());
-        $this->session->set($sessionCacheId, $metadataUrl);
-
-        if ($metadataUrl === $previousMetadataUrl) {
+        /** @var SubmitButton $importButton */
+        if ($subscription['requestedState'] !== 'import') {
             return;
         }
 
-        $metadata = new Metadata();
-
+        $subscription['metadataUrl'] = $subscription['importUrl'];
+        $subscription['metadataXml'] = '';
         try {
-            $metadata = $this->parser->parse($metadataUrl);
+            $subscription['metadataXml'] = $this->fetcher->fetch($subscription['metadataUrl']);
+            $metadata = $this->parser->parseXml($subscription['metadataXml']);
+
+
+            $event->setData($this->mapMetadataToFormData($subscription, $metadata));
         } catch (\InvalidArgumentException $e) {
             // Exceptions are deliberately ignored because they are caught by the validator
         }
-        $event->setData($this->mapMetadataToFormData($subscription, $metadata));
+    }
+
+
+    /**
+     * @param array    $formData
+     * @param Metadata $metadata
+     *
+     * @return array
+     */
+    private function mapMetadataToFormData(array $formData, Metadata $metadata)
+    {
+        $formData = $this->mapFields($formData, $metadata);
+        $formData = $this->mapContactFields($formData, $metadata);
+        $formData = $this->mapAttributeFields($formData, $metadata);
+
+        return $formData;
+    }
+
+    /**
+     * @param array $formData
+     * @param Metadata $metadata
+     * @return array
+     */
+    private function mapFields(array $formData, Metadata $metadata)
+    {
+        $map = array(
+            'acsLocation' => 'acsLocation',
+            'entityId' => 'entityId',
+            'certificate' => 'certificate',
+            'logoUrl' => 'logoUrl',
+            'nameEn' => 'nameEn',
+            'nameNl' => 'nameNl',
+            'descriptionEn' => 'descriptionEn',
+            'descriptionNl' => 'descriptionNl',
+            'applicationUrl' => 'applicationUrlEn',
+        );
+
+        foreach ($map as $fieldName => $dtoName) {
+            if (!empty($formData[$fieldName])) {
+                continue;
+            }
+
+            $formData[$fieldName] = $metadata->$dtoName;
+        }
+        return $formData;
+    }
+
+    /**
+     * @param array $formData
+     * @param Metadata $metadata
+     * @return array
+     */
+    private function mapContactFields(array $formData, Metadata $metadata)
+    {
+        $contactMap = array(
+            'firstName' => 'getFirstName',
+            'lastName' => 'getLastName',
+            'email' => 'getEmail',
+            'phone' => 'getPhone',
+        );
+
+        foreach ($this->getContactsTypeNames() as $contacTypeName) {
+            $contact = $metadata->$contacTypeName;
+
+            if (!$contact instanceof Contact) {
+                continue;
+            }
+
+            $formData[$contacTypeName] = array();
+
+            foreach ($contactMap as $fieldName => $metadataMethodName) {
+                if (!empty($formData[$contacTypeName][$fieldName])) {
+                    continue;
+                }
+
+                $formData[$contacTypeName][$fieldName] = $metadata->{$contacTypeName}->{$metadataMethodName}();
+            }
+        }
+        return $formData;
+    }
+
+    /**
+     * @param array $formData
+     * @param Metadata $metadata
+     * @return array
+     */
+    private function mapAttributeFields(array $formData, Metadata $metadata)
+    {
+        $attributesMap = array(
+            'requested' => 'isRequested',
+            'motivation' => 'getMotivation',
+        );
+
+        foreach ($this->getAttributeFieldNames() as $attributeFieldName) {
+            $attribute = $metadata->$attributeFieldName;
+
+            if (!$attribute instanceof Attribute) {
+                continue;
+            }
+
+            $formData[$attributeFieldName] = array();
+            foreach ($attributesMap as $fieldName => $dtoAccessorName) {
+                if (!empty($formData[$attributeFieldName][$fieldName])) {
+                    continue;
+                }
+
+                $formData[$attributeFieldName][$fieldName] = $metadata->{$attributeFieldName}->{$dtoAccessorName}();
+            }
+        }
+        return $formData;
     }
 
     public function onLogoUrlSubmit(FormEvent $event)
@@ -138,46 +257,6 @@ class SubscriptionType extends AbstractType
                 new ImageDimensions(500, 300)
             )
         );
-    }
-
-    /**
-     * @param array    $formData
-     * @param Metadata $metadata
-     *
-     * @return array
-     */
-    private function mapMetadataToFormData(array $formData, Metadata $metadata)
-    {
-        $formData['acsLocation'] = $metadata->acsLocation;
-        $formData['entityId'] = $metadata->entityId;
-        $formData['certificate'] = $metadata->certificate;
-
-        $formData['logoUrl'] = $metadata->logoUrl;
-        $formData['nameEn'] = $metadata->nameEn;
-        $formData['nameNl'] = $metadata->nameNl;
-        $formData['descriptionEn'] = $metadata->descriptionEn;
-        $formData['descriptionNl'] = $metadata->descriptionNl;
-        $formData['applicationUrl'] = $metadata->applicationUrlEn;
-
-        foreach ($this->getContacts() as $contact) {
-            if ($metadata->$contact instanceof Contact) {
-                $formData[$contact] = array();
-                $formData[$contact]['firstName'] = $metadata->$contact->getFirstName();
-                $formData[$contact]['lastName'] = $metadata->$contact->getLastName();
-                $formData[$contact]['email'] = $metadata->$contact->getEmail();
-                $formData[$contact]['phone'] = $metadata->$contact->getPhone();
-            }
-        }
-
-        foreach ($this->getAttributes() as $attribute) {
-            if ($metadata->$attribute instanceof Attribute) {
-                $formData[$attribute] = array();
-                $formData[$attribute]['requested'] = $metadata->$attribute->isRequested();
-                $formData[$attribute]['motivation'] = $metadata->$attribute->getMotivation();
-            }
-        }
-
-        return $formData;
     }
 
     /**
@@ -203,7 +282,7 @@ class SubscriptionType extends AbstractType
     /**
      * @return array
      */
-    private function getContacts()
+    private function getContactsTypeNames()
     {
         return array(
             'administrativeContact',
@@ -215,7 +294,7 @@ class SubscriptionType extends AbstractType
     /**
      * @return array
      */
-    private function getAttributes()
+    private function getAttributeFieldNames()
     {
         return array(
             'givenNameAttribute',
