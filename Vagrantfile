@@ -5,11 +5,11 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "smallhadroncollider/centos-6.4-lamp"
+  config.vm.box = "centos/7"
   config.vm.hostname = "dev.support.surfconext.nl"
   config.hostsupdater.aliases = ["serviceregistry.dev.support.surfconext.nl"]
   config.vm.network "private_network", ip: "192.168.33.19"
-  config.vm.synced_folder ".", "/vagrant"
+  config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
   config.ssh.forward_agent = true
 
   config.vm.provider "virtualbox" do |vb|
