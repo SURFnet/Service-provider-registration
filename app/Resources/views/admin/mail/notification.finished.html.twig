@@ -6,8 +6,12 @@ Hi,<br/>
     Link to Janus:
     <a href="{{ url('admin.subscription.janus', {eid: subscription.janusId} ) }}">
         {{ url('admin.subscription.janus', {eid: subscription.janusId} ) }}
-    </a>
+    </a> <br />
     {% endif %}
+    Link to Metadata:
+    <a href="{{ url('export', {id: subscription.id} ) }}">
+        {{ url('export', {id: subscription.id} ) }}
+    </a>
 </p>
 
 {% include 'subscription/partials/proplist.html.twig' %}
