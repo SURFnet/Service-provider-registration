@@ -15,20 +15,22 @@ use SimpleXMLElement;
  *
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class Generator extends MetadataUtil
+class Generator
 {
-    /**
-     * Constructor
-     *
-     * @param Fetcher $fetcher
-     * @param Cache   $cache
-     * @param Logger  $logger
-     */
-    public function __construct(Fetcher $fetcher, Cache $cache, Logger $logger)
-    {
-        $this->fetcher = $fetcher;
+    const NS_SAML = 'urn:oasis:names:tc:SAML:2.0:metadata';
+    const NS_SIG = 'http://www.w3.org/2000/09/xmldsig#';
+    const NS_UI = 'urn:oasis:names:tc:SAML:metadata:ui';
+    const NS_LANG = 'http://www.w3.org/XML/1998/namespace';
 
-        parent::__construct($cache, $logger);
+    /**
+     * @var AttributesMetadataRepository
+     */
+    private $attributesMetadataRepository;
+
+    public function __construct(
+        AttributesMetadataRepository $attributesMetadataRepository
+    ) {
+        $this->attributesMetadataRepository = $attributesMetadataRepository;
     }
 
     /**
@@ -225,13 +227,21 @@ class Generator extends MetadataUtil
             );
         }
 
-        foreach ($this->getAttributeMap() as $property => $attributes) {
-            $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
+        $attributesMetadata = $this->attributesMetadataRepository->findAll();
+        foreach ($attributesMetadata as $attributeMetadata) {
+            $getterName = 'get' . ucfirst($attributeMetadata->id) . 'Attribute';
+
+            // Skip attributes we know about but don't have registered.
+            if (!method_exists($subscription, $getterName)) {
+                continue;
+            }
+
+            $attr = $subscription->$getterName();
 
             if ($attr instanceof Attribute && $attr->isRequested()) {
-                $this->generateAttribute($node, $attributes['name'], $attributes['friendlyName']);
+                $this->generateAttribute($node, $attributeMetadata->urns, $attributeMetadata->friendlyName);
             } else {
-                $this->removeAttribute($node, $attributes['name']);
+                $this->removeAttribute($node, $attributeMetadata->urns);
             }
         }
     }
@@ -243,8 +253,17 @@ class Generator extends MetadataUtil
      */
     private function hasRequestedAttributes(Subscription $subscription)
     {
-        foreach (array_keys($this->getAttributeMap()) as $property) {
-            $attr = $subscription->{'get' . ucfirst($property) . 'Attribute'}();
+        $attributesMetadata = $this->attributesMetadataRepository->findAll();
+
+        foreach ($attributesMetadata as $attributeMetadata) {
+            $getterName = 'get' . ucfirst($attributeMetadata->id) . 'Attribute';
+
+            // Skip attributes we know about but don't have registered.
+            if (!method_exists($subscription, $getterName)) {
+                continue;
+            }
+
+            $attr = $subscription->$getterName();
 
             if ($attr instanceof Attribute && $attr->isRequested()) {
                 return true;

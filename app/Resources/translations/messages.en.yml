@@ -177,3 +177,5 @@ production.overview.finish.subtitle: __production.overview.finish.subtitle
 production.overview.finish.intro: __production.overview.finish.intro
 production.overview.finish.button.cancel: __production.overview.finish.button.cancel
 production.overview.finish.button.confirm: __production.overview.finish.button.confirm
+form.help.eduPersonTargetedIDAttribute: __form.help.eduPersonTargetedIDAttribute
+form.help.scopedAffiliationAttribute: __form.help.scopedAffiliationAttribute

@@ -340,4 +340,58 @@
             </a>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-xs-11">
+            <div class="form-group">
+                {{ form_label(form.eduPersonTargetedIDAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-xs-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.eduPersonTargetedIDAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="form-group">
+                            {{ form_widget(form.eduPersonTargetedIDAttribute.motivation, {attr: {'class': 'disabled', 'placeholder': 'form.placeholder.attribute'|trans }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <a href="#" class="btn btn-link popover-link"
+               data-content="{{ 'form.help.eduPersonTargetedIDAttribute'|trans|escape('html_attr') }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-11">
+            <div class="form-group">
+                {{ form_label(form.scopedAffiliationAttribute) }}
+                <div class="col-lg-10">
+                    <div class="col-xs-2">
+                        <div class="checkbox">
+                            {{ form_widget(form.scopedAffiliationAttribute.requested) }}
+                        </div>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="form-group">
+                            {{ form_widget(form.scopedAffiliationAttribute.motivation, {attr: {'class': 'disabled', 'placeholder': 'form.placeholder.attribute'|trans }}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <a href="#" class="btn btn-link popover-link"
+               data-content="{{ 'form.help.scopedAffiliationAttribute'|trans|escape('html_attr') }}">
+                {{ icon('question-circle') }}
+            </a>
+        </div>
+    </div>
 </fieldset>

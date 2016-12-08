@@ -249,6 +249,26 @@
         {% endif %}
     </dd>
 
+    <dt>{{ 'scopedAffiliationAttribute'|humanize|trans }}</dt>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.scopedAffiliationAttribute != subscription.scopedAffiliationAttribute %}
+            <del>{{ orgSubscription.scopedAffiliationAttribute }}</del>
+        {% endif %}
+        {% if subscription.scopedAffiliationAttribute %}
+            {{ subscription.scopedAffiliationAttribute }}
+        {% endif %}
+    </dd>
+
+    <dt>{{ 'eduPersonTargetedIDAttribute'|humanize|trans }}</dt>
+    <dd>
+        {% if orgSubscription is defined and orgSubscription.eduPersonTargetedIDAttribute != subscription.eduPersonTargetedIDAttribute %}
+            <del>{{ orgSubscription.eduPersonTargetedIDAttribute }}</del>
+        {% endif %}
+        {% if subscription.eduPersonTargetedIDAttribute %}
+            {{ subscription.eduPersonTargetedIDAttribute }}
+        {% endif %}
+    </dd>
+
     <dt>{{ 'comments'|humanize|trans }}</dt>
     <dd>
         {% if orgSubscription is defined and orgSubscription.comments != subscription.comments %}

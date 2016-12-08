@@ -308,6 +308,8 @@ class SubscriptionType extends AbstractType
             'uidAttribute',
             'preferredLanguageAttribute',
             'personalCodeAttribute',
+            'eduPersonTargetedIDAttribute',
+            'scopedAffiliationAttribute',
         );
     }
 }
