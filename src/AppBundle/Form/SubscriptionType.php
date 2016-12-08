@@ -41,7 +41,7 @@ class SubscriptionType extends AbstractType
     private $transparantImageResizeService;
 
     /**
-     * @var
+     * @var Fetcher
      */
     private $fetcher;
 
@@ -121,7 +121,6 @@ class SubscriptionType extends AbstractType
             return;
         }
 
-        /** @var SubmitButton $importButton */
         if ($subscription['requestedState'] !== 'import') {
             return;
         }
@@ -131,7 +130,6 @@ class SubscriptionType extends AbstractType
         try {
             $subscription['metadataXml'] = $this->fetcher->fetch($subscription['metadataUrl']);
             $metadata = $this->parser->parseXml($subscription['metadataXml']);
-
 
             $event->setData($this->mapMetadataToFormData($subscription, $metadata));
         } catch (\InvalidArgumentException $e) {

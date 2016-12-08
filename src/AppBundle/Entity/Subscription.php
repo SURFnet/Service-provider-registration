@@ -136,6 +136,7 @@ class Subscription
     /**
      * Metadata URL that import last happened from.
      *
+     * @var string
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      * @Assert\Url(
@@ -148,7 +149,6 @@ class Subscription
      * @AppAssert\ValidSSLLabsAnalyze(
      *      groups={"finished"}
      * )
-     * @var string
      */
     private $importUrl;
 
@@ -163,8 +163,8 @@ class Subscription
      *
      * Imported from metadataurl.
      *
-     * @ORM\Column(type="text", nullable=true)
      * @var string
+     * @ORM\Column(type="text", nullable=true)
      */
     private $metadataXml;
 
