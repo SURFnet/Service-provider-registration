@@ -54,7 +54,7 @@ class ValidEntityIdValidator extends ConstraintValidator
         $parser = new Parser($pslManager->getList());
 
         try {
-            $metadataUrl = $parser->parseUrl($metadataUrl);
+            $parser->parseUrl($metadataUrl);
         } catch (\Exception $e) {
             $this->context->addViolationAt('metadataUrl', 'Invalid metadataUrl.');
 
@@ -62,21 +62,9 @@ class ValidEntityIdValidator extends ConstraintValidator
         }
 
         try {
-            $entityIdUrl = $parser->parseUrl($value);
+            $parser->parseUrl($value);
         } catch (\Exception $e) {
             $this->context->addViolation('Invalid entityId.');
-
-            return;
-        }
-
-        if ($metadataUrl->host->registerableDomain !== $entityIdUrl->host->registerableDomain) {
-            $this->context->addViolation(
-                $constraint->message,
-                array(
-                    '%mdomain%' => $metadataUrl->host->registerableDomain,
-                    '%edomain%' => $entityIdUrl->host->registerableDomain
-                )
-            );
 
             return;
         }
