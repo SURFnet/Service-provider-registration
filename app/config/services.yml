@@ -40,7 +40,7 @@ services:
 
     generator:
         class: AppBundle\Metadata\Generator
-        arguments:  ['@fetcher', '@cache.metadata', '@monolog.logger.metadata']
+        arguments:  ['@attributes.metadata_repository']
 
     validator.certificate:
         class: AppBundle\Validator\Constraints\ValidSSLCertificateValidator
