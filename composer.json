@@ -7,7 +7,7 @@
         "psr-0": { "": "src/", "SymfonyStandard": "app/" }
     },
     "require": {
-        "php": ">=5.3.3",
+        "php": "~5.6",
         "ext-memcache": "*",
 
         "apy/datagrid-bundle":                  "dev-master",
