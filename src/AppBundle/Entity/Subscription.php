@@ -134,7 +134,8 @@ class Subscription
     private $contact;
 
     /**
-     * @var string
+     * Metadata URL that import last happened from.
+     *
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      * @Assert\Url(
@@ -147,8 +148,25 @@ class Subscription
      * @AppAssert\ValidSSLLabsAnalyze(
      *      groups={"finished"}
      * )
+     * @var string
+     */
+    private $importUrl;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
      */
     private $metadataUrl;
+
+    /**
+     * SAML XML Metadata for entity.
+     *
+     * Imported from metadataurl.
+     *
+     * @ORM\Column(type="text", nullable=true)
+     * @var string
+     */
+    private $metadataXml;
 
     /**
      * @var string
@@ -1232,5 +1250,37 @@ class Subscription
     public function isForConnect()
     {
         return $this->environment === static::ENVIRONMENT_CONNECT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImportUrl()
+    {
+        return $this->importUrl;
+    }
+
+    /**
+     * @param string $importUrl
+     */
+    public function setImportUrl($importUrl)
+    {
+        $this->importUrl = $importUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetadataXml()
+    {
+        return $this->metadataXml;
+    }
+
+    /**
+     * @param string $metadataXml
+     */
+    public function setMetadataXml($metadataXml)
+    {
+        $this->metadataXml = $metadataXml;
     }
 }
