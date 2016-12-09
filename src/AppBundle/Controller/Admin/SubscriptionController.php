@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\Subscription;
 use AppBundle\Entity\SubscriptionRepository;
 use AppBundle\Form\Admin\SubscriptionType;
+use AppBundle\Model\Contact;
 use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SURFnet\SPRegistration\Grid\GridConfiguration;
@@ -68,6 +69,14 @@ class SubscriptionController extends Controller implements SecuredController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // @todo The contacts have Validator/NotBlank set on them, so
+            //       if they are NULL then it fails but the form can't place
+            //       the error anywhere so it ends up at the bottom
+            //       of the form.
+            $subscription->setAdministrativeContact(new Contact());
+            $subscription->setSupportContact(new Contact());
+            $subscription->setTechnicalContact(new Contact());
+
             $this->get('subscription.repository')->insert($subscription);
 
             $this->get('mail.manager')->sendInvitation($subscription);
