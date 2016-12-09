@@ -47,10 +47,12 @@ final class ConnectPublishedController extends Controller
 
             $this->get('subscription.repository.session')->insert($subscription);
 
-            return $this->redirectToRoute(
-                'connect_republish',
-                array('id' => $subscription->getId())
-            );
+            if ($requestedState === SubscriptionType::REQUESTED_STATE_PUBLISHED) {
+                return $this->redirectToRoute(
+                    'connect_republish',
+                    array('id' => $subscription->getId())
+                );
+            }
         }
 
         return $this->render(
