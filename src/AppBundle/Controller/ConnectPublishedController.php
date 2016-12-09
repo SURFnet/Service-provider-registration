@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Form\SubscriptionType;
 use AppBundle\Validator\SubscriptionValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -35,7 +36,7 @@ final class ConnectPublishedController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             // If we're moving from published to finished, simply redirect.
             $requestedState = $request->get('subscription[requestedState]', null, true);
-            if ($requestedState === static::FINISHED) {
+            if ($requestedState === SubscriptionType::REQUESTED_STATE_FINISHED) {
                 return $this->redirect(
                     $this->generateUrl(
                         'connect_finish',
@@ -80,6 +81,4 @@ final class ConnectPublishedController extends Controller
             )
         );
     }
-
-    const FINISHED = 'finished';
 }
