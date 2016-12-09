@@ -131,7 +131,9 @@ class SubscriptionType extends AbstractType
             $subscription['metadataXml'] = $this->fetcher->fetch($subscription['metadataUrl']);
             $metadata = $this->parser->parseXml($subscription['metadataXml']);
 
-            $event->setData($this->mapMetadataToFormData($subscription, $metadata));
+            $subscription = $this->mapMetadataToFormData($subscription, $metadata);
+
+            $event->setData($subscription);
         } catch (\InvalidArgumentException $e) {
             // Exceptions are deliberately ignored because they are caught by the validator
         }
@@ -203,7 +205,9 @@ class SubscriptionType extends AbstractType
                 continue;
             }
 
-            $formData[$contacTypeName] = array();
+            if (empty($formData[$contacTypeName])) {
+                $formData[$contacTypeName] = array();
+            }
 
             foreach ($contactMap as $fieldName => $metadataMethodName) {
                 if (!empty($formData[$contacTypeName][$fieldName])) {
@@ -235,7 +239,9 @@ class SubscriptionType extends AbstractType
                 continue;
             }
 
-            $formData[$attributeFieldName] = array();
+            if (empty($formData[$attributeFieldName])) {
+                $formData[$attributeFieldName] = array();
+            }
             foreach ($attributesMap as $fieldName => $dtoAccessorName) {
                 if (!empty($formData[$attributeFieldName][$fieldName])) {
                     continue;
