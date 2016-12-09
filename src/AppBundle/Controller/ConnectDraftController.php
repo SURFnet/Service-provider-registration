@@ -45,10 +45,14 @@ final class ConnectDraftController extends Controller
                 $originalSubscription,
                 $subscription
             );
-            return $this->redirectToRoute(
-                'connect_publish',
-                array('id' => $subscription->getId())
-            );
+
+            $requestedState = $request->get('subscription[requestedState]', null, true);
+            if ($requestedState === 'published') {
+                return $this->redirectToRoute(
+                    'connect_publish',
+                    array('id' => $subscription->getId())
+                );
+            }
         }
 
         return $this->render(

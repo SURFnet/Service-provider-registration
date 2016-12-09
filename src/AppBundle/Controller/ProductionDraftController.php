@@ -45,10 +45,14 @@ final class ProductionDraftController extends Controller
                 $originalSubscription,
                 $subscription
             );
-            return $this->redirectToRoute(
-                'production_finish',
-                array('id' => $subscription->getId())
-            );
+
+            $requestedState = $request->get('subscription[requestedState]', null, true);
+            if ($requestedState === 'finished') {
+                return $this->redirectToRoute(
+                    'production_finish',
+                    array('id' => $subscription->getId())
+                );
+            }
         }
 
         return $this->render(
