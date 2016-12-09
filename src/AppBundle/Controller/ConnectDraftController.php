@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Form\SubscriptionType;
 use AppBundle\Validator\SubscriptionValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -45,10 +46,14 @@ final class ConnectDraftController extends Controller
                 $originalSubscription,
                 $subscription
             );
-            return $this->redirectToRoute(
-                'connect_publish',
-                array('id' => $subscription->getId())
-            );
+
+            $requestedState = $request->get('subscription[requestedState]', null, true);
+            if ($requestedState === SubscriptionType::REQUESTED_STATE_PUBLISHED) {
+                return $this->redirectToRoute(
+                    'connect_publish',
+                    array('id' => $subscription->getId())
+                );
+            }
         }
 
         return $this->render(
