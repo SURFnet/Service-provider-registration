@@ -151,10 +151,32 @@ class SubscriptionType extends AbstractType
      */
     private function mapMetadataToFormData(array $formData, Metadata $metadata)
     {
+        $formData = $this->mapSamlFields($formData, $metadata);
         $formData = $this->mapFields($formData, $metadata);
         $formData = $this->mapContactFields($formData, $metadata);
         $formData = $this->mapAttributeFields($formData, $metadata);
 
+        return $formData;
+    }
+
+    /**
+     * Note that we always override these fields.
+     *
+     * @param array $formData
+     * @param array $metadata
+     * @return array
+     */
+    private function mapSamlFields(array $formData, Metadata $metadata)
+    {
+        $map = array(
+            'acsLocation' => 'acsLocation',
+            'entityId' => 'entityId',
+            'certificate' => 'certificate',
+        );
+
+        foreach ($map as $fieldName => $dtoName) {
+            $formData[$fieldName] = $metadata->$dtoName;
+        }
         return $formData;
     }
 
@@ -166,9 +188,6 @@ class SubscriptionType extends AbstractType
     private function mapFields(array $formData, Metadata $metadata)
     {
         $map = array(
-            'acsLocation' => 'acsLocation',
-            'entityId' => 'entityId',
-            'certificate' => 'certificate',
             'logoUrl' => 'logoUrl',
             'nameEn' => 'nameEn',
             'nameNl' => 'nameNl',
