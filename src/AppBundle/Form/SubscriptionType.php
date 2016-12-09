@@ -25,6 +25,9 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class SubscriptionType extends AbstractType
 {
+    const REQUESTED_STATE_FINISHED = 'finished';
+    const REQUESTED_STATE_PUBLISHED = 'published';
+
     /**
      * @var Parser
      */

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Subscription;
+use AppBundle\Form\SubscriptionType;
 use AppBundle\Validator\SubscriptionValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -47,7 +48,7 @@ final class ProductionDraftController extends Controller
             );
 
             $requestedState = $request->get('subscription[requestedState]', null, true);
-            if ($requestedState === 'finished') {
+            if ($requestedState === SubscriptionType::REQUESTED_STATE_FINISHED) {
                 return $this->redirectToRoute(
                     'production_finish',
                     array('id' => $subscription->getId())

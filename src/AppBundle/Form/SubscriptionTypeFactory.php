@@ -79,7 +79,7 @@ class SubscriptionTypeFactory
         );
 
         $requestedState = $request->get('subscription[requestedState]', null, true);
-        if ($requestedState === 'finished') {
+        if ($requestedState === SubscriptionType::REQUESTED_STATE_FINISHED) {
             $formOptions['validation_groups'] = array('Default', 'finished');
         }
 
