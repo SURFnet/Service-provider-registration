@@ -64,6 +64,9 @@ class Generator
         /** @var SimpleXMLElement $descriptor */
         $descriptor = $children->SPSSODescriptor;
 
+        // Remove the Signature if it exists.
+        unset($descriptor->Signature);
+
         $this->generateUi($descriptor, $subscription);
         $this->generateContacts($xml, $subscription);
         $this->generateAttributes($descriptor, $subscription);
