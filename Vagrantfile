@@ -1,20 +1,14 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
-
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+Vagrant.configure(2) do |config|
   config.vm.box = "centos/7"
+
+  config.vm.network "private_network", ip: "192.168.33.19"
   config.vm.hostname = "dev.support.surfconext.nl"
   config.hostsupdater.aliases = ["serviceregistry.dev.support.surfconext.nl"]
-  config.vm.network "private_network", ip: "192.168.33.19"
+
   config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
-  config.ssh.forward_agent = true
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "1536"]
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "ansible/vagrant.yml"
+    ansible.groups = {"dev" => "default"}
   end
-
-  config.vm.provision "shell", path: "provisioning/development.sh"
 end
