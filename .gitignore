@@ -1,3 +1,4 @@
+/ansible/*.retry
 /web/bundles/
 /web/compiled/fonts
 /app/bootstrap.php.cache
