@@ -1,0 +1,68 @@
+---
+- name: Add group {{ support_fpm_user }}
+  group: name={{ support_fpm_user }} state=present
+
+- name: Add user {{ support_fpm_user }}
+  user: name={{ support_fpm_user }} group={{ support_fpm_user }} createhome=no state=present
+
+- name: Create directory for vhosts to store PHP sessions
+  file: path={{ php_session_dir}}/support state=directory owner={{ support_fpm_user }} group=root mode=770
+
+- name: Create the shared and releases directory for the support form
+  file: path={{ support_data_dir}}/{{item}} state=directory owner=root group=root mode=775
+  with_items:
+    - releases
+    - shared/app
+    - shared/app/config
+    - shared/web
+
+- name: Create shared directories writable by the FPM instance
+  file: path={{ support_data_dir}}/{{item}} state=directory owner={{ support_fpm_user }} group=root mode=775
+  with_items:
+    - shared/web/img
+    - shared/web/logos
+    - shared/web/img/logos
+
+- name: Create shared and writeables directory 
+  file: path={{ support_data_dir}}/shared/app/{{item}} state=directory owner={{ support_fpm_user }} group=root mode=775
+  with_items:
+    - logs
+    - data
+
+- name: Create SSL key
+  copy: content="{{ https_star_private_key }}" dest={{ tls.cert_private_path }}/star.{{ base_domain  }}.key mode=0600 owner=root
+  when: develop
+
+- name: Create SSL certificate
+  copy: src=files/certs/star.{{ base_domain }}.pem dest="{{ tls.cert_path }}/star.{{ base_domain}}.pem"
+  when: develop
+
+- name: Copy ca file
+  copy: src=files/certs/star.{{ base_domain}}_ca.pem dest={{tls.cert_path_ca}}/star.{{ base_domain}}_ca.pem
+  register: copy ca_file
+  notify: update_ca_trust
+  when: develop
+
+- name: Install Apache vhosts
+  template: src={{ item }}.j2 dest=/etc/httpd/conf.d/{{ item }}
+  with_items:
+    - support.conf
+  notify:
+    - reload httpd
+
+- name: php-fpm config
+  template: src={{ item }}.j2 dest=/etc/php-fpm.d/{{ item }}
+  with_items:
+     - support-pool.conf
+  notify:
+    - reload php-fpm
+
+- name: Install config file
+  template: src=parameters.yml.j2 dest={{ support_data_dir}}/shared/app/config/parameters.yml
+
+- name: Check if latest version is installed
+  stat: path="{{ support_data_dir}}/releases/Service-provider-registration-{{ spform_branch }}"
+  register: branch_installed
+
+- include: install-branch.yml
+  when: branch_installed.stat.exists == false
