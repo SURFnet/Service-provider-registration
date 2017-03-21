@@ -2,10 +2,9 @@
 - hosts: all
   become: true
   roles:
+    - ../OpenConext-deploy/roles/openconext-common
     - ../OpenConext-deploy/roles/httpd
     - ../OpenConext-deploy/roles/php56fpm
-  vars:
-    apache_app_listen_address: ~
-    develop: true
-    haproxy_backend_tls: false
-    timezone: Europe/Amsterdam
+    - ../OpenConext-deploy/roles/mysql
+    - ../OpenConext-deploy/roles/janus
+    - spform
