@@ -134,6 +134,43 @@ EOT
         );
         $manager->persist($template);
 
+        $template = new Template();
+        $template->setName('confirmation.updated.en.html.twig');
+        $template->setSource(
+            <<<'EOT'
+Dear {{ subscription.contact.firstName}} {{ subscription.contact.lastName }},<br>
+
+<p>Your subscription has been updated.</p>
+
+<p>
+    <b><a href="{{ url('form', {id: subscription.id} ) }}">Link to form</a></b>
+</p>
+
+Kind regards,<br>
+<br>
+SURFconext
+EOT
+        );
+        $manager->persist($template);
+
+        $template = new Template();
+        $template->setName('confirmation.updated.nl.html.twig');
+        $template->setSource(
+            <<<'EOT'
+Beste {{ subscription.contact.firstName}} {{ subscription.contact.lastName }},<br>
+
+<p>Je connectie is bijgewerkt.</p>
+
+<p>
+    <b><a href="{{ url('form', {id: subscription.id} ) }}">Link naar formulier</a></b>
+</p>
+
+Met vriendelijke groet,<br>
+<br>
+SURFconext
+EOT
+        );
+
         $manager->flush();
     }
 }
