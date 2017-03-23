@@ -56,7 +56,7 @@ Listen {{ apache_app_listen_address.support }}:{{ loadbalancing.support.port }}
 {% endif %}
 
     # Proxy the requests to FPM
-    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/support-pool.sock|fcgi://localhost/{{ support_data_dir }}/$1
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php-fpm/support-pool.sock|fcgi://localhost/{{ document_root }}/$1
 
     ErrorLog "|/usr/bin/logger -p local3.err  -t 'Apache-SUPPORT'"
     CustomLog "|/usr/bin/logger -p local3.info  -t 'Apache-SUPPORT'" combined
