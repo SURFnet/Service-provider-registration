@@ -1,4 +1,4 @@
-{% if apache_app_listen_address.engine is defined %}
+{% if apache_app_listen_address.support is defined %}
 Listen {{ apache_app_listen_address.support }}:{{ loadbalancing.support.port }}
 <Virtualhost {{ apache_app_listen_address.support }}:{{ loadbalancing.support.port }}>
 {% else %}
