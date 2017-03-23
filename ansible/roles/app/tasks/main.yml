@@ -37,3 +37,9 @@
   notify:
     - reload php-fpm
 
+- name: Remove ssl.conf
+  file:
+    path: /etc/httpd/conf.d/ssl.conf
+    state: absent
+  notify:
+    - reload httpd
