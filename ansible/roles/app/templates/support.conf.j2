@@ -7,7 +7,7 @@ Listen {{ apache_app_listen_address.support }}:{{ loadbalancing.support.port }}
     ServerName   https://{{ support_domain }}
     ServerAdmin {{ apache_server_admin }}
     Options -indexes +Includes
-    DocumentRoot {{ support_data_dir }}
+    DocumentRoot {{ document_root }}
     Alias /registration {{ support_data_dir }}/current/web
     SetEnv HTTPS on
 

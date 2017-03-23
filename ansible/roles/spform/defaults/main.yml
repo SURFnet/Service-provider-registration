@@ -1,5 +1,0 @@
-support_data_dir: /opt/openconext/support
-support_fpm_user: support
-spform_branch: v3.4.4
-spform_branch_dir: /opt/openconext/builds/spform
-support_domain: support.{{ base_domain }}
