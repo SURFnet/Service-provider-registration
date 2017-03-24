@@ -21,4 +21,16 @@ class CertificateParser
 
         return "-----BEGIN CERTIFICATE-----" . PHP_EOL . $certificateString . "-----END CERTIFICATE-----";
     }
+
+    /**
+     * @param string $certificate
+     *
+     * @return string
+     */
+    public function getSubject($certificate)
+    {
+        $certificateInfo = openssl_x509_parse($certificate);
+
+        return $certificateInfo['name'];
+    }
 }

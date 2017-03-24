@@ -146,9 +146,6 @@ class Subscription
      * )
      * @Assert\Url(message = "url.invalid")
      * @AppAssert\ValidMetadata()
-     * @AppAssert\ValidSSLLabsAnalyze(
-     *      groups={"finished"}
-     * )
      */
     private $importUrl;
 
@@ -176,9 +173,6 @@ class Subscription
      * @Assert\Url(
      *      protocols={"https"},
      *      message = "url.notSecure",
-     *      groups={"finished"}
-     * )
-     * @AppAssert\ValidSSLLabsAnalyze(
      *      groups={"finished"}
      * )
      */

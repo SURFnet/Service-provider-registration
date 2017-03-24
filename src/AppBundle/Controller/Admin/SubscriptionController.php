@@ -283,21 +283,11 @@ class SubscriptionController extends Controller implements SecuredController
         if ($scheme !== 'https') {
             return '';
         }
-        $hostname = parse_url($url, PHP_URL_HOST);
 
-        $hostDto = $this->get('ssllabs.analyze_service')->analyze(
-            $hostname,
-            true
-        );
+        $certificateFetcher = $this->get('cert.fetcher');
+        $certificateParser = $this->get('cert.parser');
 
-        foreach ($hostDto->endpoints as $endpoint) {
-            if (!isset($endpoint->details['cert']['subject'])) {
-                continue;
-            }
-            return $endpoint->details['cert']['subject'];
-        }
-
-        return '';
+        return $certificateParser->getSubject($certificateFetcher->fetch($url));
     }
 
     /**
