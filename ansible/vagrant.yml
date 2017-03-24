@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: true
+  vars:
+    document_root: /vagrant/web
+    support_domain: dev.support.surfconext.nl
+    support_data_dir: /vagrant
+    support_fpm_user: vagrant
+    php_session_dir: /tmp
+  roles:
+    - ../OpenConext-deploy/roles/openconext-common
+    - ../OpenConext-deploy/roles/httpd
+    - ../OpenConext-deploy/roles/php56fpm
+    - ../OpenConext-deploy/roles/mysql
+    - ../OpenConext-deploy/roles/janus
+    - app
+  tasks:
+    - name: Run Doctrine Migrations
+      command: /vagrant/app/console doctrine:migrations:migrate -n
+    - name: Load Doctrine Fixtures
+      command: /vagrant/app/console doctrine:fixtures:load -n

@@ -2,9 +2,9 @@ parameters:
     database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
-    database_name:     symfony
-    database_user:     root
-    database_password: ~
+    database_name:     spregistration
+    database_user:     sprw
+    database_password: secret
     database_path:     "%kernel.root_dir%/data.db3"
 
     mailer_transport:  smtp

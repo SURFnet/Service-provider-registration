@@ -1,0 +1,92 @@
+develop: true
+haproxy_backend_tls: false
+timezone: Europe/Amsterdam
+base_domain: dev.support.surfconext.nl
+apache_app_listen_address:
+  all: 127.0.0.1
+support_email: root@localhost
+apache_server_admin: root@localhost
+instance_name: "OpenConext dev"  
+mysql_root_password: secret
+mariadb_host: localhost
+mysql_host: localhost
+mysql_passwords:
+  spregistration: secret
+  sr: secret
+databases:
+  names:
+    - spregistration
+    - "{{ janus_database_name }}"
+
+  users:
+   - { name: sprw, db_name: spregistration, password: "{{ mysql_passwords.spregistration }}" }
+   - { name: "{{ janus_database_user }}", db_name: "{{ janus_database_name }}", password: "{{ mysql_passwords.sr }}" }
+
+database_clients: [ "{{ mysql_host }}" ]
+
+support_simplesaml_secret: secret
+
+
+janus_database_name: sr
+janus_database_host: "{{ mariadb_host }}"
+janus_database_user: srrw
+janus_database_password: "{{ mysql_passwords.sr }}"
+janus_version: 1.22.1
+janus_ssp_version: 1.14.8
+janus_ssp_auth_admin_password: secret
+janus_ssp_secretsalt: salt
+janus_ssp_technicalcontact_name: "Technical Contact"
+janus_ssp_technicalcontact_email: "{{ support_email }}"
+janus_ssp_managingcontact_name: "Managing Contact"
+janus_ssp_managingcontact_email: "{{ support_email }}"
+janus_no_federative_login: 1
+janus_default_sp: "example-auth"
+
+engine_janus_secret: secret
+engine_api_janus_user: serviceregistry
+engine_api_janus_password: secret
+engine_api_domain: engine-api.{{ base_domain }}
+engine_keys:
+  default:
+    privateFile: /etc/openconext/engineblock.pem
+    publicKey: engineblock.crt
+    publicFile: /etc/openconext/engineblock.crt
+
+tls:
+  cert_path: /etc/pki/tls/certs
+  cert_path_ca: /etc/pki/ca-trust/source/anchors/
+  cert_private_path: /etc/pki/tls/private
+tls_star_cert: star.{{ base_domain }}.pem
+tls_star_cert_key: star.{{ base_domain }}.key
+tls_ca: star.{{ base_domain }}_ca.pem
+
+https_star_private_key: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCJManJ2FCyC+K
+  BJ8MakQhyMHbX41tEIc93SSMFTEd0foqD2wJfU5E3vCSN5oB4Tg9tMQ7RlCFmlNv
+  qt/swnrYv3VxncxSFx+X40jXFUPdC+t+CmCFfRK4rUgj73+89/SEevscb7Rn1aCa
+  //MiilHSbsQqpzuL0IBg7+tlC7GrI4/H/es7vhUD/nD/jTk0okdjxEl9JnG2OnPW
+  hId1Ng9Ow7RkHGxgxHRAHGhv8VwO/Qk2N56BXf73l5o78XQu9HKoSj2vlgg3ZD4Q
+  rN9NBs7FQVxNJ+w35qpw6q7q296/ctX8g8G6ikgi50IhzD2sDH9uTs6eBUJI6mZY
+  HE5v8jc7AgMBAAECggEAZKMTpsovDKMgoXbLy2+6aZjbhI//i62prVPZAhRqJX8X
+  In5kDnc5/1Fheyn/V0IcGUB/CArm6pqY7aWx9dTKQVjd1EtsApGh+uYCeBu51fe7
+  1tYiOpAfCEQqxRX9LUOLKLFnQdJVvg1q92395sW0rFRms4WExHEMWzOC3ho1uvQH
+  Xe/4RPy9YbTSJRS8DS8ZKCfSNx73fFkuorFr+aw6RcmZp/uc9KgVIHywr516wWJu
+  yTSESBKczhoCM5/z/6DV/aYtH439OgsdY9fLscu2P75SXO1QXK87+8kujo1FMFAJ
+  5k4UsAj/m8LZCF1RcWo36HoeYGWH/3G34ENTfMSZIQKBgQD7mrAQmceivJ6vF+4H
+  tsT6dcEFU9/rCmMcF7jJzN3iQUXKBLbbr1374NaqodQgVAHefgBDao7hyPoBum9a
+  EcrbnGy8oPITYPiOqoVzhYYEjSeg1gTp9tOdTXe/tvX3uR8FHLAfVXvL0knyRTC5
+  d3MHEDfRpsAH0r7kXhL9ZOnZdwKBgQDFiRfKvYkSWNcP/VU3FW1dJuoUVUZLoJfP
+  Ybcp4Dof1coesCOLzs++kdZ6CuUuPDFkUxfvqCoTzWpCxLWtuYkJ/bJwlht+3BW5
+  HN5jqLOzQTMBhar4xj80e1Xrb9pMru9lCXvWQQYMY+MdrjNUlwRn2/rIjzBtVbGO
+  cNV5MTFBXQKBgAhF9uIk3F6qiyFAzS/tv55ovtcZAfTtm4Kx+P6RwP4OnWfeLdEd
+  fB6rLwPfXGVPvdv+Eq4k09vyyt3BrqWsjhoYk67EMBGZD7NJQighTN3bcmEkiHbV
+  CfJTOMvSDVZ+/NkjL1toaTCzkoDn64k9t0eVLfCz5f6b3HEP8tnoNpRTAoGAQgrG
+  uJLLvCWVqZPiJKt2R/mVszybZveHKd+alFaSOEiK7d2n1LtNO4KYuW7hFqcrQEaD
+  ry2C++Hmj/IiZ7WrOnrmaLvW73/3h08+jwU9J0Y6Hl0pP0lQomRF4pQf4RlvklEs
+  ZQKSWhwfN7IhGTvwTiT+4IT3BObsmRniVUV8GUUCgYEAmHx0zUHu8bYnuAubCKCb
+  puPf4bBZcllbbCknk87ZJz3gl9fe7a6PiBmbFEPdh0UEoJCK5o3I9PpM32f6jbYa
+  oTaOuSW9U6XhN+VIzTFjHL+N4+H4t0tfpagfVESm8mJmnjnKvBam+zd8G4jubFMF
+  N1pOK9PSfCUpJTfJ95BRMe8=
+  -----END PRIVATE KEY-----
+
