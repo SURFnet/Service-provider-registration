@@ -6,6 +6,7 @@
     support_domain: dev.support.surfconext.nl
     support_data_dir: /vagrant
     support_fpm_user: vagrant
+    php_session_dir: /tmp
   roles:
     - ../OpenConext-deploy/roles/openconext-common
     - ../OpenConext-deploy/roles/httpd
