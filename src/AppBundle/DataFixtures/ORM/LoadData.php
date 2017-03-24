@@ -170,6 +170,7 @@ Met vriendelijke groet,<br>
 SURFconext
 EOT
         );
+        $manager->persist($template);
 
         $manager->flush();
     }
