@@ -2,6 +2,5 @@
 - name: reload php-fpm
   service: name=php-fpm state=reloaded
 
-
 - name: update_ca_trust
   command: update-ca-trust
