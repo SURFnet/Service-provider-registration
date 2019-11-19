@@ -1,7 +1,7 @@
 SURFnet / Service-provider-registration
 ========================
 
-Welcome!
+**Please note that this project has been superseeded by the SP Dashboard, available here: https://github.com/SURFnet/sp-dashboard!**
 
 Requirements
 ----------------------------------
